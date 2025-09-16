@@ -1,0 +1,330 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global/global}
+    \entry{gopinathBuildingFastFuzzers2019}{online}{}{}
+      \name{author}{2}{}{%
+        {{hash=421f701ed4ed770219168b6f80719917}{%
+           family={Gopinath},
+           familyi={G\bibinitperiod},
+           given={Rahul},
+           giveni={R\bibinitperiod}}}%
+        {{hash=5e1cda0c07dec7bd29209963590efad4}{%
+           family={Zeller},
+           familyi={Z\bibinitperiod},
+           given={Andreas},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{862861915f83f3261c7773e7353453b5}
+      \strng{fullhash}{862861915f83f3261c7773e7353453b5}
+      \strng{fullhashraw}{862861915f83f3261c7773e7353453b5}
+      \strng{bibnamehash}{862861915f83f3261c7773e7353453b5}
+      \strng{authorbibnamehash}{862861915f83f3261c7773e7353453b5}
+      \strng{authornamehash}{862861915f83f3261c7773e7353453b5}
+      \strng{authorfullhash}{862861915f83f3261c7773e7353453b5}
+      \strng{authorfullhashraw}{862861915f83f3261c7773e7353453b5}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Fuzzing is one of the key techniques for evaluating the robustness of programs against attacks. Fuzzing has to be effective in producing inputs that cover functionality and find vulnerabilities. But it also has to be efficient in producing such inputs quickly. Random fuzzers are very efficient, as they can quickly generate random inputs; but they are not very effective, as the large majority of inputs generated is syntactically invalid. Grammar-based fuzzers make use of a grammar (or another model for the input language) to produce syntactically correct inputs, and thus can quickly cover input space and associated functionality. Existing grammar-based fuzzers are surprisingly inefficient, though: Even the fastest grammar fuzzer dharma still produces inputs about a thousand times slower than the fastest random fuzzer. So far, one can have an effective or an efficient fuzzer, but not both. In this paper, we describe how to build fast grammar fuzzers from the ground up, treating the problem of fuzzing from a programming language implementation perspective. Starting with a Python textbook approach, we adopt and adapt optimization techniques from functional programming and virtual machine implementation techniques together with other novel domain-specific optimizations in a step-by-step fashion. In our F1 prototype fuzzer, these improve production speed by a factor of 100–300 over the fastest grammar fuzzer dharma. As F1 is even 5–8 times faster than a lexical random fuzzer, we can find bugs faster and test with much larger valid inputs than previously possible.}
+      \field{day}{18}
+      \field{eprintclass}{cs}
+      \field{eprinttype}{arXiv}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{pubstate}{prepublished}
+      \field{title}{Building {{Fast Fuzzers}}}
+      \field{urlday}{15}
+      \field{urlmonth}{9}
+      \field{urlyear}{2025}
+      \field{year}{2019}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \verb{doi}
+      \verb 10.48550/arXiv.1911.07707
+      \endverb
+      \verb{eprint}
+      \verb 1911.07707
+      \endverb
+      \verb{file}
+      \verb /Users/sulavmalla/Zotero/storage/85VCLLFY/Gopinath and Zeller - 2019 - Building Fast Fuzzers.pdf
+      \endverb
+      \verb{urlraw}
+      \verb http://arxiv.org/abs/1911.07707
+      \endverb
+      \verb{url}
+      \verb http://arxiv.org/abs/1911.07707
+      \endverb
+      \keyw{Computer Science - Cryptography and Security,Computer Science - Programming Languages,Computer Science - Software Engineering}
+    \endentry
+    \entry{kulkarniLearningHighlyRecursive2021}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=b59b939fa92e9b2f914d1a6d33db87af}{%
+           family={Kulkarni},
+           familyi={K\bibinitperiod},
+           given={Neil},
+           giveni={N\bibinitperiod}}}%
+        {{hash=b9e6cf720e953dda189e522f241804c8}{%
+           family={Lemieux},
+           familyi={L\bibinitperiod},
+           given={Caroline},
+           giveni={C\bibinitperiod}}}%
+        {{hash=6dec3318a42d8d397a59554c48b43851}{%
+           family={Sen},
+           familyi={S\bibinitperiod},
+           given={Koushik},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Melbourne, Australia}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{ca1bf697ad902a474ffbe81333094f52}
+      \strng{fullhash}{97f17f9989d78243cf29f316e007c02f}
+      \strng{fullhashraw}{97f17f9989d78243cf29f316e007c02f}
+      \strng{bibnamehash}{97f17f9989d78243cf29f316e007c02f}
+      \strng{authorbibnamehash}{97f17f9989d78243cf29f316e007c02f}
+      \strng{authornamehash}{ca1bf697ad902a474ffbe81333094f52}
+      \strng{authorfullhash}{97f17f9989d78243cf29f316e007c02f}
+      \strng{authorfullhashraw}{97f17f9989d78243cf29f316e007c02f}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{This paper presents ARVADA, an algorithm for learning context-free grammars from a set of positive examples and a Boolean-valued oracle. ARVADA learns a context-free grammar by building parse trees from the positive examples. Starting from initially flat trees, ARVADA builds structure to these trees with a key operation: it bubbles sequences of sibling nodes in the trees into a new node, adding a layer of indirection to the tree. Bubbling operations enable recursive generalization in the learned grammar. We evaluate ARVADA against GLADE and find it achieves on average increases of 4.98× in recall and 3.13× in F1 score, while incurring only a 1.27× slowdown and requiring only 0.87× as many calls to the oracle. ARVADA has a particularly marked improvement over GLADE on grammars with highly recursive structure, like those of programming languages.}
+      \field{booktitle}{2021 36th {{IEEE}}/{{ACM International Conference}} on {{Automated Software Engineering}} ({{ASE}})}
+      \field{eventtitle}{2021 36th {{IEEE}}/{{ACM International Conference}} on {{Automated Software Engineering}} ({{ASE}})}
+      \field{isbn}{978-1-6654-0337-5}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{title}{Learning {{Highly Recursive Input Grammars}}}
+      \field{urlday}{8}
+      \field{urlmonth}{9}
+      \field{urlyear}{2025}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{456\bibrangedash 467}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1109/ASE51524.2021.9678879
+      \endverb
+      \verb{file}
+      \verb /Users/sulavmalla/Zotero/storage/Q9YPFLAN/Kulkarni et al. - 2021 - Learning Highly Recursive Input Grammars.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/9678879/
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/9678879/
+      \endverb
+    \endentry
+    \entry{bastaniSynthesizingProgramInput}{article}{}{}
+      \name{author}{4}{}{%
+        {{hash=015e80b857c3d38a64631a8370d7ff3b}{%
+           family={Bastani},
+           familyi={B\bibinitperiod},
+           given={Osbert},
+           giveni={O\bibinitperiod}}}%
+        {{hash=f5c184ac68798ea801914f18e49d22bd}{%
+           family={Sharma},
+           familyi={S\bibinitperiod},
+           given={Rahul},
+           giveni={R\bibinitperiod}}}%
+        {{hash=7b4be770da7d4fe41717b6d75f1fa596}{%
+           family={Aiken},
+           familyi={A\bibinitperiod},
+           given={Alex},
+           giveni={A\bibinitperiod}}}%
+        {{hash=86c032bbc45c3b616f0a1170befc0e82}{%
+           family={Liang},
+           familyi={L\bibinitperiod},
+           given={Percy},
+           giveni={P\bibinitperiod}}}%
+      }
+      \strng{namehash}{4c33f1522cd8c529e2f11efcb5290f57}
+      \strng{fullhash}{e232321ddbecae80281fea6876ab79ae}
+      \strng{fullhashraw}{e232321ddbecae80281fea6876ab79ae}
+      \strng{bibnamehash}{e232321ddbecae80281fea6876ab79ae}
+      \strng{authorbibnamehash}{e232321ddbecae80281fea6876ab79ae}
+      \strng{authornamehash}{4c33f1522cd8c529e2f11efcb5290f57}
+      \strng{authorfullhash}{e232321ddbecae80281fea6876ab79ae}
+      \strng{authorfullhashraw}{e232321ddbecae80281fea6876ab79ae}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{We present an algorithm for synthesizing a context-free grammar encoding the language of valid program inputs from a set of input examples and blackbox access to the program. Our algorithm addresses shortcomings of existing grammar inference algorithms, which both severely overgeneralize and are prohibitively slow. Our implementation, GLADE, leverages the grammar synthesized by our algorithm to fuzz test programs with structured inputs. We show that GLADE substantially increases the incremental coverage on valid inputs compared to two baseline fuzzers.}
+      \field{langid}{english}
+      \field{title}{Synthesizing {{Program Input Grammars}}}
+      \verb{file}
+      \verb /Users/sulavmalla/Zotero/storage/2RG4RHY7/Bastani et al. - Synthesizing Program Input Grammars.pdf
+      \endverb
+    \endentry
+    \entry{bendrissouSynthesizingInputGrammars2022}{inproceedings}{}{}
+      \name{author}{3}{}{%
+        {{hash=bf68c0ac4db02b985d83d98a702b4738}{%
+           family={Bendrissou},
+           familyi={B\bibinitperiod},
+           given={Bachir},
+           giveni={B\bibinitperiod}}}%
+        {{hash=421f701ed4ed770219168b6f80719917}{%
+           family={Gopinath},
+           familyi={G\bibinitperiod},
+           given={Rahul},
+           giveni={R\bibinitperiod}}}%
+        {{hash=5e1cda0c07dec7bd29209963590efad4}{%
+           family={Zeller},
+           familyi={Z\bibinitperiod},
+           given={Andreas},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {San Diego CA USA}%
+      }
+      \list{publisher}{1}{%
+        {ACM}%
+      }
+      \strng{namehash}{57357d0fec4760063da9700187f3a42a}
+      \strng{fullhash}{4582975b0e6248839620381e9983f8dd}
+      \strng{fullhashraw}{4582975b0e6248839620381e9983f8dd}
+      \strng{bibnamehash}{4582975b0e6248839620381e9983f8dd}
+      \strng{authorbibnamehash}{4582975b0e6248839620381e9983f8dd}
+      \strng{authornamehash}{57357d0fec4760063da9700187f3a42a}
+      \strng{authorfullhash}{4582975b0e6248839620381e9983f8dd}
+      \strng{authorfullhashraw}{4582975b0e6248839620381e9983f8dd}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{abstract}{When producing test inputs for a program, test generators (łfuzzersž) can greatly profit from grammars that formally describe the language of expected inputs. In recent years, researchers thus have studied means to recover input grammars from programs and their executions. The GLADE algorithm by Bastani et al., published at PLDI 2017, was the first blackbox approach to claim context-free approximation of input specification for non-trivial languages such as XML, Lisp, URLs, and more. Prompted by recent observations that the GLADE algorithm may show lower performance than reported in the original paper, we have reimplemented the GLADE algorithm from scratch. Our evaluation confirms that the effectiveness score (F1) reported in the GLADE paper is overly optimistic, and in some cases, based on the wrong language. Furthermore, GLADE fares poorly in several real-world languages evaluated, producing grammars that spend megabytes to enumerate inputs.}
+      \field{booktitle}{Proceedings of the 43rd {{ACM SIGPLAN International Conference}} on {{Programming Language Design}} and {{Implementation}}}
+      \field{day}{9}
+      \field{eventtitle}{{{PLDI}} '22: 43rd {{ACM SIGPLAN International Conference}} on {{Programming Language Design}} and {{Implementation}}}
+      \field{isbn}{978-1-4503-9265-5}
+      \field{langid}{english}
+      \field{month}{6}
+      \field{shorttitle}{“{{Synthesizing}} Input Grammars”}
+      \field{title}{“{{Synthesizing}} Input Grammars”: A Replication Study}
+      \field{urlday}{8}
+      \field{urlmonth}{9}
+      \field{urlyear}{2025}
+      \field{year}{2022}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{260\bibrangedash 268}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1145/3519939.3523716
+      \endverb
+      \verb{file}
+      \verb /Users/sulavmalla/Zotero/storage/8RXKN9GY/Bendrissou et al. - 2022 - “Synthesizing input grammars” a replication study.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://dl.acm.org/doi/10.1145/3519939.3523716
+      \endverb
+      \verb{url}
+      \verb https://dl.acm.org/doi/10.1145/3519939.3523716
+      \endverb
+    \endentry
+    \entry{hendriksConsiderItParsed}{thesis}{}{}
+      \name{author}{2}{}{%
+        {{hash=7ae9c95c66fc5b904c7540468eee8e70}{%
+           family={Hendriks},
+           familyi={H\bibinitperiod},
+           given={Max},
+           giveni={M\bibinitperiod}}}%
+        {{hash=09d26638429895cb750f553b57df85a3}{%
+           family={Zaytsev},
+           familyi={Z\bibinitperiod},
+           given={Vadim},
+           giveni={V\bibinitperiod}}}%
+      }
+      \list{institution}{1}{%
+        {University of Twente}%
+      }
+      \list{location}{1}{%
+        {Enschede, Netherlands}%
+      }
+      \strng{namehash}{a53fa7d94cd2691b6219efeca97274b4}
+      \strng{fullhash}{a53fa7d94cd2691b6219efeca97274b4}
+      \strng{fullhashraw}{a53fa7d94cd2691b6219efeca97274b4}
+      \strng{bibnamehash}{a53fa7d94cd2691b6219efeca97274b4}
+      \strng{authorbibnamehash}{a53fa7d94cd2691b6219efeca97274b4}
+      \strng{authornamehash}{a53fa7d94cd2691b6219efeca97274b4}
+      \strng{authorfullhash}{a53fa7d94cd2691b6219efeca97274b4}
+      \strng{authorfullhashraw}{a53fa7d94cd2691b6219efeca97274b4}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Relational parsing with context-free memoization, first presented in 2020, promises generalised contextfree parsing at speeds exceeding that of the current state-of-the-art parser generator: ANTLR4. Here, we present an independent attempt at bringing relational parsing to life based only on its original documentation, identify challenges when implementing it, and examine the capabilities of relational parsing. Our implementation of relational parsing can parse some challenging types of grammars, half of which ANTLR4 could not. However, there is a type of grammar that we cannot parse and for most tested grammars we did not manage to improve parsing speed by using context-free memoization. We expect these two caveats result from the way we implemented relational parsing rather than the method itself. We discuss some open questions that need answering before relational parsing can take its place as a practical and usable context-free parser.}
+      \field{langid}{english}
+      \field{title}{Consider It {{Parsed}}!}
+      \field{type}{Thesis}
+      \true{nocite}
+      \verb{file}
+      \verb /Users/sulavmalla/Zotero/storage/JSV2PSMD/Hendriks and Zaytsev - Consider it Parsed!.pdf
+      \endverb
+    \endentry
+    \entry{schroderStaticInferenceRegular}{article}{}{}
+      \name{author}{3}{}{%
+        {{hash=7c6c2e17f0d639dcb6529082927cd6ca}{%
+           family={Schröder},
+           familyi={S\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+        {{hash=232be5855be8eff710c726b964bf176f}{%
+           family={Cito},
+           familyi={C\bibinitperiod},
+           given={Jürgen},
+           giveni={J\bibinitperiod}}}%
+        {{hash=d6656c2a7b92e98faff26859a2d4711c}{%
+           family={Wien},
+           familyi={W\bibinitperiod},
+           given={TU},
+           giveni={T\bibinitperiod\bibinitdelim U\bibinitperiod}}}%
+      }
+      \strng{namehash}{3c03d48972043dd08b2d9fda84dfacf0}
+      \strng{fullhash}{cd10f6a4049f7c6f1cc239961143ff76}
+      \strng{fullhashraw}{cd10f6a4049f7c6f1cc239961143ff76}
+      \strng{bibnamehash}{cd10f6a4049f7c6f1cc239961143ff76}
+      \strng{authorbibnamehash}{cd10f6a4049f7c6f1cc239961143ff76}
+      \strng{authornamehash}{3c03d48972043dd08b2d9fda84dfacf0}
+      \strng{authorfullhash}{cd10f6a4049f7c6f1cc239961143ff76}
+      \strng{authorfullhashraw}{cd10f6a4049f7c6f1cc239961143ff76}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{langid}{english}
+      \field{title}{Static {{Inference}} of {{Regular Grammars}} for {{Ad Hoc Parsers}}}
+      \true{nocite}
+      \verb{file}
+      \verb /Users/sulavmalla/Zotero/storage/QGDRZJGL/Schröder et al. - Static Inference of Regular Grammars for Ad Hoc Parsers.pdf
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

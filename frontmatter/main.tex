@@ -1,0 +1,34 @@
+%%%%%%%% TITLE PAGE %%%%%%%%%%%%
+\newgeometry{
+    inner=2.5cm,
+    outer=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm
+}
+\onehalfspacing
+\input{frontmatter/title_page}
+\restoregeometry
+\onehalfspacing
+
+%%%%%%%%%%%%%%%% COPYRIGHT %%%%%%%%%%%%%%%%%%%%
+\clearpage\null\thispagestyle{empty}
+\begin{center}
+    \vspace*{\fill}
+    
+    % \textcopyright \ 2025 Sulav Malla \\
+    % All Rights Reserved\\ \vspace{1em}
+    
+    No part of this work may be reproduced, stored in a retrieval system, or transmitted \\
+    in any form or by any means, electronic, mechanical, photocopying, or otherwise, \\
+    without the prior permission of the author or The University of Sydney.
+\end{center}
+
+%%%%%%%%%%%%%%%% ABSTRACT %%%%%%%%%%%%%%%%%%%%
+\chapter*{Abstract}\addcontentsline{toc}{chapter}{Abstract}
+\lipsum{1}
+
+
+
+%%%%%%%%%%%%%%%% Table of Contents %%%%%%%%%%%%%%%%%%%%
+\newpage\thispagestyle{empty}
+\tableofcontents

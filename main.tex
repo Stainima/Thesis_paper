@@ -1,0 +1,43 @@
+%%% Document formatting %%%
+\documentclass[
+    a4paper,
+    11pt, 
+    oneside, 
+    titlepage, 
+    openright,
+]{book}
+
+\input{tex_preamble}
+
+\begin{document}
+
+%%%%%%%%%%% FRONT MATTER %%%%%%%%%%%  
+\frontmatter
+\onehalfspacing
+
+\include{frontmatter/main}
+
+%%%%%%%%%%%  Main Matter %%%%%%%%%%%  
+\mainmatter
+\onehalfspacing
+\newpage\null\thispagestyle{empty}
+
+
+\include{chapters/ch1_introduction}
+\include{chapters/ch2_review}
+\include{chapters/ch3_ARVADA}
+\include{chapters/ch4_evaluation}
+\include{chapters/ch5_discussion}
+\include{chapters/ch6_conculsion}
+
+
+
+
+
+
+%%%%%%%%%%%  Back Matter %%%%%%%%%%%
+\backmatter  
+\include{backmatter/bibliography}
+
+
+\end{document}
