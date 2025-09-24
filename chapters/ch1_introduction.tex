@@ -1,12 +1,15 @@
-\chapter{Introduction}
+\chapter{INTRODUCTION}
 
 In the field of software testing, generating test inputs for a program (fuzzing) is a well-known and popular technique. To improve the effectiveness of fuzzers, recent research has focused on recovering input grammars from existing programs, as incorporating knowledge about the input language and grammar of the program under test drastically improves the effectiveness of fuzzers \cite{gopinathBuildingFastFuzzers2019}.
 
+\vspace{\baselineskip}
 Learning Highly Recursive Input Grammars, authored by Lemieux C., Sen K., and Kulkarni N., and published in 2021 at UCB \cite{kulkarniLearningHighlyRecursive2021}, presents an algorithm called ARVADA, developed for this purpose. ARVADA attempts to learn context-free grammars (CFGs) of a specified program given a set of valid inputs and a boolean-value black-box oracle. Along with presenting the algorithm, the paper evaluates it by comparing ARVADA to GLADE \cite{bastaniSynthesizingProgramInput}, a previously developed state-of-the-art algorithm for the same task in a similar setting.
 During the evaluation, it was observed that the F1 scores of GLADE were much lower than those reported in the official GLADE paper \cite{bastaniSynthesizingProgramInput}. This led to a replication study of the original GLADE paper, conducted by Gopinath R., Bachir B., and Zeller A., and published as “Synthesizing Input Grammars: A Replication Study” \cite{bendrissouSynthesizingInputGrammars2022} at CISPA, which investigated the accuracy of the results in the original paper. Similarly, as done by the researchers at CISPA, this thesis aims to replicate ARVADA to reproduce and investigate the results presented in the original paper \cite{kulkarniLearningHighlyRecursive2021}.
 
+\vspace{\baselineskip}
 This thesis is an attempt to reproduce ARVADA in a clean-room environment, meaning with no reference to or knowledge of the original implementation, but only the abstraction and explanations provided in the paper \cite{kulkarniLearningHighlyRecursive2021}. The implementation language of choice is C.
 
+\vspace{\baselineskip}
 First, this paper will introduce general concepts of grammar and parsing, the importance of learning input grammars, a deeper explanation of ARVADA, and the motivation for conducting a replication study. This is followed by a brief explanation of ARVADA and how it works according to the original paper \cite{kulkarniLearningHighlyRecursive2021}, then a more in-depth explanation of the algorithm and how it was reproduced in C with reference to the code. Afterward, an evaluation compares the results of the reproduced implementation with those from the original paper \cite{kulkarniLearningHighlyRecursive2021}. Finally, a discussion highlights and comments on the original algorithm, the reproduced results, and the overall process of conducting the replication study, followed by a brief conclusion.
 
 %%% Put in eval , and stuff about arvada 1 and arvada 2 here.

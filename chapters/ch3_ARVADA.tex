@@ -1,6 +1,26 @@
-\chapter{ARVADA Algorithm}
+\chapter{ALGOTRITHM \& METHODOLGIES}
 
 Methodolgies:
 ARVADA walkthrough
 
 How you did it, and point out any differences?
+
+\begin{lstlisting}[caption={Struct used in code to store all \textit{trees}}]
+typedef struct nodes{
+    int capacity;
+    int count;
+    struct node **nodes;
+} Nodes;
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Struct used in \textit{trees}}]
+typedef struct node{
+    int capacity;
+    char character;
+    struct node *parent;
+    int t;
+    int num_child;
+    int pos;
+    struct node **children;
+} Node;
+\end{lstlisting}

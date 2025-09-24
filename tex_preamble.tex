@@ -29,6 +29,7 @@
     \clearfield{langid}
 }
 
+
 %%% Image packages %%%
 \usepackage{graphicx}
 \graphicspath{ {./img/} }
@@ -72,6 +73,15 @@
 
 \usepackage[acronym, nonumberlist, nopostdot]{glossaries} %%% List of Abbreviations
 \makeglossaries
+
+\usepackage{listings} % Nice C code formatting
+\lstset{language=C, numbers=left, basicstyle=\ttfamily,
+keywordstyle=\color{purple},
+commentstyle=\color{green!50!black},
+stringstyle=\color{orange},
+showstringspaces=false,
+breaklines=true
+} % customising code formatting 
 
 \usepackage{titlesec}
 \titleformat*{\paragraph}{\itshape\mdseries} % Change \paragraph styling
