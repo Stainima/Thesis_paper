@@ -2,13 +2,23 @@
 
 \subsection{What is ARVADA?}
 
-\subsubsection{Introcution}
+\subsubsection{Introduction}
 
-ARVADA is an algorithm, published in \enquote{Learning Highly Recursive Input Grammars} \cite{kulkarniLearningHighlyRecursive2021} at the University of California, Berkeley in 2021. It is an algorithm designed to learn context-free grammars from a set of positive examples and a Boolean-valued oracle $\mathcal{O}$. Starting from an initially flat parse trees, ARVADA repeatedly utilizes two specialised operations, \textbf{bubbling} and \textbf{merging}, to add structure to these trees. Which is used to extract the smallest set of context-free grammar possible that accommodates for all the given examples. The algorithm aim to generalise the language as much as possible, while not over generalising the language accepted by the $\mathcal{O}$.
+ARVADA is an algorithm published in \enquote{Learning Highly Recursive Input Grammars} \cite{kulkarniLearningHighlyRecursive2021} at the University of California, Berkeley in 2021. It is designed to learn context-free grammars from a set of positive examples and a Boolean-valued oracle $\mathcal{O}$. Starting from initially flat parse trees, ARVADA repeatedly applies two specialized operations, \textbf{bubbling} and \textbf{merging}, to incrementally add structure to these trees. From this structured representation, it extracts the smallest possible set of context-free grammar rules that accommodate all the given examples. The algorithm aims to generalize the language as much as possible without overgeneralizing beyond what is accepted by $\mathcal{O}$.
 
-ARVADA, similar to GLADE \cite{bastaniSynthesizingProgramInput}, works assuming a black-box oracle $\mathcal{O}$. Meaning ARVADA has no access or knowledge about how the oracle works, but only can see the Boolean value return from the $\mathcal{O}$. 
+Like GLADE \cite{bastaniSynthesizingProgramInput}, ARVADA operates under the assumption of a black-box oracle $\mathcal{O}$. This means that ARVADA has no access to or knowledge of the internal workings of the oracle and can only observe the Boolean values returned by $\mathcal{O}$.
 
-\subsubsection{Walktrough}
+\subsubsection{Explanation}
+
+ARVADA takes as input the oracle $\mathcal{O}$ and a set of positive, valid oracle inputs $S$. For each string $s \in S$, querying $\mathcal{O}(s)$ returns \verb|True|. The algorithm begins by constructing a flat parse tree for each string in $S$. Each tree has a single root node $t_0$ whose children correspond to the individual characters of the input string $s$.
+
+Next, ARVADA performs the \textbf{bubbling} operation. In this step, a sequence of sibling nodes in the tree is selected and replaced with a new non-terminal node. This new node takes the selected sibling nodes as its children, thereby introducing an additional level of structure. Essentially, ARVADA transforms sequences of terminal nodes in the flat parse tree into subtrees by introducing new non-terminal nodes and progressively adding structure to the tree.
+
+ARVADA then decides whether to accept or reject each bubble by checking whether the newly bubbled structure enables a sound generalization of the learned grammar. Each non-leaf node in the tree can be viewed as a non-terminal in the emerging grammar. To determine whether a bubble should be accepted, ARVADA checks whether replacing any node in the tree with the new bubbled subtree results in the generation of valid input strings according to $\mathcal{O}$. If the replacement produces valid strings, the bubble is accepted, and the tree is restructured so that both the bubbled subtree and the replaced node share the same non-terminal label.
+
+The addition of new non-terminal nodes expands the language defined by the learned grammar, since any string derivable from the same label can now be substituted interchangeably. This relabeling of the bubbled subtree and the replaced node is called a \textbf{merge}, as it merges the labels of two previously distinct nodes in the tree. If a bubble is not accepted, it is discarded, and none of the trees are affected or structurally modified.
+
+\subsubsection{Explanation}
 
 \subsection{What are Grammars?}
 
