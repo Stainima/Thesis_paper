@@ -2,11 +2,17 @@
 
 \subsection{What is ARVADA?}
 
-ARVADA is an algorithm, published in \enquote{Learning Highly Recursive Input Grammars} \cite{kulkarniLearningHighlyRecursive2021} at the University of California, Berkeley in 2021. It is an algorithm designed to learn context-free grammars from a set of positive examples and a Boolean-valued oracle. Starting from an initially flat parse trees, ARVADA builts structure to these trees. Which the algorithm uses to extract gramamr learned from the set of positive examples.
+\subsubsection{Introcution}
+
+ARVADA is an algorithm, published in \enquote{Learning Highly Recursive Input Grammars} \cite{kulkarniLearningHighlyRecursive2021} at the University of California, Berkeley in 2021. It is an algorithm designed to learn context-free grammars from a set of positive examples and a Boolean-valued oracle $\mathcal{O}$. Starting from an initially flat parse trees, ARVADA repeatedly utilizes two specialised operations, \textbf{bubbling} and \textbf{merging}, to add structure to these trees. Which is used to extract the smallest set of context-free grammar possible that accommodates for all the given examples. The algorithm aim to generalise the language as much as possible, while not over generalising the language accepted by the $\mathcal{O}$.
+
+ARVADA, similar to GLADE \cite{bastaniSynthesizingProgramInput}, works assuming a black-box oracle $\mathcal{O}$. Meaning ARVADA has no access or knowledge about how the oracle works, but only can see the Boolean value return from the $\mathcal{O}$. 
+
+\subsubsection{Walktrough}
 
 \subsection{What are Grammars?}
 
-Grammars both in the natural and artifical language can be defined as a set of 
+Grammars both in the natural and artifical language can be defined as a set of rules by which valid sentences in a language are constructed \cite{jiangFormalGrammarsLanguages}. Beginning with a start symbol, which is a single non-termial, production rules are applied sequentially adding alphabet from the grammar to generate a string which is valid in the grammar.
 
 \subsection{Further Quesitons}
 
@@ -29,8 +35,6 @@ Hence, with the aim of replicating and improving upon the runtime bottleneck pre
 Why ARVADA / Problem Statement?
 
 Why is learning highly input grammar important?
-
-What is the problem statement?
 
 What is GLADE?
 
