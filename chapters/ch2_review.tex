@@ -6,47 +6,71 @@
 
 ARVADA is an algorithm published in \enquote{Learning Highly Recursive Input Grammars} \cite{kulkarniLearningHighlyRecursive2021} at the University of California, Berkeley in 2021. It is designed to learn context-free grammars from a set of positive examples and a Boolean-valued oracle $\mathcal{O}$. Starting from initially flat parse trees, ARVADA repeatedly applies two specialized operations, \textbf{bubbling} and \textbf{merging}, to incrementally add structure to these trees. From this structured representation, it extracts the smallest possible set of context-free grammar rules that accommodate all the given examples. The algorithm aims to generalize the language as much as possible without overgeneralizing beyond what is accepted by $\mathcal{O}$.
 
+\vspace{\baselineskip}
 Like GLADE \cite{bastaniSynthesizingProgramInput}, ARVADA operates under the assumption of a black-box oracle $\mathcal{O}$. This means that ARVADA has no access to or knowledge of the internal workings of the oracle and can only observe the Boolean values returned by $\mathcal{O}$.
 
 \subsubsection{Explanation}
 
 ARVADA takes as input the oracle $\mathcal{O}$ and a set of positive, valid oracle inputs $S$. For each string $s \in S$, querying $\mathcal{O}(s)$ returns \verb|True|. The algorithm begins by constructing a flat parse tree for each string in $S$. Each tree has a single root node $t_0$ whose children correspond to the individual characters of the input string $s$.
 
+\vspace{\baselineskip}
 Next, ARVADA performs the \textbf{bubbling} operation. In this step, a sequence of sibling nodes in the tree is selected and replaced with a new non-terminal node. This new node takes the selected sibling nodes as its children, thereby introducing an additional level of structure. Essentially, ARVADA transforms sequences of terminal nodes in the flat parse tree into subtrees by introducing new non-terminal nodes and progressively adding structure to the tree.
 
+\vspace{\baselineskip}
 ARVADA then decides whether to accept or reject each bubble by checking whether the newly bubbled structure enables a sound generalization of the learned grammar. Each non-leaf node in the tree can be viewed as a non-terminal in the emerging grammar. To determine whether a bubble should be accepted, ARVADA checks whether replacing any node in the tree with the new bubbled subtree results in the generation of valid input strings according to $\mathcal{O}$. If the replacement produces valid strings, the bubble is accepted, and the tree is restructured so that both the bubbled subtree and the replaced node share the same non-terminal label.
 
+\vspace{\baselineskip}
 The addition of new non-terminal nodes expands the language defined by the learned grammar, since any string derivable from the same label can now be substituted interchangeably. This relabeling of the bubbled subtree and the replaced node is called a \textbf{merge}, as it merges the labels of two previously distinct nodes in the tree. If a bubble is not accepted, it is discarded, and none of the trees are affected or structurally modified.
 
-\subsubsection{Explanation}
+\subsubsection{Walkthrough}
+
+\subsection{What is GLADE?}
+GLADE is an algorithm proposed by Bastani et al., published in Synthesizing Input Grammars at PLDI 2017 \cite{bastaniSynthesizingProgramInput}. Like ARVADA, GLADE uses a set of valid inputs and black-box access to the program, with the aim of automatically approximating the context-free input grammar of the given program.
+
+\vspace{\baselineskip}
+
+Because GLADE and ARVADA share a similar experimental setting, GLADE was used as a benchmark for ARVADA during its evaluation. It was shown that GLADE, on average, had a faster runtime compared to ARVADA. However, ARVADA outperformed GLADE in terms of generalization across the 11 benchmarks, achieving a higher F1 score on 9 of the 11 benchmarks.
 
 \subsection{What are Grammars?}
 
-Grammars both in the natural and artifical language can be defined as a set of rules by which valid sentences in a language are constructed \cite{jiangFormalGrammarsLanguages}. Beginning with a start symbol, which is a single non-termial, production rules are applied sequentially adding alphabet from the grammar to generate a string which is valid in the grammar.
+Grammars in computer science can be defined as a set of rules by which valid sentences in a language are constructed \cite{jiangFormalGrammarsLanguages}, serving as a blueprint for the language. Beginning with a start symbol, which is a single non-terminal, production rules are applied sequentially, adding symbols from the alphabet according to the grammar’s production rules, to generate a string that is valid in the language \cite{GrammarTheoryComputation2025}.
+
+\vspace{\baselineskip}
+
+A grammar can be represented by the tuple $<N, T, P, S>$, where:
+\begin{itemize}
+\item $N$ is a finite, non-empty set of non-terminal symbols.
+\item $T$ is a finite set of terminal symbols.
+\item $P$ is a finite set of production rules.
+\item $S$ is the start symbol (a non-terminal symbol).
+\end{itemize}
+
+Here, the production rules $P$ define all symbol substitutions that can be performed recursively to generate different symbol sequences \cite{GrammarTheoryComputation2025}.
+
+\subsection{What are context free grammars?}
 
 \subsection{Further Quesitons}
 
 What are parsers?
 
-What are context free grammar?
-
 Why do a replication study?
 
 \subsection{Why C?}
 
-In the original study \cite{kulkarniLearningHighlyRecursive2021}, the ARVADA algorithm was implemented in Python. When compared to GLADE \cite{bastaniSynthesizingProgramInput}, which was implemented in Java, ARVADA exhibited a slower average runtime across all benchmarks. As stated in the study, this could be attributed to the natural runtime disadvantage of Python compared to Java.
+In the original study \cite{kulkarniLearningHighlyRecursive2021}, the ARVADA algorithm was implemented in Python. When compared to GLADE \cite{bastaniSynthesizingProgramInput}, which was implemented in Java, ARVADA exhibited a slower average runtime across all benchmarks. In the study, this was attributed to the natural runtime disadvantage of Python compared to Java, which is valid, however the possibility that ARVADA itself might be inherently slow was not acknowledged.
 
 \vspace{\baselineskip}
-In a comparative study, \enquote{A Pragmatic Comparison of Four Different Programming Languages} \cite{aliPragmaticComparisonFour2021}, it was found that if speed and efficiency were important in an implementation, C was a better options compared to Python. C, being a mid-level, statically typed, structured language that runs under a compiler, will always be faster than a dynamic language run under an interpreter such as Python \cite{kumarPythonLanguageComparison2022}. Along with being a structured language, C also comes with only essential features. These limited features contribute to its efficiency but also introduce a higher level of complexity compared to Python \cite{aliPragmaticComparisonFour2021}\cite{kumarPythonLanguageComparison2022}.
+
+In a comparative study, A Pragmatic Comparison of Four Different Programming Languages \cite{aliPragmaticComparisonFour2021}, it was found that if speed and efficiency are important, C is a better option than Python. C, being a mid-level, statically typed, structured language that runs under a compiler, is consistently faster than dynamic languages that run under an interpreter, such as Python \cite{kumarPythonLanguageComparison2022}. In addition to being a structured language, C also provides only essential features. These limited features contribute to its efficiency but also introduce a higher level of complexity compared to Python \cite{aliPragmaticComparisonFour2021, kumarPythonLanguageComparison2022}.
 
 \vspace{\baselineskip}
-Hence, with the aim of replicating and improving upon the runtime bottleneck presented by Python—while acknowledging the rise in complexity C introduces compared to Python—C was chosen as the language of implementation.
+
+Therefore, with the aim of investigating and potentially improving the runtime bottleneck, C was chosen as the language of implementation in this replication study. The increase in implementation complexity due to the nature of programming in C compared to Python was also acknowledged.
 
 Why ARVADA / Problem Statement?
 
 Why is learning highly input grammar important?
 
-What is GLADE?
 
 What are other Similar works done?
 
