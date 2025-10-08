@@ -50,10 +50,29 @@ Left-linear take the following form, where the $N$ on the right hand side of the
 Note that right-linear and left-linear forms cannot be mixed, 
 as doing so may generate languages that are not regular. 
 Additionally, production of $\varepsilon$ is allowed only if the corresponding nonterminal 
-does not appear on the right-hand side of any production rule.
-
+does not appear on the right-hand side of any production rule \cite{hendriksConsiderItParsed,shiIntelligenceScience2021}
 
 \subsubsection{Type-2}
+
+Type-2 grammars, commonly known as context-free grammars, have production rules of the form:
+\begin{itemize}
+    \item[] \( A \rightarrow \alpha \)
+\end{itemize}
+where \( A \in N \) and \( \alpha \in (T \cup N)^* \), meaning any string composed of terminal and nonterminal symbols \cite{hendriksConsiderItParsed,shiIntelligenceScience2021}.
+
+Due to the nature of the right-hand side, nonterminals are allowed to recursively expand, which can lead to repetition. For example:
+\begin{itemize}
+    \item[] \( A \rightarrow sAb \)
+    \item[] \( A \rightarrow \varepsilon \)
+\end{itemize}
+can produce derivations of the form
+\[
+A \Rightarrow sAb \Rightarrow ssAbb \Rightarrow \cdots \Rightarrow s^n b^n,
+\]
+until eventually \( A \Rightarrow \varepsilon \).
+
+This property is particularly useful because it allows the grammar to enforce well-formed parenthesis expressions and other recursive structures purely through production rules. As a result, context-free grammars are of great importance in the design and specification of programming languages\cite{hendriksConsiderItParsed,shiIntelligenceScience2021}.
+
 \subsubsection{Type-1}
 \subsubsection{Type-0}
 
