@@ -24,16 +24,62 @@ The addition of new non-terminal nodes expands the language defined by the learn
 
 \subsubsection{Walkthrough}
 
+This walkthorugh will follow very closely to the examples provided in the original paper \cite{kulkarniLearningHighlyRecursive2021}. 
+
+%%%%%%%%% GRAMMAR %%%%%%%%%%%
+\begin{figure}[h]
+\begin{tcolorbox}[title=$G_w$, colback=white, colframe=black]
+\begin{grammar}{
+   \pr{\emph{start}}{\emph{stmt}}
+    
+    \pr{\emph{stmt}}{while\textvisiblespace\emph{boolexpr}\textvisiblespace do\textvisiblespace\emph{stmt}}
+    & & \gors if\textvisiblespace\emph{boolexpr}\textvisiblespace then\textvisiblespace\emph{stmt}\textvisiblespace else\textvisiblespace\emph{stmt}\\
+    & & \gors L\textvisiblespace:=\textvisiblespace\emph{numexpr}\\
+    & & \gors \emph{stmt}\textvisiblespace;\textvisiblespace\emph{stmt}\\
+    
+    \pr{\emph{boolexpr}}{$\neg$\emph{boolexpr}}
+    & & \gors \emph{boolexpr}\textvisiblespace\&\textvisiblespace\emph{boolexpr}\\
+    & & \gors \emph{numexpr}\textvisiblespace<=\textvisiblespace\emph{numexpr}\\
+    & & \gors false\\
+    & & \gors true\\
+    
+    \pr{\emph{numexpr}}{(\textvisiblespace\emph{numexpr}\textvisiblespace*\textvisiblespace\emph{numexpr}\textvisiblespace)}
+    & & \gors L\\
+    & & \gors n\\
+}
+\end{grammar}
+\end{tcolorbox}
+
+\[
+S = \left\{
+\text{\texttt{while true \& false do L = n}},
+\quad
+\text{\texttt{L = n ; L = (n+n)}}
+\right\}
+\]
+
+\[
+O(i) =
+\begin{cases}
+\text{True} & \text{if } i \in \mathcal{L}(G_w) \\
+\text{False} & \text{otherwise}
+\end{cases}
+\]
+\label{grammar}
+\caption{Definition a simple while grammar $G_w$, sample input strings $S$, and oracle $\mathcal{O}$}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%
+
 \subsection{What is GLADE?}
 GLADE is an algorithm proposed by Bastani et al., published in Synthesizing Input Grammars at PLDI 2017 \cite{bastaniSynthesizingProgramInput}. Like ARVADA, GLADE uses a set of valid inputs and black-box access to the program, with the aim of automatically approximating the context-free input grammar of the given program.
 
 \vspace{\baselineskip}
 
-Because GLADE and ARVADA share a similar experimental setting, GLADE was used as a benchmark for ARVADA during its evaluation. It was shown that GLADE, on average, had a faster runtime compared to ARVADA. However, ARVADA outperformed GLADE in terms of generalization across the 11 benchmarks, achieving a higher F1 score on 9 of the 11 benchmarks.
+Because GLADE and ARVADA share a similar experimental setting, GLADE was used as a benchmark for ARVADA during its evaluation. It was shown that GLADE, on average, had a faster runtime compared to ARVADA. However in terms of generalization, following the original grammar of the oracle more closely , ARVADA out-performed GLADE across the 11 benchmarks, achieving a higher F1 score on 9 of the 11 benchmarks.
 
 \subsection{What are Grammars?}
 
-Grammars in computer science can be defined as a set of rules by which valid sentences in a language are constructed \cite{jiangFormalGrammarsLanguages}, serving as a blueprint for the language. Beginning with a start symbol, which is a single non-terminal, production rules are applied sequentially, adding symbols from the alphabet according to the grammar’s production rules, to generate a string that is valid in the language \cite{GrammarTheoryComputation2025}.
+Grammars in computer science can be defined as a set of rules by which valid sentences in a language are constructed \cite{jiangFormalGrammarsLanguages}, serving as a blueprint for the language. Beginning with a start symbol, which is a single non-terminal, production rules are applied sequentially, adding symbols from the alphabet according to the grammar’s production rules, to derive a string that is valid in the language \cite{GrammarTheoryComputation2025}.
 
 \vspace{\baselineskip}
 
@@ -49,11 +95,6 @@ Here, the production rules $P$ define all symbol substitutions that can be perfo
 
 \subsection{What are context free grammars?}
 
-\subsection{Further Quesitons}
-
-What are parsers?
-
-Why do a replication study?
 
 \subsection{Why C?}
 
@@ -67,10 +108,17 @@ In a comparative study, A Pragmatic Comparison of Four Different Programming Lan
 
 Therefore, with the aim of investigating and potentially improving the runtime bottleneck, C was chosen as the language of implementation in this replication study. The increase in implementation complexity due to the nature of programming in C compared to Python was also acknowledged.
 
+\subsection{Further Quesitons}
+
+What are parsers?
+
+Why do a replication study?
+
 Why ARVADA / Problem Statement?
 
-Why is learning highly input grammar important?
+what are the drawbacks of ARVADA?
 
+Why is learning highly input grammar important?
 
 What are other Similar works done?
 
