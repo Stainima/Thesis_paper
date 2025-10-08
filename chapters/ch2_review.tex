@@ -1,5 +1,62 @@
 \chapter{GENERAL REVIEW OF LITERATURE}
 
+\subsection{What are Grammars?}
+
+Grammars in computer science can be defined as a set of rules by which valid sentences in a language are constructed \cite{jiangFormalGrammarsLanguages}, serving as a blueprint for the language. Beginning with a start symbol, which is a single non-terminal, production rules are applied sequentially, adding symbols from the alphabet according to the grammar’s production rules, to derive a string that is valid in the language \cite{GrammarTheoryComputation2025}.
+
+\vspace{\baselineskip}
+
+A grammar can be represented by the tuple $<N, T, P, S>$, where:
+\begin{itemize}
+\item $N$ is a finite, non-empty set of non-terminal symbols/alphabet.
+\item $T$ is a finite set of terminal symbols/alphabet.
+\item $P$ is a finite set of production rules.
+\item $S$ is the start symbol (a non-terminal symbol/alphabet).
+\end{itemize}
+
+Here, the production rules $P$ define all symbol substitutions that can be performed recursively to generate different symbol sequences, known as \emph{strings} \cite{GrammarTheoryComputation2025}. These rules are written in the form $A \rightarrow w$, where $A \in N$ and $w \in (N \cup T)^*$.
+
+\subsection{What are Context-Free Grammars?}
+
+Depending on the set of production rules, each grammar can be classified according to the \emph{Chomsky hierarchy} \cite{chomskyTHREEMODELSTIE1956}.
+
+\begin{center}
+    \includegraphics[width=0.7\textwidth]{chapter1/ch_heir.png}
+    \captionof{figure}{Chomsky hierarchy \cite{ChomskyHierarchyTheory2025}}
+    \label{fig:hierarchy}
+\end{center}
+
+The hierarchy outlines four distinct types of grammars, ranging from \textbf{Type-3} (the most restrictive) to \textbf{Type-0} (the most general and unstructured). \textbf{Type-2} grammars in this hierarchy are known as \emph{context-free grammars}.
+
+\subsubsection{Type-3}
+Type-3 grammars, known as regular grammars are used to generate regular languages. A grammar is classified as a regular grammar if its production rules follow from $X \rightarrow a | X \rightarrow aY$. The left-hand side must consist of a single $T$ and the right hand side must consist of an single $T$ or single $T$ and single $N$.
+
+Regular grammar can take 2 froms, right linear and left linear.
+
+Right-linear take the following form, where the $N$ on the right hand side of the arrow is on the far right.
+\begin{itemize}
+    \item[] $X \rightarrow a$
+    \item[] $X \rightarrow aB$
+    \item[] $X \rightarrow \varepsilon$
+\end{itemize}
+
+Left-linear take the following form, where the $N$ on the right hand side of the arrow is on the far left.
+\begin{itemize}
+    \item[] $X \rightarrow a$
+    \item[] $X \rightarrow Ba$
+    \item[] $X \rightarrow \varepsilon$
+\end{itemize}
+
+Note that right-linear and left-linear forms cannot be mixed, 
+as doing so may generate languages that are not regular. 
+Additionally, production of $\varepsilon$ is allowed only if the corresponding nonterminal 
+does not appear on the right-hand side of any production rule.
+
+
+\subsubsection{Type-2}
+\subsubsection{Type-1}
+\subsubsection{Type-0}
+
 \subsection{What is ARVADA?}
 
 \subsubsection{Introduction}
@@ -24,26 +81,26 @@ The addition of new non-terminal nodes expands the language defined by the learn
 
 \subsubsection{Walkthrough}
 
-This walkthorugh will follow very closely to the examples provided in the original paper \cite{kulkarniLearningHighlyRecursive2021}. 
+This walkthorugh will follow very closely to the examples provided in the original paper \cite{kulkarniLearningHighlyRecursive2021}, and use a concrete example to provide an indepth explaination of ARVADA.
 
 %%%%%%%%% GRAMMAR %%%%%%%%%%%
 \begin{figure}[h]
 \begin{tcolorbox}[title=$G_w$, colback=white, colframe=black]
 \begin{grammar}{
-   \pr{\emph{start}}{\emph{stmt}}
+    \pr{\emph{start}}{\emph{stmt}}
     
-    \pr{\emph{stmt}}{while\textvisiblespace\emph{boolexpr}\textvisiblespace do\textvisiblespace\emph{stmt}}
-    & & \gors if\textvisiblespace\emph{boolexpr}\textvisiblespace then\textvisiblespace\emph{stmt}\textvisiblespace else\textvisiblespace\emph{stmt}\\
-    & & \gors L\textvisiblespace:=\textvisiblespace\emph{numexpr}\\
-    & & \gors \emph{stmt}\textvisiblespace;\textvisiblespace\emph{stmt}\\
+    \pr{\emph{stmt}}{while\textvisiblespace\ \emph{boolexpr}\textvisiblespace\ do\textvisiblespace\ \emph{stmt}}
+    & & \gors if\textvisiblespace\ \emph{boolexpr}\textvisiblespace\ then\textvisiblespace\ \emph{stmt}\textvisiblespace\ else\textvisiblespace\ \emph{stmt}\\
+    & & \gors L\textvisiblespace\ =\textvisiblespace\ \emph{numexpr}\\
+    & & \gors \emph{stmt}\textvisiblespace\ ;\textvisiblespace\ \emph{stmt}\\
     
-    \pr{\emph{boolexpr}}{$\neg$\emph{boolexpr}}
-    & & \gors \emph{boolexpr}\textvisiblespace\&\textvisiblespace\emph{boolexpr}\\
-    & & \gors \emph{numexpr}\textvisiblespace<=\textvisiblespace\emph{numexpr}\\
+    \pr{\emph{boolexpr}}{$\thicksim$\emph{boolexpr}}
+    & & \gors \emph{boolexpr}\textvisiblespace\ \&\textvisiblespace\ \emph{boolexpr}\\
+    & & \gors \emph{numexpr}\textvisiblespace\ ==\textvisiblespace\ \emph{numexpr}\\
     & & \gors false\\
     & & \gors true\\
     
-    \pr{\emph{numexpr}}{(\textvisiblespace\emph{numexpr}\textvisiblespace*\textvisiblespace\emph{numexpr}\textvisiblespace)}
+    \pr{\emph{numexpr}}{(\textvisiblespace\ \emph{numexpr}\textvisiblespace\ +\textvisiblespace\ \emph{numexpr}\textvisiblespace\ )}
     & & \gors L\\
     & & \gors n\\
 }
@@ -76,25 +133,6 @@ GLADE is an algorithm proposed by Bastani et al., published in Synthesizing Inpu
 \vspace{\baselineskip}
 
 Because GLADE and ARVADA share a similar experimental setting, GLADE was used as a benchmark for ARVADA during its evaluation. It was shown that GLADE, on average, had a faster runtime compared to ARVADA. However in terms of generalization, following the original grammar of the oracle more closely , ARVADA out-performed GLADE across the 11 benchmarks, achieving a higher F1 score on 9 of the 11 benchmarks.
-
-\subsection{What are Grammars?}
-
-Grammars in computer science can be defined as a set of rules by which valid sentences in a language are constructed \cite{jiangFormalGrammarsLanguages}, serving as a blueprint for the language. Beginning with a start symbol, which is a single non-terminal, production rules are applied sequentially, adding symbols from the alphabet according to the grammar’s production rules, to derive a string that is valid in the language \cite{GrammarTheoryComputation2025}.
-
-\vspace{\baselineskip}
-
-A grammar can be represented by the tuple $<N, T, P, S>$, where:
-\begin{itemize}
-\item $N$ is a finite, non-empty set of non-terminal symbols.
-\item $T$ is a finite set of terminal symbols.
-\item $P$ is a finite set of production rules.
-\item $S$ is the start symbol (a non-terminal symbol).
-\end{itemize}
-
-Here, the production rules $P$ define all symbol substitutions that can be performed recursively to generate different symbol sequences \cite{GrammarTheoryComputation2025}.
-
-\subsection{What are context free grammars?}
-
 
 \subsection{Why C?}
 
