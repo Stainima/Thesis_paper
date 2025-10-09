@@ -169,6 +169,33 @@ O(i) =
 \end{figure}
 %%%%%%%%%%%%%%%%%%%
 
+
+%%%%% Pseudocode $$$$$$
+\begin{algorithm}
+\caption{An algorithm with caption}\label{alg:cap}
+\begin{algorithmic}[1]
+    \Require a set of examples $S$, a language oracle $\mathcal{O}$.
+    \State $bestTrees \gets \textsc{NaiveParseTrees}(S)$
+    \State $bestTrees \gets \textsc{MergeAllValid}(bestTrees, \mathcal{O})$
+    \State $updated \gets \text{True}$
+    \While{$updated$}
+        \State $updated \gets \text{False}$
+        \State $allBubbles \gets \textsc{GetBubbles}(bestTrees)$
+        \For{$bubble$ \textbf{in} $allBubbles$}
+            \State $bbldTrees \gets \textsc{Apply}(bestTrees, bubble)$
+            \State $accepted, mergedTs \gets \textsc{CheckBubble}(bbldTrees, \mathcal{O})$
+            \If{$accepted$}
+                \State $bestTrees \gets mergedTs$
+                \State $updated \gets \text{True}$
+                \State \textbf{break}
+            \EndIf
+        \EndFor
+    \EndWhile
+    \State $G \gets \textsc{InducedGrammar}(bestTrees)$\\
+    \Return $G$
+\end{algorithmic}
+\end{algorithm}
+
 \subsection{What is GLADE?}
 GLADE is an algorithm proposed by Bastani et al., published in Synthesizing Input Grammars at PLDI 2017 \cite{bastaniSynthesizingProgramInput}. Like ARVADA, GLADE uses a set of valid inputs and black-box access to the program, with the aim of automatically approximating the context-free input grammar of the given program.
 
