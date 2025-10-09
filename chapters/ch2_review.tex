@@ -55,9 +55,9 @@ does not appear on the right-hand side of any production rule \cite{hendriksCons
 \subsubsection{Type-2}
 
 Type-2 grammars, commonly known as context-free grammars, have production rules of the form:
-\begin{itemize}
-    \item[] \( A \rightarrow \alpha \)
-\end{itemize}
+\[
+A \rightarrow \alpha
+\]
 where \( A \in N \) and \( \alpha \in (T \cup N)^* \), meaning any string composed of terminal and nonterminal symbols \cite{hendriksConsiderItParsed,shiIntelligenceScience2021}.
 
 Due to the nature of the right-hand side, nonterminals are allowed to recursively expand, which can lead to repetition. For example:
@@ -74,7 +74,30 @@ until eventually \( A \Rightarrow \varepsilon \).
 This property is particularly useful because it allows the grammar to enforce well-formed parenthesis expressions and other recursive structures purely through production rules. As a result, context-free grammars are of great importance in the design and specification of programming languages\cite{hendriksConsiderItParsed,shiIntelligenceScience2021}.
 
 \subsubsection{Type-1}
+
+Type-1 grammars, also known as context-sensitive grammars, have production rules of the form:
+\[
+\alpha A \beta \rightarrow \alpha \gamma \beta
+\]
+where \( A \in N \) and \( \alpha, \beta, \gamma \in (N \cup T)^* \). This means that \( A \) can be expanded to \( \gamma \) only in the specific context where it appears between \( \alpha \) and \( \beta \) in the given order \cite{hendriksConsiderItParsed,shiIntelligenceScience2021}.
+
+\vspace{\baselineskip}
+A key property of context-sensitive grammars is that production rules must be \emph{non-contracting}: the length of the right-hand side must be greater than or equal to the length of the left-hand side. This implies that no nonterminal on the right-hand side can derive \( \varepsilon \), meaning nullable productions are not allowed.
+
+An example derivation using a context-sensitive production is:
+\[
+A \Rightarrow aA\beta \Rightarrow aaA\beta\beta \Rightarrow \cdots
+\]
+
 \subsubsection{Type-0}
+
+Type-0 grammars, also known as unrestricted grammars, sit at the top of Chomsky's hierarchy. Their production have a complete lack of restrictions and take the general form:
+\[
+\alpha \rightarrow \beta
+\]
+where \( \alpha, \beta \in (N \cup T)^+ \), meaning they are strings consisting of terminal and nonterminal symbols. The only requirement is that \( \alpha \) must contain at least one nonterminal symbol to allow for further derivations \cite{hendriksConsiderItParsed,shiIntelligenceScience2021}.
+
+Type-0 grammars are the most expressive class in the Chomsky hierarchy and can generate all recursively enumerable languages.
 
 \subsection{What is ARVADA?}
 
