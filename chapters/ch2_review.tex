@@ -123,7 +123,7 @@ The addition of new non-terminal nodes expands the language defined by the learn
 
 \subsubsection{Walkthrough}
 
-This walkthorugh will follow very closely to the examples provided in the original paper \cite{kulkarniLearningHighlyRecursive2021}, and use a concrete example to provide an indepth explaination of ARVADA.
+This walkthorugh will follow very closely to the examples provided in the original paper \cite{kulkarniLearningHighlyRecursive2021}, and use a concrete example to provide an indepth understanding of ARVADA.
 
 %%%%%%%%% GRAMMAR %%%%%%%%%%%
 \begin{figure}[H]
@@ -164,15 +164,17 @@ O(i) =
 \text{False} & \text{otherwise}
 \end{cases}
 \]
-\label{grammar}
-\caption{Definition a simple while grammar $G_w$, sample input strings $S$, and oracle $\mathcal{O}$}
+\caption{Definition a simple while grammar $G_w$, sample input strings $S$, and oracle $\mathcal{O}$ \cite{kulkarniLearningHighlyRecursive2021}}
+\label{fig:grammar}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%
 
+%%% proof read here please %%%%%
+For this walkthrough, the simple while grammar $G_w$ and input string $S$ provided in figure~\ref{fig:grammar} will be used. Noting agian that ARVADA treats $\mathcal{O}$ as a blackbox, meaning it has no sturcture knowledge of $G_w$, and $G_w$ in only shown to clarify the behaviour of $\mathcal{O}$.
 
 %%%%% Pseudocode $$$$$$
 \begin{algorithm}[H]
-\caption{An algorithm with caption}\label{alg:cap}
+\caption{High-level overview of ARVADA \cite{kulkarniLearningHighlyRecursive2021}}\label{alg:arv}
 \begin{algorithmic}[1]
     \Require a set of examples $S$, a language oracle $\mathcal{O}$.
     \State $bestTrees \gets \textsc{NaiveParseTrees}(S)$
@@ -191,10 +193,92 @@ O(i) =
             \EndIf
         \EndFor
     \EndWhile
-    \State $G \gets \textsc{InducedGrammar}(bestTrees)$\\
-    \Return $G$
+    \State $G \gets \textsc{InducedGrammar}(bestTrees)$
+    \State \textbf{Return} $G$
 \end{algorithmic}
 \end{algorithm}
+
+ARVADA follows the high-level overview provided in algorithm ~\ref{alg:arv}, and begin by taking the all the inputs string in $S$ and building naive flat parse tree for each input stirng.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[
+    level distance=15mm,
+    sibling distance=5mm,
+    every node/.style={draw=none, inner sep=2pt, font=\small},
+    edge from parent/.style={draw}
+]
+    \node {$t_0$}
+        child {node {w}}
+        child {node {h}}
+        child {node {i}}
+        child {node {l}}
+        child {node {e}}
+        child {node {\textvisiblespace}}
+        child {node {t}}
+        child {node {r}}
+        child {node {u}}
+        child {node {e}}
+        child {node {\textvisiblespace}}
+        child {node {\&}}
+        child {node {\textvisiblespace}}
+        child {node {f}}
+        child {node {a}}
+        child {node {l}}
+        child {node {s}}
+        child {node {e}}
+        child {node {\textvisiblespace}}
+        child {node {d}}
+        child {node {o}}
+        child {node {\textvisiblespace}}
+        child {node {L}}
+        child {node {\textvisiblespace}}
+        child {node {=}}
+        child {node {\textvisiblespace}}
+        child {node {n}};
+\end{tikzpicture}
+
+\begin{tikzpicture}[
+    level distance=15mm,
+    sibling distance=5mm,
+    every node/.style={draw=none, inner sep=2pt, font=\small},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {=}}
+    child {node {\textvisiblespace}}
+    child {node {n}}
+    child {node {\textvisiblespace}}
+    child {node {;}}
+    child {node {\textvisiblespace}}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {=}}
+    child {node {\textvisiblespace}}
+    child {node {(}}
+    child {node {\textvisiblespace}}
+    child {node {n}}
+    child {node {\textvisiblespace}}
+    child {node {+}}
+    child {node {\textvisiblespace}}
+    child {node {n}}
+    child {node {\textvisiblespace}}
+    child {node {)}};    
+\end{tikzpicture}
+\caption{Initial set of flat naive prase trees ARVADA builds given inputs $S$, where each $t_i$ is a non-terminal}
+\label{fig:initialNaiveTrees}
+\end{figure}
+
+The Naive parse trees initially built by ARVDA for input set $S$ shown in figure \ref{fig:initialNaiveTrees}.
+
+\[
+t_0 \to \text{w\;h\;i\;l\;e\;\textvisiblespace\;t\;r\;u\;e\textvisiblespace\&\;f\;a\;l\;s\;e\;\textvisiblespace\;d\;o\;\textvisiblespace\;L\;\textvisiblespace=\;\textvisiblespace\;n}
+\]
+\[
+t_0 \to \text{L\;\textvisiblespace\;=\;\textvisiblespace \;n\;\textvisiblespace\;;\;\textvisiblespace\;L\;\textvisiblespace\;=\;\textvisiblespace\;(\;n\;+\;n\;)}
+\]
 
 \subsection{What is GLADE?}
 GLADE is an algorithm proposed by Bastani et al., published in Synthesizing Input Grammars at PLDI 2017 \cite{bastaniSynthesizingProgramInput}. Like ARVADA, GLADE uses a set of valid inputs and black-box access to the program, with the aim of automatically approximating the context-free input grammar of the given program.
@@ -209,19 +293,25 @@ In the original study \cite{kulkarniLearningHighlyRecursive2021}, the ARVADA alg
 
 \vspace{\baselineskip}
 
-In a comparative study, A Pragmatic Comparison of Four Different Programming Languages \cite{aliPragmaticComparisonFour2021}, it was found that if speed and efficiency are important, C is a better option than Python. C, being a mid-level, statically typed, structured language that runs under a compiler, is consistently faster than dynamic languages that run under an interpreter, such as Python \cite{kumarPythonLanguageComparison2022}. In addition to being a structured language, C also provides only essential features. These limited features contribute to its efficiency but also introduce a higher level of complexity compared to Python \cite{aliPragmaticComparisonFour2021, kumarPythonLanguageComparison2022}.
+In a comparative study, A Pragmatic Comparison of Four Different Programming Languages \cite{aliPragmaticComparisonFour2021}, it was found that when speed and efficiency are prioritized, C is a better choice than Python. As a mid-level, statically typed, and structured language that runs under a compiler, C consistently outperforms dynamically typed, interpreted languages such as Python \cite{kumarPythonLanguageComparison2022}. Moreover, C’s provision of only essential features contributes to its efficiency but also increases programming complexity compared to Python \cite{aliPragmaticComparisonFour2021, kumarPythonLanguageComparison2022}.
 
 \vspace{\baselineskip}
 
-Therefore, with the aim of investigating and potentially improving the runtime bottleneck, C was chosen as the language of implementation in this replication study. The increase in implementation complexity due to the nature of programming in C compared to Python was also acknowledged.
+Therefore, to investigate and potentially address runtime bottlenecks, C was selected as the implementation language for this replication study. The added complexity inherent to programming in C, relative to Python, was also acknowledged.
+
+\subsection{Why replicate ARVADA?}
+The replication study of GLADE \cite{bastaniSynthesizingProgramInput} conducted by researchers at CISPA \cite{bendrissouSynthesizingInputGrammars2022} in 2022 reported results that were inconsistent with those presented in the original paper \cite{bastaniSynthesizingProgramInput}. Since ARVADA is closely related to GLADE, sharing a similar purpose and experimental setting, there is reason to suspect that ARVADA may also yield inconsistent results upon reimplementation.
+
+\vspace{\baselineskip}
+
+Another motivation for replication arises from the incomplete nature of the ARVADA study and its evaluation. Although the paper presents a reasonable amount of testing and statistical data, compares the algorithm with GLADE, and provides a detailed explanation of ARVADA, it does not offer formal guarantees. It remains unclear whether ARVADA is applicable in all scenarios or what subset of scenarios it can reliably handle. Furthermore, when comparing ARVADA with GLADE, there is a possibility that the grammars used for testing were selected based on performance considerations, raising suspicions that the study may have been selective.
+
+
+\subsection{Problem Statement}
 
 \subsection{Further Quesitons}
 
 What are parsers?
-
-Why do a replication study?
-
-Why ARVADA / Problem Statement?
 
 what are the drawbacks of ARVADA?
 
