@@ -16,6 +16,9 @@ A grammar can be represented by the tuple $<N, T, P, S>$, where:
 
 Here, the production rules $P$ define all symbol substitutions that can be performed recursively to generate different symbol sequences, known as \emph{strings} \cite{GrammarTheoryComputation2025}. These rules are written in the form $A \rightarrow w$, where $A \in N$ and $w \in (N \cup T)^*$.
 
+\vspace{\baselineskip}
+These set of rules are used by parsers to parse a string of tokens and analyze its syntax against these set of rules(Grammars)\cite{mulikComparisonParsingTechniques,hendriksConsiderItParsed}.
+
 \subsection{What are Context-Free Grammars?}
 
 Depending on the set of production rules, each grammar can be classified according to the \emph{Chomsky hierarchy} \cite{chomskyTHREEMODELSTIE1956}.
@@ -300,8 +303,7 @@ The replication study of GLADE \cite{bastaniSynthesizingProgramInput} conducted 
 Another motivation for replication arises from the incomplete nature of the ARVADA study and its evaluation. Although the paper presents a reasonable amount of testing and statistical data, compares the algorithm with GLADE, and provides a detailed explanation of ARVADA, it does not offer formal guarantees. It remains unclear whether ARVADA is applicable in all scenarios or what subset of scenarios it can reliably handle. Furthermore, when comparing ARVADA with GLADE, there is a possibility that the grammars used for testing were selected based on performance considerations, raising suspicions that the study may have been selective.
 
 \subsection{Why is learning highly input grammar important?}
-incldue what are parser.
-Software in the modern world is abundant, ranging in size, function, and use. Although abundant, due to privacy and security laws around the world, accessing the sources code of many of these software and programs have become impossible. Hence, the importance recursive input grammars. Treating the program as a Blackbox and recursively using input grammar against it to reverse engineer the grammar of the program to help with program comprehension and understanding.   
+Software in the modern world is abundant, varying widely in size, functionality, and application. However, due to privacy and security regulations across the globe, access to the source code of many software systems has become increasingly restricted or entirely impossible. This limitation underscores the importance of recursive input grammars—an approach that treats a program as a black box and recursively applies input grammars to infer or reverse-engineer the underlying grammar of the program. Such methods aim to support program comprehension and analysis when direct access to the source code is unavailable.  
 
 \subsection{Related Work}
 \subsubsection{GLADE}
