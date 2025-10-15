@@ -29,18 +29,18 @@ Depending on the set of production rules, each grammar can be classified accordi
 The hierarchy outlines four distinct types of grammars, ranging from \textbf{Type-3} (the most restrictive) to \textbf{Type-0} (the most general and unstructured). \textbf{Type-2} grammars in this hierarchy are known as \emph{context-free grammars}.
 
 \subsubsection{Type-3}
-Type-3 grammars, known as regular grammars are used to generate regular languages. A grammar is classified as a regular grammar if its production rules follow from $X \rightarrow a | X \rightarrow aY$. The left-hand side must consist of a single $T$ and the right hand side must consist of an single $T$ or single $T$ and single $N$.
+Type-3 grammars, known as regular grammars are used to generate regular languages. A grammar is classified as a regular grammar if its production rules follow from $X \rightarrow a | X \rightarrow aY$. The left-hand side must consist of a single $T$ and the right-hand side must consist of an single $T$ or single $T$ and single $N$.
 
 Regular grammar can take 2 froms, right linear and left linear.
 
-Right-linear take the following form, where the $N$ on the right hand side of the arrow is on the far right.
+Right-linear take the following form, where the $N$ on the right-hand side of the arrow is on the far right.
 \begin{itemize}
     \item[] $X \rightarrow a$
     \item[] $X \rightarrow aB$
     \item[] $X \rightarrow \varepsilon$
 \end{itemize}
 
-Left-linear take the following form, where the $N$ on the right hand side of the arrow is on the far left.
+Left-linear take the following form, where the $N$ on the right-hand side of the arrow is on the far left.
 \begin{itemize}
     \item[] $X \rightarrow a$
     \item[] $X \rightarrow Ba$
@@ -306,6 +306,12 @@ The replication study of GLADE \cite{bastaniSynthesizingProgramInput} conducted 
 
 Another motivation for replication arises from the incomplete nature of the ARVADA study and its evaluation. Although the paper presents a reasonable amount of testing and statistical data, compares the algorithm with GLADE, and provides a detailed explanation of ARVADA, it does not offer formal guarantees. It remains unclear whether ARVADA is applicable in all scenarios or what subset of scenarios it can reliably handle. Furthermore, when comparing ARVADA with GLADE, there is a possibility that the grammars used for testing were selected based on performance considerations, raising suspicions that the study may have been selective.
 
+\subsection{Why is learning highly input grammar important?}
+incldue what are parser.
+
+\subsection{Related Work}
+
+What are similar work, and progression done in this field since the publication of ARVADA? (Related Work)
 
 \subsection{Problem Statement}
 
@@ -320,12 +326,5 @@ The clean-room re-implementation will mean development is entirely from scratch 
 \vspace{\baselineskip}
 Although the primary goal of this study is to re-implemention, assessment, and expantion upon the original work, I acknowledge that this study may be incomplete or no new knowledge may be discovered. While this may seem trivial—merely confirming the findings of the previous study without adding novel insights \cite{hendriksConsiderItParsed}, replication studies play a vital role in reinforcing the trustworthiness and confidence of empirical results, which is a central tent of the scientific method. Replication can increase certainty when findings are reproduce and promote innovation when they are not \cite{shepperdReplicationStudiesConsidered2018}. Therefore, this study holds significance within the field of computer science.
 
-\subsection{Further Quesitons}
-
-What are parsers?
-
-Why is learning highly input grammar important?
-
-What are similar work, and progression done in this field since the publication of ARVADA? (Related Work)
 
 
