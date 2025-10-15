@@ -280,13 +280,6 @@ t_0 \to \text{w\;h\;i\;l\;e\;\textvisiblespace\;t\;r\;u\;e\textvisiblespace\&\;f
 t_0 \to \text{L\;\textvisiblespace\;=\;\textvisiblespace \;n\;\textvisiblespace\;;\;\textvisiblespace\;L\;\textvisiblespace\;=\;\textvisiblespace\;(\;n\;+\;n\;)}
 \]
 
-\subsection{What is GLADE?}
-GLADE is an algorithm proposed by Bastani et al., published in Synthesizing Input Grammars at PLDI 2017 \cite{bastaniSynthesizingProgramInput}. Like ARVADA, GLADE uses a set of valid inputs and black-box access to the program, with the aim of automatically approximating the context-free input grammar of the given program.
-
-\vspace{\baselineskip}
-
-Because GLADE and ARVADA share a similar experimental setting, GLADE was used as a benchmark for ARVADA during its evaluation. It was shown that GLADE, on average, had a faster runtime compared to ARVADA. However in terms of generalization, following the original grammar of the oracle more closely , ARVADA out-performed GLADE across the 11 benchmarks, achieving a higher F1 score on 9 of the 11 benchmarks.
-
 \subsection{Why C?}
 
 In the original study \cite{kulkarniLearningHighlyRecursive2021}, the ARVADA algorithm was implemented in Python. When compared to GLADE \cite{bastaniSynthesizingProgramInput}, which was implemented in Java, ARVADA exhibited a slower average runtime across all benchmarks. In the study, this was attributed to the natural runtime disadvantage of Python compared to Java, which is valid, however the possibility that ARVADA itself might be inherently slow was not acknowledged.
@@ -308,10 +301,18 @@ Another motivation for replication arises from the incomplete nature of the ARVA
 
 \subsection{Why is learning highly input grammar important?}
 incldue what are parser.
+Software in the modern world is abundant, ranging in size, function, and use. Although abundant, due to privacy and security laws around the world, accessing the sources code of many of these software and programs have become impossible. Hence, the importance recursive input grammars. Treating the program as a Blackbox and recursively using input grammar against it to reverse engineer the grammar of the program to help with program comprehension and understanding.   
 
 \subsection{Related Work}
+\subsubsection{GLADE}
+GLADE is an algorithm proposed by Bastani et al., published in Synthesizing Input Grammars at PLDI 2017 \cite{bastaniSynthesizingProgramInput}. Like ARVADA, GLADE uses a set of valid inputs and black-box access to the program, with the aim of automatically approximating the context-free input grammar of the given program.
 
-What are similar work, and progression done in this field since the publication of ARVADA? (Related Work)
+\vspace{\baselineskip}
+
+Because GLADE and ARVADA share a similar experimental setting, GLADE was used as a benchmark for ARVADA during its evaluation. It was shown that GLADE, on average, had a faster runtime compared to ARVADA. However in terms of generalization, following the original grammar of the oracle more closely, ARVADA out-performed GLADE across the 11 benchmarks, achieving a higher F1 score on 9 of the 11 benchmarks.
+
+
+What are similar work, and progression done in this field since the publication of ARVADA? 
 
 \subsection{Problem Statement}
 
