@@ -10,6 +10,40 @@
   pubstate = {prepublished}
 }
 
+@online{arefinBlackboxContextfreeGrammar2025,
+  title = {Black-Box {{Context-free Grammar Inference}} for {{Readable}} \& {{Natural Grammars}}},
+  author = {Arefin, Mohammad Rifat and Rahman, Shanto and Csallner, Christoph},
+  date = {2025-09-30},
+  eprint = {2509.26616},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2509.26616},
+  url = {http://arxiv.org/abs/2509.26616},
+  urldate = {2025-10-16},
+  abstract = {Black-box context-free grammar inference is crucial for program analysis, reverse engineering, and security, yet existing tools such as Arvada, TreeVada, and Kedavra struggle with scalability, readability, and accuracy on large, complex languages. We present NatGI, a novel LLM-guided grammar inference framework that extends TreeVada's parse tree recovery with three key innovations: bracket-guided bubble exploration, LLM-driven bubble generation and non-terminal labeling, and hierarchical delta debugging (HDD) for systematic tree simplification. Bracket-guided exploration leverages syntactic cues such as parentheses to propose well-structured grammar fragments, while LLM guidance produces meaningful non-terminal names and selects more promising merges. Finally, HDD incrementally reduces unnecessary rules, which makes the grammars both compact and interpretable. In our experiments, we evaluate NatGI on a comprehensive benchmark suite ranging from small languages to larger ones such as lua, c, and mysql. Our results show that NatGI consistently outperforms strong baselines in terms of F1 score. On average, NatGI achieves an F1 score of 0.57, which is 25pp (percentage points) higher than the best-performing baseline, TreeVada. In the case of interpretability, our generated grammars perform significantly better than those produced by existing approaches. Leveraging LLM-based node renaming and bubble exploration, NatGI produces rules with meaningful non-terminal names and compact structures that align more closely with human intuition. As a result, developers and researchers can achieve higher accuracy while still being able to easily inspect, verify, and reason about the structure and semantics of the induced grammars.},
+  langid = {english},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Formal Languages and Automata Theory,Computer Science - Programming Languages,Computer Science - Software Engineering},
+  file = {/Users/sulavmalla/Zotero/storage/VAB2Z5RB/Arefin et al. - 2025 - Black-box Context-free Grammar Inference for Readable & Natural Grammars.pdf}
+}
+
+@online{arefinFastDeterministicBlackbox2024,
+  title = {Fast {{Deterministic Black-box Context-free Grammar Inference}}},
+  author = {Arefin, Mohammad Rifat and Shetiya, Suraj and Wang, Zili and Csallner, Christoph},
+  date = {2024-01-17},
+  eprint = {2308.06163},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2308.06163},
+  url = {http://arxiv.org/abs/2308.06163},
+  urldate = {2025-10-16},
+  abstract = {Black-box context-free grammar inference is a hard problem as in many practical settings it only has access to a limited number of example programs. The state-of-the-art approach Arvada heuristically generalizes grammar rules starting from flat parse trees and is non-deterministic to explore different generalization sequences. We observe that many of Arvada’s generalization steps violate common language concept nesting rules. We thus propose to prestructure input programs along these nesting rules, apply learnt rules recursively, and make black-box context-free grammar inference deterministic. The resulting TreeVada yielded faster runtime and higher-quality grammars in an empirical comparison.},
+  langid = {english},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Programming Languages,Computer Science - Software Engineering},
+  file = {/Users/sulavmalla/Zotero/storage/JUDHCB49/Arefin et al. - 2024 - Fast Deterministic Black-box Context-free Grammar Inference.pdf}
+}
+
 @article{bastaniSynthesizingProgramInput,
   title = {Synthesizing {{Program Input Grammars}}},
   author = {Bastani, Osbert and Sharma, Rahul and Aiken, Alex and Liang, Percy},
@@ -124,6 +158,41 @@
   abstract = {C and python has been proven programming language in their respective domain. Python has been a newer language in comparison to C language and offers rich set of libraries and offers significant support for newer application areas such as machine learning, whereas c has a proven and benchmark language for system programming and real time application development. Ease of coding in one perceptive that differentiate these programming languages. Other perspective is the application areas addressed by these programming languages. On this research paper all these parameters including efficiency, portability, application domains etc. has been discussed in details and comparison has been done for the same. Poularity comparison of both the langauges hgas also been done in w.r.t. each other ans w.r.t other majorly used programming languages.},
   langid = {english},
   file = {/Users/sulavmalla/Zotero/storage/C8X9UFNM/Kumar et al. - 2022 - Python versus C Language A Comparison.pdf}
+}
+
+@online{lampinenCanLanguageModels2023,
+  title = {Can Language Models Handle Recursively Nested Grammatical Structures? {{A}} Case Study on Comparing Models and Humans},
+  shorttitle = {Can Language Models Handle Recursively Nested Grammatical Structures?},
+  author = {Lampinen, Andrew Kyle},
+  date = {2023-02-16},
+  eprint = {2210.15303},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2210.15303},
+  url = {http://arxiv.org/abs/2210.15303},
+  urldate = {2025-10-16},
+  abstract = {How should we compare the capabilities of language models (LMs) and humans? I draw inspiration from comparative psychology to highlight some challenges. In particular, I consider a case study: processing of recursively nested grammatical structures. Prior work suggests that LMs cannot handle these structures as reliably as humans can. However, the humans were provided with instructions and training, while the LMs were evaluated zero-shot. I therefore match the evaluation more closely. Providing large LMs with a simple prompt—substantially less content than the human training—allows the LMs to consistently outperform the human results, and even to extrapolate to more deeply nested conditions than were tested with humans. Further, reanalyzing the prior human data suggests that the humans may not perform above chance at the difficult structures initially. Thus, large LMs may indeed process recursively nested grammatical structures as reliably as humans. This case study highlights how discrepancies in the evaluation can confound comparisons of language models and humans. I therefore reflect on the broader challenge of comparing human and model capabilities, and highlight an important difference between evaluating cognitive models and foundation models.},
+  langid = {english},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Computation and Language,Computer Science - Machine Learning},
+  file = {/Users/sulavmalla/Zotero/storage/PW4KMWUL/Lampinen - 2023 - Can language models handle recursively nested grammatical structures A case study on comparing mode.pdf}
+}
+
+@online{liIncrementalContextfreeGrammar2024,
+  title = {Incremental {{Context-free Grammar Inference}} in {{Black Box Settings}}},
+  author = {Li, Feifei and Chen, Xiao and Xiao, Xi and Sun, Xiaoyu and Chen, Chuan and Wang, Shaohua and Han, Jitao},
+  date = {2024-09-20},
+  eprint = {2408.16706},
+  eprinttype = {arXiv},
+  eprintclass = {cs},
+  doi = {10.48550/arXiv.2408.16706},
+  url = {http://arxiv.org/abs/2408.16706},
+  urldate = {2025-10-16},
+  abstract = {Black-box context-free grammar inference presents a significant challenge in many practical settings due to limited access to example programs. The state-of-the-art methods, Arvada and Treevada, employ heuristic approaches to generalize grammar rules, initiating from flat parse trees and exploring diverse generalization sequences. We have observed that these approaches suffer from low quality and readability, primarily because they process entire example strings, adding to the complexity and substantially slowing down computations. To overcome these limitations, we propose a novel method that segments example strings into smaller units and incrementally infers the grammar. Our approach, named Kedavra, has demonstrated superior grammar quality (enhanced precision and recall), faster runtime, and improved readability through empirical comparison.},
+  langid = {english},
+  pubstate = {prepublished},
+  keywords = {Computer Science - Programming Languages,Computer Science - Software Engineering},
+  file = {/Users/sulavmalla/Zotero/storage/YV8QVFYU/Li et al. - 2024 - Incremental Context-free Grammar Inference in Black Box Settings.pdf}
 }
 
 @article{mulikComparisonParsingTechniques,

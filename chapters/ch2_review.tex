@@ -302,8 +302,12 @@ The replication study of GLADE \cite{bastaniSynthesizingProgramInput} conducted 
 
 Another motivation for replication arises from the incomplete nature of the ARVADA study and its evaluation. Although the paper presents a reasonable amount of testing and statistical data, compares the algorithm with GLADE, and provides a detailed explanation of ARVADA, it does not offer formal guarantees. It remains unclear whether ARVADA is applicable in all scenarios or what subset of scenarios it can reliably handle. Furthermore, when comparing ARVADA with GLADE, there is a possibility that the grammars used for testing were selected based on performance considerations, raising suspicions that the study may have been selective.
 
-\subsection{Why is learning highly input grammar important?}
-Software in the modern world is abundant, varying widely in size, functionality, and application. However, due to privacy and security regulations across the globe, access to the source code of many software systems has become increasingly restricted or entirely impossible. This limitation underscores the importance of recursive input grammars—an approach that treats a program as a black box and recursively applies input grammars to infer or reverse-engineer the underlying grammar of the program. Such methods aim to support program comprehension and analysis when direct access to the source code is unavailable.  
+\subsection{Why is learning input grammar important?}
+Grammar inference is important for many software engineering tasks, as knowledge about a program grammar helps with code comprehension, reverse engineering, detecting and refactoring code smells, transforming source code for optimization or bug fixing, and generating test inputs\cite{arefinFastDeterministicBlackbox2024}. However, due to the increasing restrictions in many software systems—caused by global privacy and security regulations—we often do not have access to the source code needed to learn their grammar. 
+
+\vspace{\baselineskip}
+This limitation highlights the importance of learning input grammars, which are formal grammars defining valid program inputs, and of approaches that treat a program as a black box and recursively apply input grammars to infer or reverse-engineer the underlying grammar of the program.
+
 
 \subsection{Related Work}
 \subsubsection{GLADE}
@@ -313,6 +317,12 @@ GLADE is an algorithm proposed by Bastani et al., published in Synthesizing Inpu
 
 Because GLADE and ARVADA share a similar experimental setting, GLADE was used as a benchmark for ARVADA during its evaluation. It was shown that GLADE, on average, had a faster runtime compared to ARVADA. However in terms of generalization, following the original grammar of the oracle more closely, ARVADA out-performed GLADE across the 11 benchmarks, achieving a higher F1 score on 9 of the 11 benchmarks.
 
+\subsection{TREEVADA}
+
+
+\subsection{KEDARVA}
+
+\subsection{NATGI}
 
 What are similar work, and progression done in this field since the publication of ARVADA? 
 
