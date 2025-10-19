@@ -304,7 +304,7 @@ Therefore, to investigate and potentially address runtime bottlenecks, C was sel
 
 
 \subsection{Why is learning input grammar important?}
-Grammar inference is important for many software engineering tasks, as knowledge about a program grammar helps with code comprehension, reverse engineering, detecting and refactoring code smells, transforming source code for optimization or bug fixing, and generating test inputs\cite{arefinFastDeterministicBlackbox2024}. However, due to the increasing restrictions in many software systems—caused by global privacy and security regulations—we often do not have access to the source code needed to learn their grammar.  Even upon open-source programs and code, many only have closed source prasers, making white-box or grey-box instrumention difficult.
+Grammar inference is important for many software engineering tasks, as knowledge about a program grammar helps with code comprehension, reverse engineering, detecting and refactoring code smells, transforming source code for optimization or bug fixing, and generating test inputs\cite{arefinFastDeterministicBlackbox2024}. However, due to the increasing restrictions in many software systems—caused by global privacy and security regulations—we often do not have access to the source code needed to learn their grammar.  Even upon open-source programs and code, many only have closed source prasers, making white-box or grey-box instrumention difficult \cite{arefinFastDeterministicBlackbox2024,liIncrementalContextfreeGrammar2024}.
 
 \vspace{\baselineskip}
 This limitation highlights the importance of learning input grammars, which are formal grammars defining valid program inputs, and approaches that treat a program as a black box and recursively apply input grammars to infer or reverse-engineer the underlying grammar of the program.
@@ -320,10 +320,10 @@ Because GLADE and ARVADA share a similar experimental setting, GLADE was used as
 
 \subsection{TREEVADA}
 
-Published in \enquote{Fast Deterministic Black-box Context-free Grammar inference} 2023, at the University of Texas\cite{arefinFastDeterministicBlackbox2024}, TREEAVADA is an algorithm that is based on ARVADA\cite{kulkarniLearningHighlyRecursive2021,} aiming to solve the non-deterministic and speed-related limitations of ARVADA. The paper claims, TREEVADA yields reproducable better quality grammar in a single run, with faster run time.
+Published in \enquote{Fast Deterministic Black-box Context-free Grammar inference} 2023, at the University of Texas\cite{arefinFastDeterministicBlackbox2024}, TREEAVADA is an algorithm that is based on ARVADA\cite{kulkarniLearningHighlyRecursive2021}, aiming to solve the non-deterministic and speed-related limitations of ARVADA. The paper claims, TREEVADA yields better quality grammar in a single run, with faster run time.
 
 \vspace{\baselineskip}
-To achieve such results, TREEVADA uses a few different techniques. First, during pre-tokenisation, TREEVADA pre-structures its parse according to nesting rules induced by balanced brackets common in many grammars, uses \textcolor{blue}{' "} quotes grouping and identifying string literals, and same heuristics used in ARVADA such lowercase, numbers. Essentially adding more structure to the initial parse trees compared to ARVADA, which does not consider brackets. Noting that TREEVADA assumes that program uses \textcolor{blue}{' "} quotes to wrap string and brackets for nesting only.
+To achieve such results, TREEVADA uses a few different techniques. First, during pre-tokenisation, TREEVADA pre-structures its parse according to nesting rules induced by balanced brackets common in many grammars, uses \textcolor{blue}{' "} quotes grouping and identifying string literals, and the same heuristics used in ARVADA, such as lowercase and numbers. Essentially, adding more structure to the initial parse trees compared to ARVADA, which does not consider brackets. Noting that TREEVADA assumes that the program uses \textcolor{blue}{' "} quotes to wrap a string and brackets for nesting only.
 
 \begin{figure}[h!]
 \centering
@@ -400,13 +400,16 @@ To achieve such results, TREEVADA uses a few different techniques. First, during
         child {node {\textvisiblespace}}
         child {node {n}};
 \end{tikzpicture}
-\caption{Naive Parse trees after pre-tokenisation in TREEVADA}
+\caption{Naive Parse trees after pre-tokenisation in TREEVADA \cite{arefinFastDeterministicBlackbox2024}}
 \label{fig:pre-tokenised trees}
 \end{figure}
 
-Secondly, to tackle the non-deterministic as aspect of ARVADA, by switching to deterministic data-structure for specific opreation. Additionally, also adding two new heuristics bubble length and bubble depth when considering bubble ranks during bubbling.
+Secondly, to address the non-deterministic aspect of ARVADA, we can switch to a deterministic data structure for specific operations. Additionally, two new heuristics, bubble length and bubble depth, are considered when considering bubble ranks during bubbling.
 
 \subsection{KEDARVA}
+
+Proposed in \enquote{Incremental Context-free Grammar Inference in Black Box
+Settings} \cite{liIncrementalContextfreeGrammar2024} in 2024, KEDARVA is an algorithm designed to imporve upon TREEVADA. Although, TREEAVADA did improve upon ARVADA, it still had limitations of low accuracy, slow proccessing speeds, and limited readability which were inehereted from ARVADA \cite{liIncrementalContextfreeGrammar2024,kulkarniLearningHighlyRecursive2021}
 
 \subsection{NATGI}
 
