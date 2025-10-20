@@ -57,7 +57,7 @@ does not appear on the right-hand side of any production rule \cite{hendriksCons
 
 \subsubsection{Type-2}
 
-Type-2 grammars, commonly known as context-free grammars, have production rules of the form:
+Type-2 grammars, commonly known as context-free grammars (CFGs), have production rules of the form:
 \[
 A \rightarrow \alpha
 \]
@@ -402,12 +402,13 @@ To achieve such results, TREEVADA uses a few different techniques. First, during
 \label{fig:pre-tokenised trees}
 \end{figure}
 
-Secondly, to address the non-deterministic aspect of ARVADA, we can switch to a deterministic data structure for specific operations. Additionally, two new heuristics, bubble length and bubble depth, are considered when considering bubble ranks during bubbling.
+Secondly, to address the non-deterministic aspect of ARVADA, TREEAVADA switches to a deterministic data structure for specific operations and discard all bubbles with unmatched parentheses when bubbling. Additionally, two new heuristics, bubble length and bubble depth, are considered when considering bubble ranks during bubbling.
 
 \subsection{KEDARVA}
 
 Proposed in \enquote{Incremental Context-free Grammar Inference in Black Box
 Settings} \cite{liIncrementalContextfreeGrammar2024} in 2024, KEDARVA is an algorithm designed to improve upon TREEVADA, in the same setting. Although TREEAVADA did improve upon ARVADA, it still had limitations of low accuracy, slow processing speeds, and limited readability due to complex grammar structures, which were inherited from ARVADA \cite{liIncrementalContextfreeGrammar2024,kulkarniLearningHighlyRecursive2021}. 
+The paper highlights that KEDARVA outperforms ARVADA and TREEVADA in terms of grammar precision, recall, runtime/computational efficiency, and readability while maintaining similar memory usage.
 
 \vspace{\baselineskip}
 The approach taken by KEDAVRA consists of 3 main parts:
@@ -477,7 +478,7 @@ t_1 \rightarrow \text{\enquote{a}}|\text{\enquote{b}}|...|\text{\enquote{z}}
 
 \subsubsection{Data Decompostion}
 
-KEDARVA then breaks down all complex example strings into simple components, while collectively preserving all grammatical structure of the original sequence. This is done to overcome the slow down and degrading of readability of generated grammars due to the complexity of analysing entire example strings.
+KEDARVA then breaks down all complex example strings into simple components, while collectively preserving all grammatical structure of the original sequence and essentially, breaking the input string into smaller valid input strings. This is done to overcome the slowdown and lack of readability of generated grammars due to the complexity inherent in the entire example strings.
 
 \begin{figure}[h!]
 \centering
@@ -494,13 +495,13 @@ KEDARVA then breaks down all complex example strings into simple components, whi
 \node[below=0.6em of l6] (l7) {if ( t1 ) ; else ;};
 
 \end{tikzpicture}
-\caption{Decomposed Sequences}
+\caption{Decomposed Sequences of toeknised example from \ref{fig:pre-tokenised KEDARVA}}
 \label{fig:decomp KEDARVA}
 \end{figure}
 
 \subsubsection{Incremental Grammar inference}
 
-
+After Decomposition, KEDARVA orders all the decomposed sequences by length and begins to infer grammar from the simplest token sequence, iterating over all token sequences derived from the input strings. Done similarly to ARVADA and TREEAVADA, KEDARVA uses bubbling and merging. Also, like TREEVADA, only consider bubbles that have matched parentheses if parentheses are included.  
 
 \subsection{NATGI}
 
