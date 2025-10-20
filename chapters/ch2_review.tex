@@ -404,11 +404,11 @@ To achieve such results, TREEVADA uses a few different techniques. First, during
 
 Secondly, to address the non-deterministic aspect of ARVADA, TREEAVADA switches to a deterministic data structure for specific operations and discard all bubbles with unmatched parentheses when bubbling. Additionally, two new heuristics, bubble length and bubble depth, are considered when considering bubble ranks during bubbling.
 
-\subsection{KEDARVA}
+\subsection{KEDAVRA}
 
 Proposed in \enquote{Incremental Context-free Grammar Inference in Black Box
-Settings} \cite{liIncrementalContextfreeGrammar2024} in 2024, KEDARVA is an algorithm designed to improve upon TREEVADA, in the same setting. Although TREEAVADA did improve upon ARVADA, it still had limitations of low accuracy, slow processing speeds, and limited readability due to complex grammar structures, which were inherited from ARVADA \cite{liIncrementalContextfreeGrammar2024,kulkarniLearningHighlyRecursive2021}. 
-The paper highlights that KEDARVA outperforms ARVADA and TREEVADA in terms of grammar precision, recall, runtime/computational efficiency, and readability while maintaining similar memory usage.
+Settings} \cite{liIncrementalContextfreeGrammar2024} in 2024, KEDAVRA is an algorithm designed to improve upon TREEVADA, in the same setting. Although TREEAVADA did improve upon ARVADA, it still had limitations of low accuracy, slow processing speeds, and limited readability due to complex grammar structures, which were inherited from ARVADA \cite{liIncrementalContextfreeGrammar2024,kulkarniLearningHighlyRecursive2021}. 
+The paper highlights that KEDAVRA outperforms ARVADA and TREEVADA in terms of grammar precision, recall, runtime/computational efficiency, and readability while maintaining similar memory usage.
 
 \vspace{\baselineskip}
 The approach taken by KEDAVRA consists of 3 main parts:
@@ -419,7 +419,7 @@ The approach taken by KEDAVRA consists of 3 main parts:
 \end{itemize}
 
 \subsubsection{Tokenisation}
-Similar to ARVADA and TREEVADA, KEDARVA performs a tokenisation step. However, unlike ARVADA, which is tokenised based on class, and TREEAVADA, which extends it to consider brackets. KEDARVA tokenises based on common lexical rules such as identifiers, strings, and numbers, and only considers whitespace if the given $\mathcal{O}$ is sensitive to it. 
+Similar to ARVADA and TREEVADA, KEDAVRA performs a tokenisation step. However, unlike ARVADA, which is tokenised based on class, and TREEAVADA, which extends it to consider brackets. KEDAVRA tokenises based on common lexical rules such as identifiers, strings, and numbers, and only considers whitespace if the given $\mathcal{O}$ is sensitive to it. 
 
 \begin{figure}[h!]
 \centering
@@ -441,11 +441,11 @@ Similar to ARVADA and TREEVADA, KEDARVA performs a tokenisation step. However, u
         child {node {5}}
         child {node {;}};
 \end{tikzpicture}
-\caption{Result during KEDARVA pre-tokenisation given input \texttt{if(a); else b = 5;}}
-\label{fig:pre-tokenising KEDARVA}
+\caption{Result during KEDAVRA pre-tokenisation given input \texttt{if(a); else b = 5;}}
+\label{fig:pre-tokenising KEDAVRA}
 \end{figure}
 
-Furthermore, KEDARVA during grammar inference performs \textbf{character-level generalisation} for token values. Given a token character type,  it computes all possible characters corresponding to that character type. For instance, if a token is a lowercase letter, all lowercase letters are included in the set.
+Furthermore, KEDAVRA during grammar inference performs \textbf{character-level generalisation} for token values. Given a token character type,  it computes all possible characters corresponding to that character type. For instance, if a token is a lowercase letter, all lowercase letters are included in the set.
 
 \begin{figure}[H]
 \centering
@@ -472,13 +472,13 @@ Furthermore, KEDARVA during grammar inference performs \textbf{character-level g
 t_1 \rightarrow \text{\enquote{a}}|\text{\enquote{b}}|...|\text{\enquote{z}}
 \]
 
-\caption{Result after KEDARVA pre-tokenisation given input \texttt{if(a); else b = 5;}, and example generalisation of $t_1$}
-\label{fig:pre-tokenised KEDARVA}
+\caption{Result after KEDAVRA pre-tokenisation given input \texttt{if(a); else b = 5;}, and example generalisation of $t_1$}
+\label{fig:pre-tokenised KEDAVRA}
 \end{figure}
 
 \subsubsection{Data Decompostion}
 
-KEDARVA then breaks down all complex example strings into simple components, while collectively preserving all grammatical structure of the original sequence and essentially, breaking the input string into smaller valid input strings. This is done to overcome the slowdown and lack of readability of generated grammars due to the complexity inherent in the entire example strings.
+KEDAVRA then breaks down all complex example strings into simple components, while collectively preserving all grammatical structure of the original sequence and essentially, breaking the input string into smaller valid input strings. This is done to overcome the slowdown and lack of readability of generated grammars due to the complexity inherent in the entire example strings.
 
 \begin{figure}[h!]
 \centering
@@ -495,15 +495,17 @@ KEDARVA then breaks down all complex example strings into simple components, whi
 \node[below=0.6em of l6] (l7) {if ( t1 ) ; else ;};
 
 \end{tikzpicture}
-\caption{Decomposed Sequences of toeknised example from \ref{fig:pre-tokenised KEDARVA}}
-\label{fig:decomp KEDARVA}
+\caption{Decomposed Sequences of toeknised example from \ref{fig:pre-tokenised KEDAVRA}}
+\label{fig:decomp KEDAVRA}
 \end{figure}
 
 \subsubsection{Incremental Grammar inference}
 
-After Decomposition, KEDARVA orders all the decomposed sequences by length and begins to infer grammar from the simplest token sequence, iterating over all token sequences derived from the input strings. Done similarly to ARVADA and TREEAVADA, KEDARVA uses bubbling and merging. Also, like TREEVADA, only consider bubbles that have matched parentheses if parentheses are included.  
+After Decomposition, KEDAVRA orders all the decomposed sequences by length and begins to infer grammar from the simplest token sequence, iterating over all token sequences derived from the input strings. Done similarly to ARVADA and TREEAVADA, KEDAVRA uses bubbling and merging. Also, like TREEVADA, only consider bubbles that have matched parentheses if parentheses are included.  
 
 \subsection{NATGI}
+
+Published in \enquote{Black-Box Context-free Grammar Inference for Readbile \& Natural Grammars} at the University of Texas 2025, NATGI is a novel LLM-guided grammar inference framework that extends TREEAVADA's parse tree recovery.
 
 \subsection{Problem Statement}
 
