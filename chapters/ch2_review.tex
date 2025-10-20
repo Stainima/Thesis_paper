@@ -352,8 +352,7 @@ To achieve such results, TREEVADA uses a few different techniques. First, during
         child {node {\textvisiblespace}}
         child {node {)}}
         child {node {\textvisiblespace}}
-        child {node {d}}
-        child {node {o}}
+        child {node {do}}
         child {node {\textvisiblespace}}
         child {node {L}}
         child {node {\textvisiblespace}}
@@ -391,8 +390,7 @@ To achieve such results, TREEVADA uses a few different techniques. First, during
             child {node {)}}
         }
         child {node {\textvisiblespace}}
-        child {node {d}}
-        child {node {o}}
+        child {node {do}}
         child {node {\textvisiblespace}}
         child {node {L}}
         child {node {\textvisiblespace}}
@@ -409,7 +407,100 @@ Secondly, to address the non-deterministic aspect of ARVADA, we can switch to a 
 \subsection{KEDARVA}
 
 Proposed in \enquote{Incremental Context-free Grammar Inference in Black Box
-Settings} \cite{liIncrementalContextfreeGrammar2024} in 2024, KEDARVA is an algorithm designed to imporve upon TREEVADA. Although, TREEAVADA did improve upon ARVADA, it still had limitations of low accuracy, slow proccessing speeds, and limited readability which were inehereted from ARVADA \cite{liIncrementalContextfreeGrammar2024,kulkarniLearningHighlyRecursive2021}
+Settings} \cite{liIncrementalContextfreeGrammar2024} in 2024, KEDARVA is an algorithm designed to improve upon TREEVADA, in the same setting. Although TREEAVADA did improve upon ARVADA, it still had limitations of low accuracy, slow processing speeds, and limited readability due to complex grammar structures, which were inherited from ARVADA \cite{liIncrementalContextfreeGrammar2024,kulkarniLearningHighlyRecursive2021}. 
+
+\vspace{\baselineskip}
+The approach taken by KEDAVRA consists of 3 main parts:
+\begin{itemize}
+    \item Tokenisation
+    \item Data Decomposition
+    \item Incremental grammar inference
+\end{itemize}
+
+\subsubsection{Tokenisation}
+Similar to ARVADA and TREEVADA, KEDARVA performs a tokenisation step. However, unlike ARVADA, which is tokenised based on class, and TREEAVADA, which extends it to consider brackets. KEDARVA tokenises based on common lexical rules such as identifiers, strings, and numbers, and only considers whitespace if the given $\mathcal{O}$ is sensitive to it. 
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[
+    level distance=15mm,
+    sibling distance=7mm,
+    every node/.style={draw=none, inner sep=2pt, font=\small},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+        child {node {if}}
+        child {node {(}}
+        child {node {a}}
+        child {node {)}}
+        child {node {;}}
+        child {node {else}}
+        child {node {b}}
+        child {node {=}}
+        child {node {5}}
+        child {node {;}};
+\end{tikzpicture}
+\caption{Result during KEDARVA pre-tokenisation given input \texttt{if(a); else b = 5;}}
+\label{fig:pre-tokenising KEDARVA}
+\end{figure}
+
+Furthermore, KEDARVA during grammar inference performs \textbf{character-level generalisation} for token values. Given a token character type,  it computes all possible characters corresponding to that character type. For instance, if a token is a lowercase letter, all lowercase letters are included in the set.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    level distance=15mm,
+    sibling distance=7mm,
+    every node/.style={draw=none, inner sep=2pt, font=\small},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+        child {node {if}}
+        child {node {(}}
+        child {node {$t_1$}}
+        child {node {)}}
+        child {node {;}}
+        child {node {else}}
+        child {node {$t_1$}}
+        child {node {=}}
+        child {node {$t_2$}}
+        child {node {;}};
+\end{tikzpicture}
+
+\[
+t_1 \rightarrow \text{\enquote{a}}|\text{\enquote{b}}|...|\text{\enquote{z}}
+\]
+
+\caption{Result after KEDARVA pre-tokenisation given input \texttt{if(a); else b = 5;}, and example generalisation of $t_1$}
+\label{fig:pre-tokenised KEDARVA}
+\end{figure}
+
+\subsubsection{Data Decompostion}
+
+KEDARVA then breaks down all complex example strings into simple components, while collectively preserving all grammatical structure of the original sequence. This is done to overcome the slow down and degrading of readability of generated grammars due to the complexity of analysing entire example strings.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[
+    every node/.style={font=\ttfamily},
+]
+
+\node (l1) at (0,0) {;};
+\node[below=0.6em of l1] (l2) {t2 ;};
+\node[below=0.6em of l2] (l3) {t1 ;};
+\node[below=0.6em of l3] (l4) {t1 = t2 ;};
+\node[below=0.6em of l4] (l5) {if ( t1 ) ;};
+\node[below=0.6em of l5] (l6) {while ( t2 ) ;};
+\node[below=0.6em of l6] (l7) {if ( t1 ) ; else ;};
+
+\end{tikzpicture}
+\caption{Decomposed Sequences}
+\label{fig:decomp KEDARVA}
+\end{figure}
+
+\subsubsection{Incremental Grammar inference}
+
+
 
 \subsection{NATGI}
 
