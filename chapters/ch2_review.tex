@@ -111,6 +111,13 @@ ARVADA is an algorithm published in \enquote{Learning Highly Recursive Input Gra
 \vspace{\baselineskip}
 Like GLADE \cite{bastaniSynthesizingProgramInput}, ARVADA operates under the assumption of a black-box oracle $\mathcal{O}$. This means that ARVADA has no access to or knowledge of the internal workings of the oracle and can only observe the Boolean values returned by $\mathcal{O}$.
 
+\subsubsection{GLADE}
+GLADE is an algorithm proposed by Bastani et al., published in Synthesizing Input Grammars at PLDI 2017 \cite{bastaniSynthesizingProgramInput}. Like ARVADA, GLADE uses a set of valid inputs and black-box access to the program, with the aim of automatically approximating the context-free input grammar of the given program.
+
+\vspace{\baselineskip}
+
+Because GLADE shares a similar experimental setting as ARVADA and is a predecessor, GLADE was used as a benchmark for ARVADA during its evaluation. It was shown that GLADE, on average, had a faster runtime compared to ARVADA. However, in terms of generalisation, following the original grammar of the oracle more closely, ARVADA outperformed GLADE across the 11 benchmarks, achieving a higher F1 score on 9 of the 11 benchmarks.
+
 \subsubsection{Explanation}
 
 ARVADA takes as input the oracle $\mathcal{O}$ and a set of positive, valid oracle inputs $S$. For each string $s \in S$, querying $\mathcal{O}(s)$ returns \verb|True|. The algorithm begins by constructing a flat parse tree for each string in $S$. Each tree has a single root node $t_0$ whose children correspond to the individual characters of the input string $s$.
@@ -311,12 +318,6 @@ This limitation highlights the importance of learning input grammars, which are 
 
 
 \subsection{Related Work}
-\subsubsection{GLADE}
-GLADE is an algorithm proposed by Bastani et al., published in Synthesizing Input Grammars at PLDI 2017 \cite{bastaniSynthesizingProgramInput}. Like ARVADA, GLADE uses a set of valid inputs and black-box access to the program, with the aim of automatically approximating the context-free input grammar of the given program.
-
-\vspace{\baselineskip}
-
-Because GLADE and ARVADA share a similar experimental setting, GLADE was used as a benchmark for ARVADA during its evaluation. It was shown that GLADE, on average, had a faster runtime compared to ARVADA. However, in terms of generalisation, following the original grammar of the oracle more closely, ARVADA outperformed GLADE across the 11 benchmarks, achieving a higher F1 score on 9 of the 11 benchmarks.
 
 \subsection{TREEVADA}
 
@@ -501,11 +502,25 @@ KEDAVRA then breaks down all complex example strings into simple components, whi
 
 \subsubsection{Incremental Grammar inference}
 
-After Decomposition, KEDAVRA orders all the decomposed sequences by length and begins to infer grammar from the simplest token sequence, iterating over all token sequences derived from the input strings. Done similarly to ARVADA and TREEAVADA, KEDAVRA uses bubbling and merging. Also, like TREEVADA, only consider bubbles that have matched parentheses if parentheses are included.  
+After Decomposition, KEDAVRA orders all the decomposed sequences by length and begins to infer grammar from the simplest token sequence, iterating over all token sequences derived from the input strings. Done similarly to ARVADA and TREEAVADA, KEDAVRA uses bubbling and merging. Also, like TREEVADA, only consider bubbles that have matched parentheses if parentheses are included. 
 
 \subsection{NATGI}
 
-Published in \enquote{Black-Box Context-free Grammar Inference for Readbile \& Natural Grammars} at the University of Texas 2025, NATGI is a novel LLM-guided grammar inference framework that extends TREEAVADA's parse tree recovery.
+Published in \enquote{Black-Box Context-free Grammar Inference for Readable \& Natural Grammars} at the University of Texas 2025\cite{arefinBlackboxContextfreeGrammar2025}, NATGI is a novel LLM-guided grammar inference framework that extends TREEAVADA's parse tree recovery. Aiming to improve upon the difficulties of human readability and the lack of guarantees on larger and realistic languages of previous work.
+
+\vspace{\baselineskip}
+
+NATGI, as mentioned above, builds upon TREEAVADA's idea of bracket-induced tree structuring. It follows the same pre-tokenising step, adding two extra modifications. First, there is no separation of class between lowercase and uppercase letters, treating them as a single class. Second, it attempts to remove redundant whitespaces by iteratively removing whitespaces and checking if the resulting program is still valid. During this process, and each time a non-terminal is created via a merge, NATGI collects the subtrees that are about to be relabelled and prompts LLM models, given the sub-trees about to be merged for a more descriptive label compared to $t_1, t_2 ...$ .
+
+\vspace{\baselineskip}
+Then, before using any bubble heuristics process like ARVADA, TREEAVADA or KEDAVRA, NATGI further exploits the brackets. It automatically treats any sequence within enclosed brackets as a bubble and attempts to further structuralise the parse trees. This partially structured tree is then given to an LLM model with a specialised prompt to finish. If the LLM terminates due to LLM's limitations, such as hallucinations \cite{orvalhoAreLargeLanguage2025a,arefinBlackboxContextfreeGrammar2025,} it then uses TREEAVADA heuristics and bubbling to compensate.
+
+\vspace{\baselineskip}
+To allow a broader range of rules cmopared to the ones induced soley from the parse tree, NATGI decomposes each parse tree into smaller fragements. Allowing the resulting grammar to capture a broader set of language rules. This is done via effective pruning through the use of Hierarchical Delta Debugging (HDD). Where pruning is selective deleting branches of a trees. HDD is an algorithm that iteratively prunes the trees as long as a it fails a certain criteria \cite{misherghiHDDHierarchicalDelta2006a}. 
+
+\vspace{\baselineskip}
+Finally, NATGI performs lexical expansion. Since the leaf nodes are limited by the token in the input string, NATGI takes these leaf node and try to expand the lexicon accepted. For example, if leaf token is a single character, NATGI attempts to see if multiple characters are accepted.
+
 
 \subsection{Problem Statement}
 
