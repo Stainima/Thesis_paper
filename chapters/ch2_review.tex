@@ -281,14 +281,114 @@ ARVADA follows the high-level overview provided in algorithm ~\ref{alg:arv}, and
 \label{fig:initialNaiveTrees}
 \end{figure}
 
-In this initially naive parse tree, for each string input. There is a non-terminal $t_0$, and all characters in the string, including the spaces, are children nodes.
+In this initially naive parse tree, for each string input. There is a non-terminal $t_0$, and all characters in the string, including the spaces, are children nodes. From this alone the following grammar can be induced.
 
 \[
-t_0 \to \text{w\;h\;i\;l\;e\;\textvisiblespace\;t\;r\;u\;e\textvisiblespace\&\;f\;a\;l\;s\;e\;\textvisiblespace\;d\;o\;\textvisiblespace\;L\;\textvisiblespace=\;\textvisiblespace\;n}
+t_0 \to \text{w\;h\;i\;l\;e\;\textvisiblespace\;t\;r\;u\;e\textvisiblespace\&\textvisiblespace\;f\;a\;l\;s\;e\;\textvisiblespace\;d\;o\;\textvisiblespace\;L\;\textvisiblespace=\;\textvisiblespace\;n}
 \]
 \[
 t_0 \to \text{L\;\textvisiblespace\;=\;\textvisiblespace \;n\;\textvisiblespace\;;\;\textvisiblespace\;L\;\textvisiblespace\;=\;\textvisiblespace\;(\;n\;+\;n\;)}
 \]
+
+Note that the string derivable from a node $N$, in this case $t_0$, is the concatination of all its leaf nodes. 
+
+\vspace{\baselineskip}
+Next, although not present in pesudocode \ref{alg:arv}, ARVADA has a functionality called pre-tokenisation which can be toggled on or off. Pre-tokenisation is a step after all the naive trees are built, where the algorithm group together sequence of contiguous characters of the same class (lowercase, uppercase, whitespaces, digits) into leaf tokens and all punctuations are kept separate.
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[
+    level distance=15mm,
+    sibling distance=7mm,
+    every node/.style={draw=none, inner sep=2pt, font=\small},
+    edge from parent/.style={draw}
+]
+    \node {$t_0$}
+        child {node {while}}
+        child {node {\textvisiblespace}}
+        child {node {true}}
+        child {node {\textvisiblespace}}
+        child {node {\&}}
+        child {node {\textvisiblespace}}
+        child {node {false}}
+        child {node {\textvisiblespace}}
+        child {node {do}}
+        child {node {\textvisiblespace}}
+        child {node {L}}
+        child {node {\textvisiblespace}}
+        child {node {=}}
+        child {node {\textvisiblespace}}
+        child {node {n}};
+\end{tikzpicture}
+
+\caption{ARVADA pre-tokenisations example}
+\label{fig:tokenisedNaiveTrees}
+\end{figure}
+
+Next, ARVADA attempts its first optimization performing MERGEALLVALID, which attempts to gerenalise and add stucture to the tree by seeing if any of the leaf nodes/tokens can already be merged and put under new non-terminal labels. MERGEALLVALID looks at 2 leaf nodes if it is non-tokenised or 2 non-terminals if tokenised at a time, let these be $t_a$ and $t_b$. Then it goes through all the parse trees creating a replica with all instances of $t_b$ replaced with $t_a$. Let the original parse trees be $T$ and the replica with replacements be $T'$. From replica new candidate strings can be derived, these candidate strings are fed into $\mathcal{O}$. The same process is is done, where all instances of $t_a$ is replaced with $t_b$. Now having 2 sets of candidate strings, where in 1 set $t_b$ replaces $t_a$ and other set has vise-versa. If all the strings in both sets are accepted by $\mathcal{O}$, then $t_a$ and $t_b$ are put under a new non-terminal labelled $t_c$. The roots $t_0$ can also be $t_a$ or $t_b$.
+
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[
+    level distance=15mm,
+    sibling distance=7mm,
+    every node/.style={draw=none, inner sep=2pt, font=\small},
+    edge from parent/.style={draw}
+]
+    \node {$t_0$}
+        child {node {while}}
+        child {node {\textvisiblespace}}
+        child {node {true}}
+        child {node {\textvisiblespace}}
+        child {node {\&}}
+        child {node {\textvisiblespace}}
+        child {node {false}}
+        child {node {\textvisiblespace}}
+        child {node {do}}
+        child {node {\textvisiblespace}}
+        child {node {L}}
+        child {node {\textvisiblespace}}
+        child {node {=}}
+        child {node {\textvisiblespace}}
+        child {node {n}};
+\end{tikzpicture}
+
+$\big\downarrow$
+
+\begin{tikzpicture}[
+    level distance=15mm,
+    sibling distance=7mm,
+    every node/.style={draw=none, inner sep=2pt, font=\small},
+    edge from parent/.style={draw}
+]
+    \node {$t_0$}
+        child {node {while}}
+        child {node {\textvisiblespace}}
+        child {node[fill=green] {$t_1$}
+            child {node {ture}}
+        }
+        child {node {\textvisiblespace}}
+        child {node {\&}}
+        child {node {\textvisiblespace}}
+        child {node[fill=green] {$t_1$}
+            child {node {false}}
+        }
+        child {node {\textvisiblespace}}
+        child {node {do}}
+        child {node {\textvisiblespace}}
+        child {node {L}}
+        child {node {\textvisiblespace}}
+        child {node {=}}
+        child {node {\textvisiblespace}}
+        child {node {n}};
+\end{tikzpicture}
+
+\caption{Example of a MERGEALLVALID run}
+\label{fig:mergallvalid}
+\end{figure}
+
+As MERGEALLVALID only looked at 1 leaf-node or non-terminal on it own (no sequence of leaf-node or non-terminals), ARVADA now moves onto bubbling. Where bubbiling now looks at a sequence of leaf-nodes and/or non-terminal.
 
 \subsection{Why replicate ARVADA?}
 The replication study of GLADE \cite{bastaniSynthesizingProgramInput} conducted by researchers at CISPA \cite{bendrissouSynthesizingInputGrammars2022} in 2022 reported results that were inconsistent with those presented in the original paper \cite{bastaniSynthesizingProgramInput}. Since ARVADA is closely related to GLADE, sharing a similar purpose and experimental setting, there is reason to suspect that ARVADA may also yield inconsistent results upon reimplementation.
