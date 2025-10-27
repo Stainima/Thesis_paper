@@ -325,7 +325,7 @@ Next, although not present in pesudocode \ref{alg:arv}, ARVADA has a functionali
 \label{fig:tokenisedNaiveTrees}
 \end{figure}
 
-Next, ARVADA attempts its first optimization performing MERGEALLVALID, which attempts to gerenalise and add stucture to the tree by seeing if any of the leaf nodes/tokens can already be merged and put under new non-terminal labels. MERGEALLVALID looks at 2 leaf nodes if it is non-tokenised or 2 non-terminals if tokenised at a time, let these be $t_a$ and $t_b$. Then it goes through all the parse trees creating a replica with all instances of $t_b$ replaced with $t_a$. Let the original parse trees be $T$ and the replica with replacements be $T'$. From replica new candidate strings can be derived, these candidate strings are fed into $\mathcal{O}$. The same process is is done, where all instances of $t_a$ is replaced with $t_b$. Now having 2 sets of candidate strings, where in 1 set $t_b$ replaces $t_a$ and other set has vise-versa. If all the strings in both sets are accepted by $\mathcal{O}$, then $t_a$ and $t_b$ are put under a new non-terminal labelled $t_c$. The roots $t_0$ can also be $t_a$ or $t_b$.
+Next, ARVADA attempts its first optimization performing MERGEALLVALID, which attempts to gerenalise and add stucture to the tree by seeing if any of the leaf nodes/tokens can already be merged and put under new non-terminal labels. MERGEALLVALID looks at 2 leaf nodes if it is non-tokenised and/or 2 non-terminals if tokenised at a time, let these be $t_a$ and $t_b$. Then it goes through all the parse trees creating a replica with all instances of $t_b$ replaced with $t_a$. Let the original parse trees be $T$ and the replica with replacements be $T'$. From replica new candidate strings can be derived, these candidate strings are fed into $\mathcal{O}$. The same process is is done, where all instances of $t_a$ is replaced with $t_b$. Now having 2 sets of candidate strings, where in 1 set, $t_b$ replaces $t_a$, and other set has, $t_a$ replaces $t_b$. If all the strings in both sets are accepted by $\mathcal{O}$, then $t_a$ and $t_b$ are put under a new non-terminal labelled $t_c$, and a successful merge has occured. Note roots $t_0$ are also non-terminal and can be $t_a$ or $t_b$.
 
 
 \begin{figure}[h!]
@@ -352,6 +352,36 @@ Next, ARVADA attempts its first optimization performing MERGEALLVALID, which att
         child {node {=}}
         child {node {\textvisiblespace}}
         child {node {n}};
+\end{tikzpicture}
+
+\begin{tikzpicture}[
+    level distance=15mm,
+    sibling distance=5mm,
+    every node/.style={draw=none, inner sep=2pt, font=\small},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {=}}
+    child {node {\textvisiblespace}}
+    child {node {n}}
+    child {node {\textvisiblespace}}
+    child {node {;}}
+    child {node {\textvisiblespace}}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {=}}
+    child {node {\textvisiblespace}}
+    child {node {(}}
+    child {node {\textvisiblespace}}
+    child {node {n}}
+    child {node {\textvisiblespace}}
+    child {node {+}}
+    child {node {\textvisiblespace}}
+    child {node {n}}
+    child {node {\textvisiblespace}}
+    child {node {)}};    
 \end{tikzpicture}
 
 $\big\downarrow$
@@ -384,12 +414,100 @@ $\big\downarrow$
         child {node {n}};
 \end{tikzpicture}
 
-\caption{Example of a MERGEALLVALID run}
+
+\begin{tikzpicture}[
+    level distance=15mm,
+    sibling distance=5mm,
+    every node/.style={draw=none, inner sep=2pt, font=\small},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {=}}
+    child {node {\textvisiblespace}}
+    child {node[fill=yellow] {$t_2$}
+        child {node {n}}
+    }
+    child {node {\textvisiblespace}}
+    child {node {;}}
+    child {node {\textvisiblespace}}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {=}}
+    child {node {\textvisiblespace}}
+    child {node {(}}
+    child {node {\textvisiblespace}}
+    child {node[fill=yellow] {$t_2$}
+        child {node {n}}
+    }
+    child {node {\textvisiblespace}}
+    child {node {+}}
+    child {node {\textvisiblespace}}
+    child {node[fill=yellow] {$t_2$}
+        child {node {n}}
+    }
+    child {node {\textvisiblespace}}
+    child {node {)}};    
+\end{tikzpicture}
+
+\caption{Examples of a $\texttt{MERGEALLVALID}$ run, tokenised and non tokenisation}
 \label{fig:mergallvalid}
 \end{figure}
 
-As MERGEALLVALID only looked at 1 leaf-node or non-terminal on it own (no sequence of leaf-node or non-terminals), ARVADA now moves onto bubbling. Where bubbiling now looks at a sequence of leaf-nodes and/or non-terminal.
+As MERGEALLVALID only looked at 1 leaf-node or non-terminal on it own (no sequence of leaf-node and/or non-terminals), ARVADA now moves onto bubbling. Where bubbiling now looks at a sequence of leaf-nodes and/or non-terminal. 
 
+\vspace{\baselineskip}
+The fundamental next step ARVADA perform is to bubble up a sequecne of sibiling nodes in the current trees $T$ into a new non-terminal.  To bubble up a sequcne $s_1$ in trees $T$ a  new non-terminal is created ${t_s}_1$ with children $s_1$ and all occurrences of $s_1$ in each tree $t$ in $T$ with ${t_s}_1$. Example shown in fig \ref{fig:possible bubble}, where $t_3$ is a bubbled up.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    level distance=15mm,
+    sibling distance=5mm,
+    every node/.style={draw=none, inner sep=2pt, font=\small},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {=}}
+    child {node {\textvisiblespace}}
+    child {node[fill=yellow] {$t_2$}
+        child {node {n}}
+    }
+    child {node {\textvisiblespace}}
+    child {node {;}}
+    child {node {\textvisiblespace}}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {=}}
+    child {node {\textvisiblespace}}
+    child {node[fill=green] {$t_3$}
+        child {node[fill=green] {(}}
+        child {node[fill=green] {\textvisiblespace}}
+        child {node[fill=green] {$t_2$}
+            child {node[fill=green] {n}}
+        }
+        child {node[fill=green] {\textvisiblespace}}
+        child {node[fill=green] {+}}
+        child {node[fill=green] {\textvisiblespace}}
+        child {node[fill=green] {$t_2$}
+            child {node[fill=green] {n}}
+        }
+        child {node[fill=green] {\textvisiblespace}}
+        child {node[fill=green] {)}}    
+    };
+\end{tikzpicture}
+
+
+\caption{Possbile bubble example}
+\label{fig:possible bubble}
+\end{figure}
+
+Now from the current trees $T$, ARVADA perform GETBUBBLES, collecting all possible bubbles. For each tree $t \in T$, GETBUBBLES collects all proper contiguous subsequences of children in $t$. That is, if a tree contains a node $t_i$ with children $C = c_1, c_2,....c_n$, the potential bubble for this tree include all sequence of C of length greater than 1 and less than n. Note that if the children is a subtree, the structure is maintained, like in fig \ref{fig:possible bubble}. GETBUBBLES returns all these as 1-bubble, and all non-confilicting paris of these as 2-bubbles.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Why replicate ARVADA?}
 The replication study of GLADE \cite{bastaniSynthesizingProgramInput} conducted by researchers at CISPA \cite{bendrissouSynthesizingInputGrammars2022} in 2022 reported results that were inconsistent with those presented in the original paper \cite{bastaniSynthesizingProgramInput}. Since ARVADA is closely related to GLADE, sharing a similar purpose and experimental setting, there is reason to suspect that ARVADA may also yield inconsistent results upon reimplementation.
 
@@ -408,7 +526,6 @@ In a comparative study, A Pragmatic Comparison of Four Different Programming Lan
 \vspace{\baselineskip}
 
 Therefore, to investigate and potentially address runtime bottlenecks, C was selected as the implementation language for this replication study. The added complexity inherent to programming in C, relative to Python, was also acknowledged.
-
 
 \subsection{Why is learning input grammar important?}
 Grammar inference is important for many software engineering tasks, as knowledge about a program grammar helps with code comprehension, reverse engineering, detecting and refactoring code smells, transforming source code for optimisation or bug fixing, and generating test inputs\cite{arefinFastDeterministicBlackbox2024}. However, due to the increasing restrictions in many software systems—caused by global privacy and security regulations—we often do not have access to the source code needed to learn their grammar.  Even upon open-source programs and code, many only have closed source prasers, making white-box or grey-box instrumention difficult \cite{arefinFastDeterministicBlackbox2024,liIncrementalContextfreeGrammar2024}.
