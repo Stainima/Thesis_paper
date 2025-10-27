@@ -112,7 +112,7 @@ ARVADA is an algorithm published in \enquote{Learning Highly Recursive Input Gra
 Like GLADE \cite{bastaniSynthesizingProgramInput}, ARVADA operates under the assumption of a black-box oracle $\mathcal{O}$. This means that ARVADA has no access to or knowledge of the internal workings of the oracle and can only observe the Boolean values returned by $\mathcal{O}$.
 
 \subsubsection{GLADE}
-GLADE is an algorithm proposed by Bastani et al., published in Synthesizing Input Grammars at PLDI 2017 \cite{bastaniSynthesizingProgramInput}. Like ARVADA, GLADE uses a set of valid inputs and black-box access to the program, with the aim of automatically approximating the context-free input grammar of the given program.
+GLADE is an algorithm proposed by Bastani et al., published in Synthesising Input Grammars at PLDI 2017 \cite{bastaniSynthesizingProgramInput}. Like ARVADA, GLADE uses a set of valid inputs and black-box access to the program, with the aim of automatically approximating the context-free input grammar of the given program.
 
 \vspace{\baselineskip}
 
@@ -180,7 +180,7 @@ O(i) =
 %%%%%%%%%%%%%%%%%%%
 
 %%% proofread here please %%%%%
-For this walkthrough, the simple while grammar $G_w$ and input string $S$ provided in figure~\ref{fig: grammar} will be used. Noting again that ARVADA treats $\mathcal{O}$ as a black box, meaning it has no structural knowledge of $G_w$, and $G_w$ is only shown to clarify the behaviour of $\mathcal{O}$.
+For this walkthrough, the simple while grammar $G_w$ and input strings $S$ provided in figure~\ref{fig: grammar} will be used. Clarifying again that ARVADA treats $\mathcal{O}$ as a black box, meaning it has no structural knowledge of $G_w$, and $G_w$ is only shown to clarify the behaviour of $\mathcal{O}$ for understanding and comprehension.
 
 %%%%% Pseudocode $$$$$$
 \begin{algorithm}[H]
@@ -281,7 +281,7 @@ ARVADA follows the high-level overview provided in algorithm ~\ref{alg:arv}, and
 \label{fig:initialNaiveTrees}
 \end{figure}
 
-In this initially naive parse tree, for each string input. There is a non-terminal $t_0$, and all characters in the string, including the spaces, are children nodes. From this alone the following grammar can be induced.
+In this initially naive parse tree, for each string input. There is a non-terminal $t_0$, and all characters in the string, including the spaces, are child nodes. From this alone, the following grammar can be induced.
 
 \[
 t_0 \to \text{w\;h\;i\;l\;e\;\textvisiblespace\;t\;r\;u\;e\textvisiblespace\&\textvisiblespace\;f\;a\;l\;s\;e\;\textvisiblespace\;d\;o\;\textvisiblespace\;L\;\textvisiblespace=\;\textvisiblespace\;n}
@@ -290,10 +290,10 @@ t_0 \to \text{w\;h\;i\;l\;e\;\textvisiblespace\;t\;r\;u\;e\textvisiblespace\&\te
 t_0 \to \text{L\;\textvisiblespace\;=\;\textvisiblespace \;n\;\textvisiblespace\;;\;\textvisiblespace\;L\;\textvisiblespace\;=\;\textvisiblespace\;(\;n\;+\;n\;)}
 \]
 
-Note that the string derivable from a node $N$, in this case $t_0$, is the concatination of all its leaf nodes. 
+The string derivable from a node $N$, in this case $t_0$, is the concatenation of all its leaf nodes or itself, if $N$ happens to be a leaf node. 
 
 \vspace{\baselineskip}
-Next, although not present in pesudocode \ref{alg:arv}, ARVADA has a functionality called pre-tokenisation which can be toggled on or off. Pre-tokenisation is a step after all the naive trees are built, where the algorithm group together sequence of contiguous characters of the same class (lowercase, uppercase, whitespaces, digits) into leaf tokens and all punctuations are kept separate.
+Next, although not present in pseudocode \ref{alg:arv}, ARVADA has a functionality called pre-tokenisation, which can be toggled on or off. Pre-tokenisation is a step after all the naive trees are built, where the algorithm groups together sequences of contiguous characters of the same class (lowercase, uppercase, whitespaces, digits, etc) into leaf tokens and all punctuations are kept separate.
 
 \begin{figure}[h!]
 \centering
@@ -325,10 +325,10 @@ Next, although not present in pesudocode \ref{alg:arv}, ARVADA has a functionali
 \label{fig:tokenisedNaiveTrees}
 \end{figure}
 
-Next, ARVADA attempts its first optimization performing MERGEALLVALID, which attempts to gerenalise and add stucture to the tree by seeing if any of the leaf nodes/tokens can already be merged and put under new non-terminal labels. MERGEALLVALID looks at 2 leaf nodes if it is non-tokenised and/or 2 non-terminals if tokenised at a time, let these be $t_a$ and $t_b$. Then it goes through all the parse trees creating a replica with all instances of $t_b$ replaced with $t_a$. Let the original parse trees be $T$ and the replica with replacements be $T'$. From replica new candidate strings can be derived, these candidate strings are fed into $\mathcal{O}$. The same process is is done, where all instances of $t_a$ is replaced with $t_b$. Now having 2 sets of candidate strings, where in 1 set, $t_b$ replaces $t_a$, and other set has, $t_a$ replaces $t_b$. If all the strings in both sets are accepted by $\mathcal{O}$, then $t_a$ and $t_b$ are put under a new non-terminal labelled $t_c$, and a successful merge has occured. Note roots $t_0$ are also non-terminal and can be $t_a$ or $t_b$.
+Next, ARVADA attempts its first optimisation, performing MERGEALLVALID, which attempts to generalise and add structure to the tree by seeing if any of the leaf nodes/tokens can already be merged and put under new non-terminal labels. MERGEALLVALID looks at 2 leaf nodes if it is non-tokenised and/or 2 non-terminals if tokenised at a time, let these be $t_a$ and $t_b$. Then it goes through all the parse trees, creating a replica of each tree with all instances of $t_b$ replaced with $t_a$. Let the original parse trees be $T$ and the replica with replacements be $T'$. From the replica, new candidate strings can be derived; these candidate strings are fed into $\mathcal{O}$. The same process is done, where all instances of $t_a$ are replaced with $t_b$. Now having 2 sets of candidate strings, where in 1 set, $t_b$ replaces $t_a$, and other set, $t_a$ replaces $t_b$. If all the strings in both sets are accepted by $\mathcal{O}$, then $t_a$ and $t_b$ are put under a new non-terminal labelled $t_c$, and a successful merge has occurred. Note roots $t_0$ are also non-terminal and can be $t_a$ or $t_b$.
 
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[
     level distance=15mm,
@@ -455,10 +455,10 @@ $\big\downarrow$
 \label{fig:mergallvalid}
 \end{figure}
 
-As MERGEALLVALID only looked at 1 leaf-node or non-terminal on it own (no sequence of leaf-node and/or non-terminals), ARVADA now moves onto bubbling. Where bubbiling now looks at a sequence of leaf-nodes and/or non-terminal. 
+As MERGEALLVALID only looked at 1 leaf-node or non-terminal on its own (no sequence of leaf-node and/or non-terminals), ARVADA now moves onto bubbling. Where bubbling now looks at a sequence of leaf-nodes and/or non-terminal. 
 
 \vspace{\baselineskip}
-The fundamental next step ARVADA perform is to bubble up a sequecne of sibiling nodes in the current trees $T$ into a new non-terminal.  To bubble up a sequcne $s_1$ in trees $T$ a  new non-terminal is created ${t_s}_1$ with children $s_1$ and all occurrences of $s_1$ in each tree $t$ in $T$ with ${t_s}_1$. Example shown in fig \ref{fig:possible bubble}, where $t_3$ is a bubbled up.
+The fundamental next step ARVADA perform is to bubble up a sequence of sibling nodes in the current trees $T$ into a new non-terminal.  To bubble up a sequcne $s_1$ in trees $T$ a  new non-terminal is created ${t_s}_1$ with children $s_1$ and all occurrences of $s_1$ in each tree $t$ in $T$ with ${t_s}_1$. Example shown in fig \ref{fig: possible bubble}, where $t_3$ is a bubbled up. After bubbling up a sequence $s_1$, ARVADA either accepts or rejects the bubble. A bubble is only accepted if the enables a valid generalisation of the example string inputs. Meaning if the relabeling of the bubbled non-terminal, merging its label with the label of another existing node, expands the language accepted by the induced grammar while still remaining valid to the oracle, the bubble is accepted.
 
 \begin{figure}[H]
 \centering
@@ -502,10 +502,10 @@ The fundamental next step ARVADA perform is to bubble up a sequecne of sibiling 
 
 
 \caption{Possbile bubble example}
-\label{fig:possible bubble}
+\label{fig: possible bubble}
 \end{figure}
 
-Now from the current trees $T$, ARVADA perform GETBUBBLES, collecting all possible bubbles. For each tree $t \in T$, GETBUBBLES collects all proper contiguous subsequences of children in $t$. That is, if a tree contains a node $t_i$ with children $C = c_1, c_2,....c_n$, the potential bubble for this tree include all sequence of C of length greater than 1 and less than n. Note that if the children is a subtree, the structure is maintained, like in fig \ref{fig:possible bubble}. GETBUBBLES returns all these as 1-bubble, and all non-confilicting paris of these as 2-bubbles.
+Now, from the current trees $T$, ARVADA perform GETBUBBLES, collecting all possible bubbles. For each tree $t \in T$, GETBUBBLES collects all proper contiguous subsequences of children in $t$. That is, if a tree contains a node $t_i$ with children $C = c_1, c_2,..., c_n$, the potential bubble for this tree includes all sequences of length greater than 1 and less than n. Note that if the children are a subtree, the structure is maintained, like in fig \ref{fig: possible bubble}. GETBUBBLES returns all these as 1-bubble, and all non-conflicting pairs of these as 2-bubbles. Two subsequences are non-conflicting if they do not strictly overlap: they can be disjoint or a proper subsequence of the other. So $((c_1, c_2, c_3), (c_4, c_5, c_6))$ and $((c_1, c_2, c_3), (c_2, c_3))$ are fine, however $((c_1, c_2, c_3), (c_2, c_3, c_4))$ is not. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Why replicate ARVADA?}
@@ -513,7 +513,7 @@ The replication study of GLADE \cite{bastaniSynthesizingProgramInput} conducted 
 
 \vspace{\baselineskip}
 
-Another motivation for replication arises from the incomplete nature of the ARVADA study and its evaluation. Although the paper presents a reasonable amount of testing and statistical data, compares the algorithm with GLADE, and provides a detailed explanation of ARVADA, it does not offer formal guarantees. It remains unclear whether ARVADA is applicable in all scenarios or what subset of scenarios it can reliably handle. Furthermore, when comparing ARVADA with GLADE, there is a possibility that the grammars used for testing were selected based on performance considerations. In later research, it has been stated that ARVADA only has high F1 scores when input strings are relatively small, and can vary widely on each run \cite{arefinFastDeterministicBlackbox2024}, raising suspicions that the study may have been selective.
+Another motivation for replication arises from the incomplete nature of the ARVADA study and its evaluation. Although the paper presents a reasonable amount of testing and statistical data, compares the algorithm with GLADE, and provides a detailed explanation of ARVADA, it does not offer formal guarantees. It remains unclear whether ARVADA is applicable in all scenarios or what subset of scenarios it can reliably handle. Furthermore, when comparing ARVADA with GLADE, the possibility exists that the grammars used for testing were selected based on performance considerations. In later research, it has been stated that ARVADA only has high F1 scores when input strings are relatively small, and can vary widely on each run \cite{arefinFastDeterministicBlackbox2024}, raising suspicions that the study may have been selective.
 
 \subsection{Why C?}
 
@@ -521,14 +521,14 @@ In the original study \cite{kulkarniLearningHighlyRecursive2021}, the ARVADA alg
 
 \vspace{\baselineskip}
 
-In a comparative study, A Pragmatic Comparison of Four Different Programming Languages \cite{aliPragmaticComparisonFour2021}, it was found that when speed and efficiency are prioritized, C is a better choice than Python. As a mid-level, statically typed, and structured language that runs under a compiler, C consistently outperforms dynamically typed, interpreted languages such as Python \cite{kumarPythonLanguageComparison2022}. Moreover, C’s provision of only essential features contributes to its efficiency but also increases programming complexity compared to Python \cite{aliPragmaticComparisonFour2021, kumarPythonLanguageComparison2022}.
+In a comparative study, A Pragmatic Comparison of Four Different Programming Languages \cite{aliPragmaticComparisonFour2021}, it was found that when speed and efficiency are prioritised, C is a better choice than Python. As a mid-level, statically typed, and structured language that runs under a compiler, C consistently outperforms dynamically typed, interpreted languages such as Python \cite{kumarPythonLanguageComparison2022}. Moreover, C’s provision of only essential features contributes to its efficiency but also increases programming complexity compared to Python \cite{aliPragmaticComparisonFour2021, kumarPythonLanguageComparison2022}.
 
 \vspace{\baselineskip}
 
 Therefore, to investigate and potentially address runtime bottlenecks, C was selected as the implementation language for this replication study. The added complexity inherent to programming in C, relative to Python, was also acknowledged.
 
 \subsection{Why is learning input grammar important?}
-Grammar inference is important for many software engineering tasks, as knowledge about a program grammar helps with code comprehension, reverse engineering, detecting and refactoring code smells, transforming source code for optimisation or bug fixing, and generating test inputs\cite{arefinFastDeterministicBlackbox2024}. However, due to the increasing restrictions in many software systems—caused by global privacy and security regulations—we often do not have access to the source code needed to learn their grammar.  Even upon open-source programs and code, many only have closed source prasers, making white-box or grey-box instrumention difficult \cite{arefinFastDeterministicBlackbox2024,liIncrementalContextfreeGrammar2024}.
+Grammar inference is important for many software engineering tasks, as knowledge about a program's grammar helps with code comprehension, reverse engineering, detecting and refactoring code smells, transforming source code for optimisation or bug fixing, and generating test inputs \ cite {arefinFastDeterministicBlackbox2024}. However, due to the increasing restrictions in many software systems—caused by global privacy and security regulations—we often lack access to the source code needed to learn their grammar.  Even with open-source programs and code, many only have closed-source parsers, making white-box or grey-box instrumentation difficult \cite{arefinFastDeterministicBlackbox2024,liIncrementalContextfreeGrammar2024}.
 
 \vspace{\baselineskip}
 This limitation highlights the importance of learning input grammars, which are formal grammars defining valid program inputs, and approaches that treat a program as a black box and recursively apply input grammars to infer or reverse-engineer the underlying grammar of the program.
@@ -620,7 +620,7 @@ To achieve such results, TREEVADA uses a few different techniques. First, during
 \label{fig:pre-tokenised trees}
 \end{figure}
 
-Secondly, to address the non-deterministic aspect of ARVADA, TREEAVADA switches to a deterministic data structure for specific operations and discard all bubbles with unmatched parentheses when bubbling. Additionally, two new heuristics, bubble length and bubble depth, are considered when considering bubble ranks during bubbling.
+Secondly, to address the non-deterministic aspect of ARVADA, TREEAVADA switches to a deterministic data structure for specific operations and discards all bubbles with unmatched parentheses when bubbling. Additionally, two new heuristics, bubble length and bubble depth, are considered when considering bubble ranks during bubbling.
 
 \subsection{KEDAVRA}
 
@@ -730,13 +730,13 @@ Published in \enquote{Black-Box Context-free Grammar Inference for Readable \& N
 NATGI, as mentioned above, builds upon TREEAVADA's idea of bracket-induced tree structuring. It follows the same pre-tokenising step, adding two extra modifications. First, there is no separation of class between lowercase and uppercase letters, treating them as a single class. Second, it attempts to remove redundant whitespaces by iteratively removing whitespaces and checking if the resulting program is still valid. During this process, and each time a non-terminal is created via a merge, NATGI collects the subtrees that are about to be relabelled and prompts LLM models, given the sub-trees about to be merged for a more descriptive label compared to $t_1, t_2 ...$ .
 
 \vspace{\baselineskip}
-Then, before using any bubble heuristics process like ARVADA, TREEAVADA or KEDAVRA, NATGI further exploits the brackets. It automatically treats any sequence within enclosed brackets as a bubble and attempts to further structuralise the parse trees. This partially structured tree is then given to an LLM model with a specialised prompt to finish. If the LLM terminates due to LLM's limitations, such as hallucinations \cite{orvalhoAreLargeLanguage2025a,arefinBlackboxContextfreeGrammar2025,} it then uses TREEAVADA heuristics and bubbling to compensate.
+Then, before using any bubble heuristics process like ARVADA, TREEAVADA or KEDAVRA, NATGI further exploits the brackets. It automatically treats any sequence within enclosed brackets as a bubble and attempts to further structuralise the parse trees. This partially structured tree is then given to an LLM model with a specialised prompt to finish. If the LLM terminates due to LLM's limitations, such as hallucinations \cite{orvalhoAreLargeLanguage2025a,arefinBlackboxContextfreeGrammar2025}, it then uses TREEAVADA heuristics and bubbling to compensate.
 
 \vspace{\baselineskip}
-To allow a broader range of rules cmopared to the ones induced soley from the parse tree, NATGI decomposes each parse tree into smaller fragements. Allowing the resulting grammar to capture a broader set of language rules. This is done via effective pruning through the use of Hierarchical Delta Debugging (HDD). Where pruning is selective deleting branches of a trees. HDD is an algorithm that iteratively prunes the trees as long as a it fails a certain criteria \cite{misherghiHDDHierarchicalDelta2006a}. 
+To allow a broader range of rules compared to the ones induced solely from the parse tree, NATGI decomposes each parse tree into smaller fragments. Allowing the resulting grammar to capture a broader set of language rules. This is done via effective pruning through the use of Hierarchical Delta Debugging (HDD). Pruning is the selective deletion of branches of a tree. HDD is an algorithm that iteratively prunes the trees as long as it fails a certain criterion \cite{misherghiHDDHierarchicalDelta2006a}. 
 
 \vspace{\baselineskip}
-Finally, NATGI performs lexical expansion. Since the leaf nodes are limited by the token in the input string, NATGI takes these leaf node and try to expand the lexicon accepted. For example, if leaf token is a single character, NATGI attempts to see if multiple characters are accepted.
+Finally, NATGI performs lexical expansion. Since the leaf nodes are limited by the token in the input string, NATGI takes these leaf nodes and tries to expand the lexicon accepted. For example, if leaf token is a single character, NATGI attempts to see if multiple characters are accepted.
 
 
 \subsection{Problem Statement}
@@ -751,4 +751,6 @@ The clean-room re-implementation will mean development is entirely from scratch 
 
 \vspace{\baselineskip}
 Although the primary goal of this study is to re-implement, assess, and expand upon the original work, I acknowledge that this study may be incomplete or no new knowledge may be discovered. While this may seem trivial—merely confirming the findings of the previous study without adding novel insights \cite{hendriksConsiderItParsed}, replication studies play a vital role in reinforcing the trustworthiness and confidence of empirical results, which is a central tenet of the scientific method. Replication can increase certainty when findings are reproduced and promote innovation when they are not \cite{shepperdReplicationStudiesConsidered2018}. Therefore, this study holds significance within the field of computer science.
+
+
 
