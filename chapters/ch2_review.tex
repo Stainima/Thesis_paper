@@ -515,7 +515,90 @@ ARVADA to optimise checking bubbles that are more likely to get accepted first u
 
 \vspace{\baselineskip}
 After all the bubbles are exhausted, it looks at the final parse and returns the induced grammar. More technical explanations are provided in the implementation section of this paper.
+%%%%%%%%%%% Full run %%%%%%
 
+\begin{figure}[h!]
+\centering
+\makebox[\textwidth]{%
+
+\begin{tikzpicture}[node distance=10mm, every node/.style={align=center}]
+    % left tree
+    \node (lefttree) {
+        \begin{tikzpicture}[
+            level distance=10mm,
+            sibling distance=4mm,
+            every node/.style={draw=none,inner sep=1pt,font=\small, anchor=base},
+            edge from parent/.style={draw}
+        ]
+        \node {$t_0$}
+            child {node {w}}
+            child {node {h}}
+            child {node {i}}
+            child {node {l}}
+            child {node {e}}
+            child {node {\textvisiblespace}}
+            child {node {t}}
+            child {node {r}}
+            child {node {u}}
+            child {node {e}}
+            child {node {\textvisiblespace}}
+            child {node {\&}}
+            child {node {\textvisiblespace}}
+            child {node {f}}
+            child {node {a}}
+            child {node {l}}
+            child {node {s}}
+            child {node {e}}
+            child {node {\textvisiblespace}}
+            child {node {d}}
+            child {node {o}}
+            child {node {\textvisiblespace}}
+            child {node {L}}
+            child {node {\textvisiblespace}}
+            child {node {=}}
+            child {node {\textvisiblespace}}
+            child {node {n}};
+        \end{tikzpicture}
+    };
+
+    % right tree (placed in same row)
+    \node[right=of lefttree] (righttree) {
+        \begin{tikzpicture}[
+            level distance=12mm,
+            sibling distance=3mm,
+            every node/.style={draw=none,inner sep=1pt,font=\small, anchor=base},
+            edge from parent/.style={draw}
+        ]
+        \node {$t_0$}
+            child {node {L}}
+            child {node {\textvisiblespace}}
+            child {node {=}}
+            child {node {\textvisiblespace}}
+            child {node {n}}
+            child {node {\textvisiblespace}}
+            child {node {;}}
+            child {node {\textvisiblespace}}
+            child {node {L}}
+            child {node {\textvisiblespace}}
+            child {node {=}}
+            child {node {\textvisiblespace}}
+            child {node {(}}
+            child {node {\textvisiblespace}}
+            child {node {n}}
+            child {node {\textvisiblespace}}
+            child {node {+}}
+            child {node {\textvisiblespace}}
+            child {node {n}}
+            child {node {\textvisiblespace}}
+            child {node {)}};
+        \end{tikzpicture}
+    };
+\end{tikzpicture}
+}
+
+\caption{Initial set of flat naive parse trees ARVADA builds given inputs $S$, where each $t_i$ is a non-terminal.}
+\label{fig:initialNaiveTrees}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Why replicate ARVADA?}
