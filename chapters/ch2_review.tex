@@ -135,8 +135,10 @@ The addition of new non-terminal nodes expands the language defined by the learn
 
 This walkthrough will follow very closely to the examples provided in the original paper \cite{kulkarniLearningHighlyRecursive2021}, and use a concrete example to provide an in-depth understanding of ARVADA.
 
+\vspace{\baselineskip}
+
 %%%%%%%%% GRAMMAR %%%%%%%%%%%
-\begin{figure}[H]
+\begin{figure}[h!]
 \begin{tcolorbox}[title=$G_w$, colback=white, colframe=black]
 \begin{grammar}{
     \pr{\emph{start}}{\emph{stmt}}
@@ -180,7 +182,7 @@ O(i) =
 %%%%%%%%%%%%%%%%%%%
 
 %%% proofread here please %%%%%
-For this walkthrough, the simple while grammar $G_w$ and input strings $S$ provided in figure~\ref{fig: grammar} will be used. Clarifying again that ARVADA treats $\mathcal{O}$ as a black box, meaning it has no structural knowledge of $G_w$, and $G_w$ is only shown to clarify the behaviour of $\mathcal{O}$ for understanding and comprehension.
+For this walkthrough, the simple while grammar $G_w$ and input strings $S$ provided in figure \ref{fig:grammar} will be used. Clarifying again that ARVADA treats $\mathcal{O}$ as a black box, meaning it has no structural knowledge of $G_w$, and $G_w$ is only shown to clarify the behaviour of $\mathcal{O}$ for understanding and comprehension.
 
 %%%%% Pseudocode $$$$$$
 \begin{algorithm}[H]

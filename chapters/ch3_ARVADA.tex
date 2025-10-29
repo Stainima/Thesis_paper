@@ -29,7 +29,7 @@ During this process of re-implementation, 2 structures were initialised. Structu
 \label{fig:Data_Structures1}
 \end{figure}
 
-Figure \ref{fig:Data_Structures1} shows the structure $Nodes$, used to hold all the parse trees. It has variables called $rootNodes$, which is list containing pointer to the roots of all the parse trees. Now as this implementation is in C and memory management is a manual process, this structure holds 2 more variables $capacity$ and $count$. Both of these variables are integers that are used to help manage the size of $rootNodes$. Variable $capacity$ tracks the number of root node pointer $rootNodes$ can currently hold, and variable $count$ tracks the number of actutal roots nodes pointer $rootNode$ currently has.
+Figure \ref{fig:Data_Structures1} shows the structure $Nodes$, used to hold all the parse trees. It has variables called $rootNodes$, which is list containing pointer to the roots of all the parse trees. Now as this implementation is in C and memory management is a dynamic and manual process, this structure holds 2 more variables $capacity$ and $count$. Both of these variables are integers that are used to help manage the size of $rootNodes$. Variable $capacity$ tracks the number of root node pointer $rootNodes$ can currently hold, and variable $count$ tracks the number of actutal roots nodes pointer $rootNode$ currently has.
 
 \begin{figure}[H]
 
@@ -72,5 +72,81 @@ Figure \ref{fig:Data_Structures2} shows the structure $Node$, used for each indi
 \end{itemize}
 
 \subsubsection{Building Inital parse trees}
+This part of the thesis is derived from section III-A of the original paper \cite{kulkarniLearningHighlyRecursive2021}. Using the 2 structures described, next the initial parse trees were built. First, we build the $Nodes$ structure, which is houses all the parse tree pointer. 
+This is done by using C's built-in dynamic memory funciton $malloc$, where $capacity$ was set randomly to 4, $count$ to 0 as it does not house any parse trees pointers yet, and list $rootNodes$ was given enough memory to house 4 $Node$ pointers, where 4 is the current $capacity$. 
 
-This part of the thesis references section III-A of the original paper \cite{kulkarniLearningHighlyRecursive2021}.
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+     // Keeping track of all root trees (each string in example file)
+     Nodes *root_trees= malloc(sizeof(Nodes)); 
+     root_trees->capacity = 4; // randomly assigned
+     root_trees->count = 0;
+     root_trees->rootNodes= malloc(root_trees->capacity * sizeof(Node*));
+
+    \end{lstlisting}
+
+\caption{building of Nodes Structure}
+\label{fig:rootNodes}
+\end{figure}
+
+Next, the file contain all the vaild example strings is read as standard. Then from the top of the file, each valid string is read and the each naive falt prase tree is built one by one. After each tree is built, the pointer to the tree's root if given and housed in $root\_trees$, refer to figure \ref{fig:rootNodes}.
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+          // reading in line by line
+     char *current_line = NULL; // freed
+     size_t line_buffer_len = 0;
+     ssize_t read_line_len = 0;
+     while((read_line_len = getline(&current_line, &line_buffer_len, file_ptr)) != -1){
+
+         current_line[read_line_len - 1] = '\0';
+         //printf("Current Line = %s\n", current_line);
+
+         // builidng the navie parse tree for each sentence
+         Node *current_tree = build_basic_node();
+         current_tree->capacity = 10; // randomly assigned
+         current_tree->t_label = 0;
+         current_tree->children = calloc(current_tree->capacity, sizeof(Node*));
+
+         for(int i = 0; i < (read_line_len - 1); i ++ ){
+             //printf("%c\n", current_line[i]);
+             Node * node = build_basic_node();
+             node->parent = current_tree;
+             node->character = current_line[i];
+             node->pos = i;
+             current_tree->children[current_tree->num_child] = node;
+             current_tree->num_child ++;
+             check_node_capacity(current_tree);
+
+         }
+
+         // Check current capacity of the root nodes
+         root_trees->rootNodes[root_trees->count] = current_tree;
+         root_trees->count = root_trees->count + 1;
+         check_nodes_capacity(root_trees);
+
+     }
+
+     free(current_line);
+
+    \end{lstlisting}
+
+\caption{Building and storting each prase tree}
+\label{fig:eachParseTree}
+\end{figure}
+
+\subsubsection{Memory Management}
