@@ -1,25 +1,76 @@
 \chapter{METHODOLGIES \& IMPLEMENTATION}
 
+This section of the thesis aims to provide a clear understanding how the re-implementation was conducted in C. Providing all the steps taken in this attempt, with as much technical detail as possible and referencing appropriate sections of the original paper.
+
+\subsection{Data structures, and Initial Parse Trees}
+\subsubsection{Data Structures}
+During this process of re-implementation, 2 structures were initialised. Structures being a way to group several related variables into one place in C \cite{w3schoolStructuresStructs2025}. One sturcture is used to represent a node in the parse trees, and another sturcture to hold and reference each parse tree.
+\begin{figure}[H]
+
+    \begin{tcolorbox}[title=Nodes Structure for storing trees, colback=white, colframe=black]
+        \begin{lstlisting}[
+            language=C,
+            numbers=left,
+            stepnumber=1,
+            numbersep=5pt,
+            xleftmargin=1.5em,
+            frame=none
+        ]
+        typedef struct nodes{
+            int capacity;
+            int count;
+            struct node **rootNodes;
+        } Nodes;
+        \end{lstlisting}
+
+    \end{tcolorbox}
+
+\caption{Data Structure to store and track trees}
+\label{fig:Data_Structures1}
+\end{figure}
+
+Figure \ref{fig:Data_Structures1} shows the structure $Nodes$, used to hold all the parse trees. It has variables called $rootNodes$, which is list containing pointer to the roots of all the parse trees. Now as this implementation is in C and memory management is a manual process, this structure holds 2 more variables $capacity$ and $count$. Both of these variables are integers that are used to help manage the size of $rootNodes$. Variable $capacity$ tracks the number of root node pointer $rootNodes$ can currently hold, and variable $count$ tracks the number of actutal roots nodes pointer $rootNode$ currently has.
+
+\begin{figure}[H]
+
+    \begin{tcolorbox}[title=Node Structure to build each tree, colback=white, colframe=black]
+
+        \begin{lstlisting}[
+            language=C,
+            numbers=left,
+            stepnumber=1,
+            numbersep=5pt,
+            xleftmargin=1.5em,
+            frame=none
+        ]
+        typedef struct node{
+            int capacity;
+            char character;
+            struct node *parent;
+            int t_label;
+            int num_child;
+            int pos;
+            struct node **children;
+        } Node;
+        \end{lstlisting}
+    \end{tcolorbox}
+
+\caption{Data Structure to build each tree}
+\label{fig:Data_Structures2}
+\end{figure}
 
 
-How you did it, and point out any differences?
+Figure \ref{fig:Data_Structures2} shows the structure $Node$, used for each individual node in the trees. It has 7 variables inside it. 
+\begin{itemize}
+    \item $character$: stores a C character if the nodes is a leaf/terminal node, else a null character if the the node is a non-terminal.
+    \item  $t\_label$: stores an integer. The integer is positive vlaue if the node is a non-terminal, else -1 if it is a terminal.
+    \item $parent$: hold a pointer to the current nodes parent, which is a $Node$ as well. If root, parent is a null pointer.
+    \item $pos$: is an integer which represent the index of the current node when the parse trees are initial for all terminal nodes. For non-terminal nodes, it will be null value.
+    \item $children$: hold a list of pointer, which point to $Node$.
+    \item $capacity$: current size of the list $children$. 
+    \item $num\_child$: current number of $Node$ pointer in list $children$.
+\end{itemize}
 
-\begin{lstlisting}[caption={Struct used in code to store all \textit{trees}}]
-typedef struct nodes{
-    int capacity;
-    int count;
-    struct node **nodes;
-} Nodes;
-\end{lstlisting}
+\subsubsection{Building Inital parse trees}
 
-\begin{lstlisting}[caption={Struct used in \textit{trees}}]
-typedef struct node{
-    int capacity;
-    char character;
-    struct node *parent;
-    int t;
-    int num_child;
-    int pos;
-    struct node **children;
-} Node;
-\end{lstlisting}
+This part of the thesis references section III-A of the original paper \cite{kulkarniLearningHighlyRecursive2021}.
