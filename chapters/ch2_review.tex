@@ -215,7 +215,7 @@ ARVADA follows the high-level overview provided in algorithm ~\ref{alg:arv}, and
 \begin{tikzpicture}[
     level distance=15mm,
     sibling distance=5mm,
-    every node/.style={draw=none, inner sep=2pt, font=\small},
+    every node/.style={draw=none, inner sep=2pt, font=\small, anchor=base},
     edge from parent/.style={draw}
 ]
     \node {$t_0$}
@@ -251,7 +251,7 @@ ARVADA follows the high-level overview provided in algorithm ~\ref{alg:arv}, and
 \begin{tikzpicture}[
     level distance=15mm,
     sibling distance=5mm,
-    every node/.style={draw=none, inner sep=2pt, font=\small},
+    every node/.style={draw=none, inner sep=2pt, font=\small, anchor=base},
     edge from parent/.style={draw}
 ]
 \node {$t_0$}
@@ -300,7 +300,7 @@ Next, although not present in pseudocode \ref{alg:arv}, ARVADA has a functionali
 \begin{tikzpicture}[
     level distance=15mm,
     sibling distance=7mm,
-    every node/.style={draw=none, inner sep=2pt, font=\small},
+    every node/.style={draw=none, inner sep=2pt, font=\small, anchor=base},
     edge from parent/.style={draw}
 ]
     \node {$t_0$}
@@ -333,7 +333,7 @@ Next, ARVADA attempts its first optimisation, performing MERGEALLVALID, which at
 \begin{tikzpicture}[
     level distance=15mm,
     sibling distance=7mm,
-    every node/.style={draw=none, inner sep=2pt, font=\small},
+    every node/.style={draw=none, inner sep=2pt, font=\small, anchor=base},
     edge from parent/.style={draw}
 ]
     \node {$t_0$}
@@ -357,7 +357,7 @@ Next, ARVADA attempts its first optimisation, performing MERGEALLVALID, which at
 \begin{tikzpicture}[
     level distance=15mm,
     sibling distance=5mm,
-    every node/.style={draw=none, inner sep=2pt, font=\small},
+    every node/.style={draw=none, inner sep=2pt, font=\small, anchor=base},
     edge from parent/.style={draw}
 ]
 \node {$t_0$}
@@ -389,7 +389,7 @@ $\big\downarrow$
 \begin{tikzpicture}[
     level distance=15mm,
     sibling distance=7mm,
-    every node/.style={draw=none, inner sep=2pt, font=\small},
+    every node/.style={draw=none, inner sep=2pt, font=\small, anchor=base},
     edge from parent/.style={draw}
 ]
     \node {$t_0$}
@@ -418,7 +418,7 @@ $\big\downarrow$
 \begin{tikzpicture}[
     level distance=15mm,
     sibling distance=5mm,
-    every node/.style={draw=none, inner sep=2pt, font=\small},
+    every node/.style={draw=none, inner sep=2pt, font=\small, anchor=base},
     edge from parent/.style={draw}
 ]
 \node {$t_0$}
@@ -465,7 +465,7 @@ The fundamental next step ARVADA perform is to bubble up a sequence of sibling n
 \begin{tikzpicture}[
     level distance=15mm,
     sibling distance=5mm,
-    every node/.style={draw=none, inner sep=2pt, font=\small},
+    every node/.style={draw=none, inner sep=2pt, font=\small, anchor=base},
     edge from parent/.style={draw}
 ]
 \node {$t_0$}
@@ -505,23 +505,23 @@ The fundamental next step ARVADA perform is to bubble up a sequence of sibling n
 \label{fig: possible bubble}
 \end{figure}
 
-Referring to the pseudocode in \ref{alg:arv}, from the current trees $T$ after MERGEALLVALID, ARVADA performs GETBUBBLES, collecting all possible bubbles. For each tree $t \in T$, GETBUBBLES collects all proper contiguous subsequences of children in $t$. That is, if a tree contains a node $t_i$ with children $C = c_1, c_2,..., c_n$, the potential bubble for this tree includes all sequences of length greater than 1 and less than n. Note that if the children are a subtree, the structure is maintained, like in fig \ref{fig: possible bubble}. GETBUBBLES returns all these as 1-bubble, and all non-conflicting pairs of these as 2-bubbles. Two subsequences are non-conflicting if they do not strictly overlap: they can be disjoint or a proper subsequence of the other. So $((c_1, c_2, c_3), (c_4, c_5, c_6))$ and $((c_1, c_2, c_3), (c_2, c_3))$ are fine, however $((c_1, c_2, c_3), (c_2, c_3, c_4))$ is not. The purpose of 2 bubbles is to account for the limitation of looking at just 1 bubble at a time. At some point, ARVADA will reach a stage where no 1-bubble can be merged with an existing label of a node in the tree, and more generalisation can still be made.
+Referring to the pseudocode in \ref{alg:arv}, from the current trees $T$ after MERGEALLVALID, ARVADA performs GETBUBBLES. For each tree $t \in T$, GETBUBBLES collects all proper contiguous subsequences of children in $t$. That is, if a tree contains a node $t_i$ with children $C = c_1, c_2,..., c_n$, the potential bubble for this tree includes all sequences of length greater than 1 and less than n. Note that if the children are a subtree, the structure is maintained, like in fig \ref{fig: possible bubble}. GETBUBBLES returns all these as 1-bubble, and all non-conflicting pairs of these as 2-bubbles. Two subsequences are non-conflicting if they do not strictly overlap: they can be disjoint or a proper subsequence of the other. So $((c_1, c_2, c_3), (c_4, c_5, c_6))$ and $((c_1, c_2, c_3), (c_2, c_3))$ are fine, however $((c_1, c_2, c_3), (c_2, c_3, c_4))$ is not. The purpose of 2 bubbles is to account for the limitations of 1-bubble. At some point, ARVADA will reach a stage where no 1-bubble can be merged with an existing label of a node in the tree, but more generalisations can still be made. Consider fig \ref{fig:fullrun2} (3), at this point in the run, ARVADA finds the single bubble $true \rightarrow t_5$ cannot be validly merged with any other existing node in the trees $T$. To cope with this, ARVADA bubbles up 2 distinct sequences (distinct or sub/super sets), only accepting the 2-bubble if they can merge, as seen in the example. $t_6 \rightarrow false$. 
 \vspace{\baselineskip}
 
-Now, ARVADA goes through 1-bubbles, taking 1 at a time and attempts to see if it can validly merge the current bubble with another non-terminal in the tree. This is done in CHECKBUBBLE. If the merge is accepted, the trees are updated to reflect the successful merge; no further bubbles are checked, all current bubbles are discarded, and the process is repeated with the new update trees. Meaning, new bubble are formed and checked. 
+Now, ARVADA goes through 1-bubbles, taking 1 at a time and attempts to see if it can validly merge the current bubble with another non-terminal in the original trees. This is done in CHECKBUBBLE. If the merge is accepted, the trees are updated to reflect the successful merge; no further bubbles are checked, all current bubbles are discarded, and the process is repeated with the new updated trees. Meaning, new bubbles are formed and checked. 
 
 \vspace{\baselineskip}
 ARVADA to optimise checking bubbles that are more likely to get accepted first uses certain heuristics to order the exploration of the bubbles. Primarily sorting by similarity in context first, and frequency second and taking the top 100. Technical details are explained in the implementation.
 
 \vspace{\baselineskip}
-After all the bubbles are exhausted, it looks at the final parse and returns the induced grammar. More technical explanations are provided in the implementation section of this paper.
+After all the bubbles, 1-bubbles and 2-bubbles are exhausted, it looks at the final stage of the parse trees and returns the induced grammar. More technical explanations are provided in the implementation section of this paper.
 %%%%%%%%%%% Full run %%%%%%
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \centering
-\makebox[\textwidth]{%
 
-\begin{tikzpicture}[node distance=10mm, every node/.style={align=center}]
+\begin{tikzpicture}[
+    node distance=10mm, every node/.style={align=center}]
     % left tree
     \node (lefttree) {
         \begin{tikzpicture}[
@@ -594,10 +594,413 @@ After all the bubbles are exhausted, it looks at the final parse and returns the
         \end{tikzpicture}
     };
 \end{tikzpicture}
-}
 
-\caption{Initial set of flat naive parse trees ARVADA builds given inputs $S$, where each $t_i$ is a non-terminal.}
-\label{fig:initialNaiveTrees}
+$\vert$
+
+(1) Bubble $t_2 \rightarrow$ ( n + n ); merge ($t_2$, n) into $t_3$
+
+$\big\downarrow$
+
+\begin{tikzpicture}[node distance=10mm, every node/.style={align=center}]
+    % left tree
+    \node (lefttree) {
+        \begin{tikzpicture}[
+            level distance=10mm,
+            sibling distance=4mm,
+            every node/.style={draw=none,inner sep=1pt,font=\small, anchor=base},
+            edge from parent/.style={draw}
+        ]
+        \node {$t_0$}
+            child {node {w}}
+            child {node {h}}
+            child {node {i}}
+            child {node {l}}
+            child {node {e}}
+            child {node {\textvisiblespace}}
+            child {node {t}}
+            child {node {r}}
+            child {node {u}}
+            child {node {e}}
+            child {node {\textvisiblespace}}
+            child {node {\&}}
+            child {node {\textvisiblespace}}
+            child {node {f}}
+            child {node {a}}
+            child {node {l}}
+            child {node {s}}
+            child {node {e}}
+            child {node {\textvisiblespace}}
+            child {node {d}}
+            child {node {o}}
+            child {node {\textvisiblespace}}
+            child {node {L}}
+            child {node {\textvisiblespace}}
+            child {node {=}}
+            child {node {\textvisiblespace}}
+            child {node[fill=orange] {$t_3$}
+                child {node {n}}
+            };
+        \end{tikzpicture}
+    };
+
+    % right tree (placed in same row)
+    \node[right=of lefttree] (righttree) {
+        \begin{tikzpicture}[
+            level distance=12mm,
+            sibling distance=3mm,
+            every node/.style={draw=none,inner sep=1pt,font=\small, anchor=base},
+            edge from parent/.style={draw}
+        ]
+        \node {$t_0$}
+            child {node {L}}
+            child {node {\textvisiblespace}}
+            child {node {=}}
+            child {node {\textvisiblespace}}
+            child {node[fill=orange] {$t_3$}
+                child {node {n}}
+            }
+            child {node {\textvisiblespace}}
+            child {node {;}}
+            child {node {\textvisiblespace}}
+            child {node {L}}
+            child {node {\textvisiblespace}}
+            child {node {=}}
+            child {node {\textvisiblespace}}
+            child {node[fill=orange] {$t_3$}
+                child {node {(}}
+                child {node {\textvisiblespace}}
+                child {node[fill=orange] {$t_3$}
+                    child {node {n}}
+                }
+                child {node {\textvisiblespace}}
+                child {node {+}}
+                child {node {\textvisiblespace}}
+                child {node[fill=orange] {$t_3$}
+                    child {node {n}}
+                }
+                child {node {\textvisiblespace}}
+                child {node {)}}
+            };
+        \end{tikzpicture}
+    };
+\end{tikzpicture}
+
+$\vert$
+
+(2) Bubble $t_4 \rightarrow$ L\textvisiblespace=\textvisiblespace $t_3$; merge ($t_4, t_0$) into $t_0$
+
+$\big\downarrow$
+
+
+\begin{tikzpicture}[node distance=10mm, every node/.style={align=center}]
+    % left tree
+    \node (lefttree) {
+        \begin{tikzpicture}[
+            level distance=10mm,
+            sibling distance=4mm,
+            every node/.style={draw=none,inner sep=1pt,font=\small, anchor=base},
+            edge from parent/.style={draw}
+        ]
+        \node {$t_0$}
+            child {node {w}}
+            child {node {h}}
+            child {node {i}}
+            child {node {l}}
+            child {node {e}}
+            child {node {\textvisiblespace}}
+            child {node {t}}
+            child {node {r}}
+            child {node {u}}
+            child {node {e}}
+            child {node {\textvisiblespace}}
+            child {node {\&}}
+            child {node {\textvisiblespace}}
+            child {node {f}}
+            child {node {a}}
+            child {node {l}}
+            child {node {s}}
+            child {node {e}}
+            child {node {\textvisiblespace}}
+            child {node {d}}
+            child {node {o}}
+            child {node {\textvisiblespace}}
+            child {node[fill=orange] {$t_0$}
+                child {node {L}}
+                child {node {\textvisiblespace}}
+                child {node {=}}
+                child {node {\textvisiblespace}}
+                child {node {$t_3$}
+                    child {node {n}}
+                }
+            };
+
+        \end{tikzpicture}
+    };
+
+    % right tree (placed in same row)
+    \node[right=of lefttree] (righttree) {
+        \begin{tikzpicture}[
+            level distance=12mm,
+            level 1/.style={sibling distance=5mm}, % children of the root
+            level 2/.style={sibling distance=4mm}, % grandchi1
+            every node/.style={draw=none,inner sep=1pt,font=\small, anchor=base},
+            edge from parent/.style={draw}
+        ]
+        \node {$t_0$}
+            child {node[fill=orange] {$t_0$}
+                child {node {L}}
+                child {node {\textvisiblespace}}
+                child {node {=}}
+                child {node {\textvisiblespace}}
+                child {node {$t_3$}
+                    child {node {n}}
+                }
+            }
+            child {node {\textvisiblespace}}
+            child {node {;}}
+            child {node {\textvisiblespace}}
+            child {node[fill=orange] {$t_0$}
+                child {node {L}}
+                child {node {\textvisiblespace}}
+                child {node {=}}
+                child {node {\textvisiblespace}}
+                child {node {$t_3$}
+                    child {node {(}}
+                    child {node {\textvisiblespace}}
+                    child {node {$t_3$}
+                        child {node {n}}
+                    }
+                    child {node {\textvisiblespace}}
+                    child {node {+}}
+                    child {node {\textvisiblespace}}
+                    child {node {$t_3$}
+                        child {node {n}}
+                    }
+                    child {node {\textvisiblespace}}
+                    child {node {)}}
+                }
+            };
+        \end{tikzpicture}
+    };
+\end{tikzpicture}
+
+
+\caption{Example full run of ARVADA bubbling using non-tokenisation nor optimised tree, and the grammar induced (part 1)\cite{kulkarniLearningHighlyRecursive2021}}
+\label{fig:fullrun1}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+(3) Bubble $t_5 \rightarrow false, t_6 \rightarrow ture$; merge ($t_5, t_6$) into $t_7$
+
+$\big\downarrow$
+
+\begin{tikzpicture}[node distance=10mm, every node/.style={align=center}]
+    % left tree
+    \node (lefttree) {
+        \begin{tikzpicture}[
+            level 1/.style={sibling distance=5mm}, % children of the root
+            level 2/.style={sibling distance=4mm}, % grandchi1
+            level distance=10mm,
+            sibling distance=4mm,
+            every node/.style={draw=none,inner sep=1pt,font=\small, anchor=base},
+            edge from parent/.style={draw}
+        ]
+        \node {$t_0$}
+            child {node {w}}
+            child {node {h}}
+            child {node {i}}
+            child {node {l}}
+            child {node {e}}
+            child {node {\textvisiblespace}}
+            child {node [fill=orange]{$t_7$}
+                child {node {t}}
+                child {node {r}}
+                child {node {u}}
+                child {node {e}}
+            }
+            child {node {\textvisiblespace}}
+            child {node {\&}}
+            child {node {\textvisiblespace}}
+            child {node [fill=orange]{$t_7$}
+                child {node {f}}
+                child {node {a}}
+                child {node {l}}
+                child {node {s}}
+                child {node {e}}
+            }
+            child {node {\textvisiblespace}}
+            child {node {d}}
+            child {node {o}}
+            child {node {\textvisiblespace}}
+            child {node {$t_0$}
+                child {node {L}}
+                child {node {\textvisiblespace}}
+                child {node {=}}
+                child {node {\textvisiblespace}}
+                child {node {$t_3$}
+                    child {node {n}}
+                }
+            };
+
+        \end{tikzpicture}
+    };
+
+    % right tree (placed in same row)
+    \node[right=of lefttree] (righttree) {
+        \begin{tikzpicture}[
+            level distance=12mm,
+            level 1/.style={sibling distance=5mm}, % children of the root
+            level 2/.style={sibling distance=4mm}, % grandchi1
+            every node/.style={draw=none,inner sep=1pt,font=\small, anchor=base},
+            edge from parent/.style={draw}
+        ]
+        \node {$t_0$}
+            child {node {$t_0$}
+                child {node {L}}
+                child {node {\textvisiblespace}}
+                child {node {=}}
+                child {node {\textvisiblespace}}
+                child {node {$t_3$}
+                    child {node {n}}
+                }
+            }
+            child {node {\textvisiblespace}}
+            child {node {;}}
+            child {node {\textvisiblespace}}
+            child {node {$t_0$}
+                child {node {L}}
+                child {node {\textvisiblespace}}
+                child {node {=}}
+                child {node {\textvisiblespace}}
+                child {node {$t_3$}
+                    child {node {(}}
+                    child {node {\textvisiblespace}}
+                    child {node {$t_3$}
+                        child {node {n}}
+                    }
+                    child {node {\textvisiblespace}}
+                    child {node {+}}
+                    child {node {\textvisiblespace}}
+                    child {node {$t_3$}
+                        child {node {n}}
+                    }
+                    child {node {\textvisiblespace}}
+                    child {node {)}}
+                }
+            };
+        \end{tikzpicture}
+    };
+\end{tikzpicture}
+
+(4) Bubble $t_8 \rightarrow t_7 \text{\textvisiblespace} \& \text{\textvisiblespace} t_7$ ; merge ($t_8, t_7$) into $t_7$
+
+$\big\downarrow$
+
+
+\begin{tikzpicture}[node distance=10mm, every node/.style={align=center}]
+    % left tree
+    \node (lefttree) {
+        \begin{tikzpicture}[
+            level distance=10mm,
+            sibling distance=4mm,
+            level 1/.style={sibling distance=6mm}, % children of the root
+            level 2/.style={sibling distance=5mm}, % grandchi1
+            level 3/.style={sibling distance=4mm}, % grandchi1
+            every node/.style={draw=none,inner sep=1pt,font=\small, anchor=base},
+            edge from parent/.style={draw}
+        ]
+        \node {$t_0$}
+            child {node {w}}
+            child {node {h}}
+            child {node {i}}
+            child {node {l}}
+            child {node {e}}
+            child {node {\textvisiblespace}}
+            child {node [fill=orange]{$t_7$}
+                child {node {$t_7$}
+                    child {node {t}}
+                    child {node {r}}
+                    child {node {u}}
+                    child {node {e}}
+                }
+                child {node {\textvisiblespace}}
+                child {node {\&}}
+                child {node {\textvisiblespace}}
+                child {node {$t_7$}
+                    child {node {f}}
+                    child {node {a}}
+                    child {node {l}}
+                    child {node {s}}
+                    child {node {e}}
+                }
+            }
+            child {node {\textvisiblespace}}
+            child {node {d}}
+            child {node {o}}
+            child {node {\textvisiblespace}}
+            child {node {$t_0$}
+                child {node {L}}
+                child {node {\textvisiblespace}}
+                child {node {=}}
+                child {node {\textvisiblespace}}
+                child {node {$t_3$}
+                    child {node {n}}
+                }
+            };
+
+        \end{tikzpicture}
+    };
+
+    % right tree (placed in same row)
+    \node[right=of lefttree] (righttree) {
+        \begin{tikzpicture}[
+            level distance=12mm,
+            level 1/.style={sibling distance=5mm}, % children of the root
+            level 2/.style={sibling distance=4mm}, % grandchi1
+            every node/.style={draw=none,inner sep=1pt,font=\small, anchor=base},
+            edge from parent/.style={draw}
+        ]
+        \node {$t_0$}
+            child {node {$t_0$}
+                child {node {L}}
+                child {node {\textvisiblespace}}
+                child {node {=}}
+                child {node {\textvisiblespace}}
+                child {node {$t_3$}
+                    child {node {n}}
+                }
+            }
+            child {node {\textvisiblespace}}
+            child {node {;}}
+            child {node {\textvisiblespace}}
+            child {node {$t_0$}
+                child {node {L}}
+                child {node {\textvisiblespace}}
+                child {node {=}}
+                child {node {\textvisiblespace}}
+                child {node {$t_3$}
+                    child {node {(}}
+                    child {node {\textvisiblespace}}
+                    child {node {$t_3$}
+                        child {node {n}}
+                    }
+                    child {node {\textvisiblespace}}
+                    child {node {+}}
+                    child {node {\textvisiblespace}}
+                    child {node {$t_3$}
+                        child {node {n}}
+                    }
+                    child {node {\textvisiblespace}}
+                    child {node {)}}
+                }
+            };
+        \end{tikzpicture}
+    };
+\end{tikzpicture}
+\caption{Example full run of ARVADA bubbling using non-tokenisation nor optimised tree, and the grammar induced (part 2)\cite{kulkarniLearningHighlyRecursive2021}}
+\label{fig:fullrun2}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -641,7 +1044,7 @@ To achieve such results, TREEVADA uses a few different techniques. First, during
 \begin{tikzpicture}[
     level distance=15mm,
     sibling distance=5mm,
-    every node/.style={draw=none, inner sep=2pt, font=\small},
+    every node/.style={draw=none, inner sep=2pt, font=\small, anchor=base},
     edge from parent/.style={draw}
 ]
 \node {$t_0$}
@@ -676,7 +1079,7 @@ To achieve such results, TREEVADA uses a few different techniques. First, during
 \begin{tikzpicture}[
     level distance=15mm,
     sibling distance=5mm,
-    every node/.style={draw=none, inner sep=2pt, font=\small},
+    every node/.style={draw=none, inner sep=2pt, font=\small, anchor=base},
     edge from parent/.style={draw}
 ]
 \node {$t_0$}
@@ -737,7 +1140,7 @@ Similar to ARVADA and TREEVADA, KEDAVRA performs a tokenisation step. However, u
 \begin{tikzpicture}[
     level distance=15mm,
     sibling distance=7mm,
-    every node/.style={draw=none, inner sep=2pt, font=\small},
+    every node/.style={draw=none, inner sep=2pt, font=\small, anchor=base},
     edge from parent/.style={draw}
 ]
 \node {$t_0$}
@@ -763,7 +1166,7 @@ Furthermore, KEDAVRA during grammar inference performs \textbf{character-level g
 \begin{tikzpicture}[
     level distance=15mm,
     sibling distance=7mm,
-    every node/.style={draw=none, inner sep=2pt, font=\small},
+    every node/.style={draw=none, inner sep=2pt, font=\small, anchor=base},
     edge from parent/.style={draw}
 ]
 \node {$t_0$}
@@ -844,6 +1247,8 @@ The clean-room re-implementation will mean development is entirely from scratch 
 
 \vspace{\baselineskip}
 Although the primary goal of this study is to re-implement, assess, and expand upon the original work, I acknowledge that this study may be incomplete or no new knowledge may be discovered. While this may seem trivial—merely confirming the findings of the previous study without adding novel insights \cite{hendriksConsiderItParsed}, replication studies play a vital role in reinforcing the trustworthiness and confidence of empirical results, which is a central tenet of the scientific method. Replication can increase certainty when findings are reproduced and promote innovation when they are not \cite{shepperdReplicationStudiesConsidered2018}. Therefore, this study holds significance within the field of computer science.
+
+
 
 
 
