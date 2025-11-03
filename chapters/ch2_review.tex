@@ -295,7 +295,7 @@ t_0 \to \text{L\;\textvisiblespace\;=\;\textvisiblespace \;n\;\textvisiblespace\
 The string derivable from a node $N$, in this case $t_0$, is the concatenation of all its leaf nodes or itself, if $N$ happens to be a leaf node. 
 
 \vspace{\baselineskip}
-Next, although not present in pseudocode \ref{alg:arv}, ARVADA has a functionality called pre-tokenisation, which can be toggled on or off. Pre-tokenisation is a step after all the naive trees are built, where the algorithm groups together sequences of contiguous characters of the same class (lowercase, uppercase, whitespaces, digits, etc) into leaf tokens and all punctuations are kept separate.
+Next, although not present in pseudocode \ref{alg:arv}, ARVADA has a functionality called pre-tokenisation, which can be toggled on or off. Pre-tokenisation is a step after all the naive trees are built, where the algorithm groups together sequences of contiguous characters of the same class (lowercase, uppercase, whitespaces, digits) into leaf tokens and all punctuations are kept separate. Essentially, grouping at the leaf node level.
 
 \begin{figure}[h!]
 \centering

@@ -164,3 +164,33 @@ As the number of valid example strings and the length of each example string are
 Since memory is being assigned dynamically, it also has to be freed dynamically. To help with this, a help function is used. This helper function is given a node that does a depth-first search, and frees nodes as it searches, working its way bottom up. This is used to free memory as needed throughout, and all memory at the end. For code refer to appendix \ref{fig:freeNodes}
 
 
+\subsection{Pre-tokenisation}
+
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+     // Step 2: Toggeling pre-tokenisation
+     // Section III-E of Original paper
+     int tokenise = 0;
+
+     if(tokenise){
+        for (int i = 0; i < root_trees->count; i ++){
+            pre_tokenise(root_trees->rootNodes[i]);
+            concact_and_print_with_lvl(root_trees->rootNodes[i]);
+        }
+     }
+
+
+
+    \end{lstlisting}
+
+\caption{Pre-tokenisaiton of each root node}
+\label{fig:pre-tokenise in main loop}
+\end{figure}
