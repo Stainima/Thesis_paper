@@ -4,7 +4,7 @@ This section of the thesis aims to provide a clear understanding of how the re-i
 
 \subsection{Data structures, and Initial Parse Trees}
 \subsubsection{Data Structures}
-During this process of re-implementation, 2 structures were initialised. Structures are a way to group several related variables into one place in C \cite{w3schoolStructuresStructs2025}. One structure is used to represent a node in the parse trees, and another structure to hold and reference each parse tree.
+During this process of re-implementation, 2 structures were initialised. Structures are a way to group several related variables into one place in C \cite{w3schoolStructuresStructs2025}. One structure to represent a node in the parse trees, and another structure to hold and reference each parse tree.
 \begin{figure}[H]
 
     \begin{tcolorbox}[title=Nodes Structure for storing trees, colback=white, colframe=black]
@@ -98,7 +98,16 @@ This is done by using C's built-in dynamic memory function $malloc$, where $capa
 
 Next, the file containing all the valid example strings is read as standard. Refer to figure \ref{fig:buildeachParseTree}, then from the top of the file, each valid string is read and each naive flat parse tree is built one by one. After each tree is built, the pointer to the tree's root if given and housed in \texttt{root\_trees} from figure \ref{fig:rootNodes}. 
 
-\begin{figure}[h]
+
+\subsubsection{Memory management}
+
+As the number of valid example strings and the length of each example string are not pre-determined, the number of \texttt{Nodes} (each parse tree), and the number of leaf nodes each non-terminal root node is going to is also non-determined. This means memory has to be allocated dynamically. To do this, two functions are used: one function to check and increase memory allocated to \texttt{root\_nodes} in \texttt{Nodes}, and another to check and increase memory allocated to \texttt{children} in \texttt{Node}. Both these functions check the \texttt{capacity} of their respective structures, and if \texttt{count} for \texttt{Nodes} and \texttt{num\_child} for \texttt{Node} equals \texttt{capacity}, they increase the memory allocated to their respective lists by 1.5 times the \texttt{capacity}, updating other variables appropriately. Function code in the appendix \ref{fig:capacityChangeCode}
+
+\vspace{\baselineskip}
+Since memory is being assigned dynamically, it also has to be freed dynamically. To help with this, a help function is used. This helper function is given a node that does a depth-first search, and frees nodes as it searches, working its way bottom up. This is used to free memory as needed throughout, and all memory at the end. Refer to appendix \ref{fig:freeNodes}
+
+
+\begin{figure}[H]
     \begin{lstlisting}[
         language=C,
         numbers=left,
@@ -152,17 +161,9 @@ Next, the file containing all the valid example strings is read as standard. Ref
 
 \end{lstlisting}
 
-\caption{Building and sorting each phrase tree}
+\caption{Building each initial parse tree}
 \label{fig:buildeachParseTree}
 \end{figure}
-
-\subsubsection{Memory management}
-
-As the number of valid example strings and the length of each example string are not pre-determined, the number of \texttt{Nodes} (each parse tree), and the number of leaf nodes each non-terminal root node is going to is also non-determined. This means memory has to be allocated dynamically. To do this, two functions are used: one function to check and increase memory allocated to \texttt{root\_nodes} in \texttt{Nodes}, and another to check and increase memory allocated to \texttt{children} in \texttt{Node}. Both these functions check the \texttt{capacity} of their respective structures, and if \texttt{count} for \texttt{Nodes} and \texttt{num\_child} for \texttt{Node} equals \texttt{capacity}, they increase the memory allocated to their respective lists by 1.5 times the \texttt{capacity}, updating other variables appropriately. Function code in the appendix \ref{fig:capacityChangeCode}
-
-\vspace{\baselineskip}
-Since memory is being assigned dynamically, it also has to be freed dynamically. To help with this, a help function is used. This helper function is given a node that does a depth-first search, and frees nodes as it searches, working its way bottom up. This is used to free memory as needed throughout, and all memory at the end. For code refer to appendix \ref{fig:freeNodes}
-
 
 \subsection{Pre-tokenisation}
 
@@ -183,7 +184,6 @@ Since memory is being assigned dynamically, it also has to be freed dynamically.
      if(tokenise){
         for (int i = 0; i < root_trees->count; i ++){
             pre_tokenise(root_trees->rootNodes[i]);
-            concact_and_print_with_lvl(root_trees->rootNodes[i]);
         }
      }
 
@@ -194,3 +194,13 @@ Since memory is being assigned dynamically, it also has to be freed dynamically.
 \caption{Pre-tokenisaiton of each root node}
 \label{fig:pre-tokenise in main loop}
 \end{figure}
+    
+After the inital parse trees , pre-tokenisation, from section III-A of the original paper \cite{kulkarniLearningHighlyRecursive2021} was implemented. This involved looping through each parse tree in the $Nodes$ structure, and for each prase tree, looping through all the leaf nodes, grouping all consective sequence of leaf nodes of the same class and putting them under a intermediate node sitting between the root node and a sequence of nodes, also known as a label node. Pre-tokenisation of each parse tree was encapsulated inside a function, which performed the pre-tokenisation given the root $t_0$ of a prase tree. 
+
+\vspace{\baselineskip}
+Given a root $t_0$, the function first detaches all the children ($c_0, c_1, ... c_n$) form the root $t_0$. This is just done by assigning an empry list to the root's childern list pointer, and storing the list of children $c_0, c_1, ... c_n$ into a new variable. It then builds an empty new node, the intermediate non-terminal label node $t_i$, and starts iterating over the childern $c_0, c_1, ... c_n$. It takes the frist child node $c_0$, assign it as a child of $t_i$ keeping track of the class and the number of nodes assigned to $t_i$ (lenght of sequence of same class). Then it will go through $c_1, c_2 ... c_n$, and as long as the current child $c_i$ is of the same class it will continue assign it as a child of $t_i$. When a punction or a $c_i$ of a different class is found, if $t_i$ houses a sequence of children greater than 1, it will then assign $t_i$ as a child of root $t_0$ and a new non-terminal node $t_j$ is built. After, same process is repeated. If $t_i$ ever houses a sequence of lenght 1 when class changes, and the sequence of different class begin, $t_i$ is dissolved, and child $c_p$, is directly linked with the root $t_0$, and it is freshly restarted with a new non-terminal label node $t_k$, same is done for punction. Essentially, only having an intermediate non-terminal label nodes for leaf nodes in the same class and that form a consective sequence of length 2 or greater.
+Refer to appendix \ref{fig:Pre_tokeniser} and \ref{fig:pre_tokenise helper}.
+
+\subsection{MergeAllValid}
+
+The first optimisation.
