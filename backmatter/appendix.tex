@@ -1,0 +1,317 @@
+\chapter{Appendix}
+
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+    Node *build_basic_node(){
+
+        Node * node = malloc(sizeof(Node));
+        node->parent = NULL;
+        node->capacity = 0;
+        node->character = '\0';
+        node-> t= -1;
+        node->num_child = 0;
+        node->pos = -1;
+        node->children = NULL;
+        return node;
+    }
+
+
+    \end{lstlisting}
+\caption{Code for building a basic node}
+\label{fig:buildBasicNode}
+\end{figure}
+
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+
+    // Function that checks Node capacity and count.
+    void check_nodes_capacity(Nodes *nodes){
+
+        // If number for Node's is less than current capacity, return.
+        if(nodes->capacity > nodes->count){
+            return;
+        }
+
+        // If number of childern has reached capacity, update cap.
+        int cur_cap = nodes->capacity;
+        nodes->capacity = (cur_cap + (cur_cap/2) + 1);
+        void *new_space = realloc(nodes->rootNodes,nodes->capacity * sizeof(Node*));
+        if(errno == ENOMEM || new_space == NULL){
+            fprintf(stderr, "Error increasing the capicty of nodes.");
+            return;
+        }
+        nodes->rootNodes= new_space;
+
+    }
+
+    // Fucntion that checks Node capacity and num_child.
+    void check_node_capacity(Node *node){
+
+        if(node->capacity > node->num_child){
+            return;
+        }
+
+        // If number for Node's is less than current capacity, return.
+        int cur_cap = node->capacity;
+        node->capacity = (cur_cap + (cur_cap/2) + 1);
+        void *new_space = realloc(node->children,node->capacity * sizeof(Node*));
+        if(errno == ENOMEM || new_space == NULL){
+            fprintf(stderr, "Error increasing the capicty of nodes.");
+            return;
+        }
+        node->children= new_space;
+
+    }
+
+    \end{lstlisting}
+\caption{Code for changing list capacities appropriately}
+\label{fig:capacityChangeCode}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+        // Function to free all the nodes given a root Node
+        void free_tree(Node *root){
+
+            // dfs, freeing children nodes first
+            if (root->num_child > 0){
+                for( int i = 0; i < root->num_child; i++){
+                    free_tree(root->children[i]);
+                }
+                free(root->children);
+            }
+            free(root);
+        }
+    \end{lstlisting}
+\caption{Code for freeing tree given a root node}
+\label{fig:freeNodes}
+\end{figure}
+
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        basicstyle= \tiny,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+void pre_tokenise(Node* root){
+
+    // Flags to count contigious seuqences.
+    int sequence_begun = 0;
+    int sequence_length = 0;
+    // class 1 = Whitespaces
+    // class 2 = Uppercase
+    // class 3 = Lowercase
+    // class 4 = Digits
+
+    // Set basic node with a list up.
+    // parent and children of the node assigned in progress.
+    Node *tmp = build_basic_node_with_list();
+    
+    // num of child and parent save in a local var,
+    // helps later for memory management
+    int cur_children_num = root->num_child;
+    Node ** cur_children = root->children;
+    root->capacity = 1;
+    root->num_child = 0;
+    root->children= calloc(root->capacity, sizeof(Node*));
+
+
+    for( int i = 0; i < cur_children_num; i++){
+
+        Node * cur_node= cur_children[i];
+        // Current character is a whiteSpace
+        if(cur_node->character == ' '){
+            check_and_tokenise(1, &sequence_length, &sequence_begun, &tmp, cur_node);
+
+        // Current character is an uppercase character
+        }else if(isupper(cur_node->character)){
+            check_and_tokenise(2, &sequence_length, &sequence_begun, &tmp, cur_node);
+
+        // Current character is a lower character.
+        }else if(islower(cur_node->character)){
+            check_and_tokenise(3, &sequence_length, &sequence_begun, &tmp, cur_node);
+
+        // Current character is a digit.
+        }else if(isdigit(cur_node->character)){
+            check_and_tokenise(4, &sequence_length, &sequence_begun, &tmp, cur_node);
+
+        // Current character is punctuation
+        }else{
+
+            // sequence of size 1 in progress, remove warpper
+            if(sequence_length == 1){
+                root->children[root->num_child] = tmp->children[0];
+                root->num_child ++;
+                check_node_capacity(root);
+                tmp->num_child = 0;
+                tmp->children[0] = NULL;
+                free((tmp)->children);
+                free_tree(tmp);
+
+            }else if(sequence_length >1 ){
+                // multi character sequence, close and attach
+                tmp->parent = tmp->children[0]->parent;
+                (*tid) ++;
+                tmp->t_label = *tid;
+
+                Node *p = cur_node->parent;
+                if (p) {
+                    p->children[p->num_child] = tmp;
+                    (p->num_child)++;
+                    check_node_capacity(p);
+                }
+
+            }
+
+            tmp = build_basic_node_with_list();
+            root->children[root->num_child] = cur_node;
+            root->num_child++;
+            check_node_capacity(root);
+            sequence_begun = 0;
+            sequence_length = 0;
+        }
+    }
+
+    // End of loop is reached, deal with the left over unclosed sequence
+    if(sequence_length == 1){
+        root->children[root->num_child] = tmp->children[0];
+        root->num_child ++;
+        check_node_capacity(root);
+        tmp->num_child = 0;
+        tmp->children[0] = NULL;
+        free((tmp)->children);
+        free_tree(tmp);
+    }else if(sequence_length == 0){
+        free_tree(tmp);
+    } else  {
+        root->children[root->num_child] = tmp;
+        root->num_child ++;
+        tmp->parent = root;
+        check_node_capacity(root);
+    }
+    free(cur_children);
+}
+
+
+    \end{lstlisting}
+\caption{Pre-tokeniser code}
+\label{fig:Pre_tokeniser}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        basicstyle= \tiny,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+
+    void check_and_tokenise(int cur_class, int *sequence_length, int *sequence_begun, Node **tmp, Node *cur_node){
+
+    // A sequence of the same class as currnet node is in progress.
+    if (*sequence_begun == cur_class && *sequence_length > 0){
+
+        // Because the parent of the first child is never assigned,
+        // this is done to deal with cases where a sequence of just
+        // length 1 is found.
+        if (*sequence_length == 1 && (*tmp)->num_child > 0) {
+            (*tmp)->children[0]->parent = *tmp;
+        }
+        // Assigning the current node to tmp,
+        // increase sequence number.
+        cur_node->parent = *tmp;
+        (*tmp)->children[(*tmp)->num_child]= cur_node;
+        (*tmp)->num_child ++;
+        check_node_capacity(*tmp);
+        (*sequence_length)++;
+
+    // no sequence or a different sequence has begun
+    }else{
+
+        // different sequence of length 1 is in progress.
+        if(*sequence_length == 1){
+            // previous sequence was just one node, discard wrapper
+            Node *p = cur_node->parent;
+            if (p) {
+                p->children[p->num_child] = (*tmp)->children[0];
+                (p->num_child)++;
+                check_node_capacity(p);
+                }
+
+            (*tmp)->num_child = 0;
+            (*tmp)->children[0] = NULL;
+            free((*tmp)->children);
+            free_tree(*tmp);
+            *tmp= build_basic_node_with_list();
+            (*tmp)->children[(*tmp)->num_child] = cur_node;
+            (*tmp)->num_child ++;
+            check_node_capacity(*tmp);
+
+        // different sequence of length greater than 1 has begun.
+        }else if(*sequence_length > 1){
+            // finalise previous multi-node sequence
+            (*tmp)->parent = (*tmp)->children[0]->parent;
+            *tid = *tid + 1;
+            (*tmp)->t_label = *tid;
+
+
+            Node *p = cur_node->parent;
+            if (p) {
+                p->children[p->num_child] = *tmp;
+                (p->num_child)++;
+                check_node_capacity(p);
+            }
+
+            *tmp = build_basic_node_with_list();
+            (*tmp)->children[(*tmp)->num_child] = cur_node;
+            (*tmp)->num_child ++;
+            check_node_capacity(*tmp);
+            *sequence_length = 1;
+
+        // no sequence in progress, assign this node as first node,
+        // and begin the sequence.
+        }else if(*sequence_begun == 0) {
+            (*tmp)->children[(*tmp)->num_child] = cur_node;
+            (*tmp)->num_child ++;
+            check_node_capacity(*tmp);
+            *sequence_length = 1;
+        }
+    }
+    *sequence_begun = cur_class;
+}
+
+    \end{lstlisting}
+\caption{Pre-tokenisation helper code}
+\label{fig:pre_tokenise helper}
+\end{figure}
