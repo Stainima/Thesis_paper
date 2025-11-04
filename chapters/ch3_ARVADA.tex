@@ -177,8 +177,8 @@ Since memory is being assigned dynamically, it also has to be freed dynamically.
         xleftmargin=1.5em,
         frame=none
     ]
-     // Step 2: Toggeling pre-tokenisation
-     // Section III-E of Original paper
+     // Step 2: Toggling pre-tokenisation
+     // Section III-E of the Original paper
      int tokenise = 0;
 
      if(tokenise){
@@ -191,16 +191,59 @@ Since memory is being assigned dynamically, it also has to be freed dynamically.
 
     \end{lstlisting}
 
-\caption{Pre-tokenisaiton of each root node}
+\caption{Pre-tokenisation of each root node}
 \label{fig:pre-tokenise in main loop}
 \end{figure}
     
-After the inital parse trees , pre-tokenisation, from section III-A of the original paper \cite{kulkarniLearningHighlyRecursive2021} was implemented. This involved looping through each parse tree in the $Nodes$ structure, and for each prase tree, looping through all the leaf nodes, grouping all consective sequence of leaf nodes of the same class and putting them under a intermediate node sitting between the root node and a sequence of nodes, also known as a label node. Pre-tokenisation of each parse tree was encapsulated inside a function, which performed the pre-tokenisation given the root $t_0$ of a prase tree. 
+After the initial parse trees were built, pre-tokenisation, as described in Section~III-A of the original paper \cite{kulkarniLearningHighlyRecursive2021}, was implemented. This process involved looping through each parse tree in the \texttt{Nodes} structure and, for each parse tree, iterating through all its leaf nodes. The goal was to group consecutive sequences of leaf nodes belonging to the same class and place them under an intermediate node positioned between the root node and the sequence of leaf nodes—also referred to as a label node. The pre-tokenisation of each parse tree was encapsulated within a dedicated function, which performed pre-tokenisation given the root node $t_0$ of a parse tree. 
 
 \vspace{\baselineskip}
-Given a root $t_0$, the function first detaches all the children ($c_0, c_1, ... c_n$) form the root $t_0$. This is just done by assigning an empry list to the root's childern list pointer, and storing the list of children $c_0, c_1, ... c_n$ into a new variable. It then builds an empty new node, the intermediate non-terminal label node $t_i$, and starts iterating over the childern $c_0, c_1, ... c_n$. It takes the frist child node $c_0$, assign it as a child of $t_i$ keeping track of the class and the number of nodes assigned to $t_i$ (lenght of sequence of same class). Then it will go through $c_1, c_2 ... c_n$, and as long as the current child $c_i$ is of the same class it will continue assign it as a child of $t_i$. When a punction or a $c_i$ of a different class is found, if $t_i$ houses a sequence of children greater than 1, it will then assign $t_i$ as a child of root $t_0$ and a new non-terminal node $t_j$ is built. After, same process is repeated. If $t_i$ ever houses a sequence of lenght 1 when class changes, and the sequence of different class begin, $t_i$ is dissolved, and child $c_p$, is directly linked with the root $t_0$, and it is freshly restarted with a new non-terminal label node $t_k$, same is done for punction. Essentially, only having an intermediate non-terminal label nodes for leaf nodes in the same class and that form a consective sequence of length 2 or greater.
-Refer to appendix \ref{fig:Pre_tokeniser} and \ref{fig:pre_tokenise helper}.
+Given a root node $t_0$, the function first detached all of its children ($c_0, c_1, \dots, c_n$) from the root. This was achieved by assigning an empty list to the root’s children list pointer and storing the original list of children ($c_0, c_1, \dots, c_n$) in a temporary variable. It then created a new intermediate non-terminal label node $t_i$ and began iterating through the detached children. The function took the first child node $c_0$, assigned it as a child of $t_i$, and kept track of its class and the number of nodes assigned to $t_i$ (i.e., the length of the current sequence of the same class). It then continued through $c_1, c_2, \dots, c_n$, and as long as the current child $c_i$ belonged to the same class, it continued assigning it as a child of $t_i$.  
+
+When a punctuation mark or a node $c_i$ of a different class was encountered, and $t_i$ contained a sequence of more than one child, the function assigned $t_i$ as a child of the root $t_0$ and created a new non-terminal node $t_j$ to begin a new sequence. This process was then repeated. If $t_i$ contained a sequence of length one when a class change occurred, and a new sequence began, $t_i$ was dissolved, and the single child $c_p$ was directly linked to the root $t_0$. The process was then restarted with a new non-terminal label node $t_k$. The same approach was applied when punctuation marks were encountered.  
+
+Essentially, this process ensured that intermediate non-terminal label nodes were only created for leaf nodes of the same class that formed consecutive sequences of length two or greater. Refer to Appendix~\ref{fig:Pre_tokeniser} and Appendix~\ref{fig:pre_tokenise helper} for the implementation details.
 
 \subsection{MergeAllValid}
 
-Next implementation is 
+Following the explanation provided in Section~III-A of the original paper \cite{kulkarniLearningHighlyRecursive2021}, the function MERGEALLVALID was implemented. After pre-tokenisation, another loop was executed that iterated through each parse tree $T_i$ and called the MERGEALLVALID function on it.
+
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+     // Step 3: MergeAllValid 
+     // Section III-A of Original paper
+     for( int i = 0; i < root_trees -> count; i++){
+        merge_all_valid(root_trees->rootNodes[i]);
+     } 
+    \end{lstlisting}
+
+\caption{MergeAllValid call}
+\label{fig:pre-tokenise in main loop}
+\end{figure}
+
+Referencing Appendix \ref{fig:MergeAllValid function code}, once the function is given a parse tree $T_i$ with root $t_0$, it iterates through all its children, which are either leaf nodes ($c_i$) or non-terminal label nodes ($t_i$). For each child node $c_i$ or $t_i$, the function then loops from the current node $c_i$ or $t_i$ to the final node $c_n$ or $t_n$, effectively generating all combinations of two child nodes ($t_a$/$c_a$ and $t_b$/$c_b$).
+
+While ignoring whitespace nodes as potential $t_a$/$c_a$ or $t_b$/$c_b$, the function first checks whether a pair of nodes $t_a$/$c_a$ and $t_b$/$c_b$ produce the same string when concatenated. String concatenation is performed by executing a depth-first search (DFS) traversal to the leaf nodes, retrieving each character, and storing it in a buffer (see Appendix \ref{fig:Stirng Concatenate}).
+
+If $t_a / c_a$ and $t_b / c_b$ produce identical concatenated strings, the function merges both pairs ($t_a / c_a$ and $t_b / c_b$). This merging process is carried out through another function (Appendix~\ref{fig:Merging Same nodes}), which creates two new intermediate nodes with identical labels if the two child nodes being compared are leaf nodes ($c_a$ and $c_b$). Otherwise, if the two nodes are non-terminals ($t_a$ and $t_b$), the function simply updates their \texttt{t\_label} values accordingly. Changing the \texttt{t\_label} of the larger non-terminal to the smaller 1.
+
+\vspace{\baselineskip}
+Now, for every $t_a / c_a$ and $t_b / c_b$ that produce different strings, MERGEALLVALID does a more tedious check and merge process.
+
+\subsection{Merging}
+
+\subsubsection{String replacement}
+
+\subsection{Bubbling}
+
+This section of ARVADA has not been implemented yet. Hence, further future work is required to complete the re-implementation.
+
+

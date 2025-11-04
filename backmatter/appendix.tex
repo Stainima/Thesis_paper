@@ -6,6 +6,7 @@
         language=C,
         numbers=left,
         stepnumber=1,
+        basicstyle = \tiny,
         numbersep=5pt,
         xleftmargin=1.5em,
         frame=none
@@ -35,6 +36,7 @@
         language=C,
         numbers=left,
         stepnumber=1,
+        basicstyle = \tiny,
         numbersep=5pt,
         xleftmargin=1.5em,
         frame=none
@@ -89,6 +91,7 @@
         language=C,
         numbers=left,
         stepnumber=1,
+        basicstyle = \tiny,
         numbersep=5pt,
         xleftmargin=1.5em,
         frame=none
@@ -215,6 +218,8 @@ void pre_tokenise(Node* root){
         root->children[root->num_child] = tmp;
         root->num_child ++;
         tmp->parent = root;
+        (*tid) ++;
+        tmp->t_label = *tid;
         check_node_capacity(root);
     }
     free(cur_children);
@@ -236,7 +241,6 @@ void pre_tokenise(Node* root){
         xleftmargin=1.5em,
         frame=none
     ]
-
     void check_and_tokenise(int cur_class, int *sequence_length, int *sequence_begun, Node **tmp, Node *cur_node){
 
     // A sequence of the same class as currnet node is in progress.
@@ -314,4 +318,153 @@ void pre_tokenise(Node* root){
     \end{lstlisting}
 \caption{Pre-tokenisation helper code}
 \label{fig:pre_tokenise helper}
+\end{figure}
+
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        basicstyle= \tiny,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+void merge_all_valid(Node *root){
+
+    // Go through the list 1 once
+    for( int i = 0; i < root->num_child; i++){
+
+        // Skip White spaces
+        if(root->children[i]->character == ' '){
+            continue;
+        }
+
+        // Go through the list number 2 for perms
+        for ( int j = i + 1; j < root->num_child; j++){
+
+            // Skip White spaces
+            if(root->children[j]->character == ' '){
+                continue;
+            }
+
+            Node *tmp = root->children[i];
+
+            // if both t_a and t_b, concatneate to the same string
+            // Merge (change labels ) if they are non-terminals or non-white space.
+            char *buffer_ta = calloc(1, sizeof(char));
+            concatenate(root->children[i], &buffer_ta);
+            char *buffer_tb = calloc(1, sizeof(char));
+            concatenate(root->children[j], &buffer_tb);
+            if(strcmp(buffer_ta,buffer_tb) == 0){
+                merge_same_node(root->children[i], root->children[j], i, j);
+                free(buffer_ta);
+                free(buffer_tb);
+                continue;
+            }
+
+            free(buffer_ta);
+            free(buffer_tb);
+            //merge(tmp, dup_root->children[j], dup_root);
+        }
+
+        }
+    
+    }
+
+    \end{lstlisting}
+\caption{Merge All valid function code}
+\label{fig:MergeAllValid fnction code}
+\end{figure}
+
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        basicstyle= \tiny,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+    void concatenate(Node *root, char** buffer){
+
+        if(root->t_label == -1){
+            size_t len = strlen(*buffer);
+            char *new_space = realloc(*buffer, (len + 2) * sizeof(char));
+            new_space[len] = root->character;
+            new_space[len + 1] = '\0';
+            *buffer = new_space;
+            return;
+        }
+
+        for( int i = 0; i < root->num_child; i++){
+            concatenate(root->children[i], buffer);
+
+        }
+    }
+    \end{lstlisting}
+\caption{String concatenate function}
+\label{fig:Stirng Concatenate}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        basicstyle= \tiny,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+void merge_same_node(Node *ta, Node *tb, int i , int j){
+
+    // if we are trying to merge 2 leaf nodes,
+    // This is assuming pre-tokenisation.
+    if(ta->t_label == -1 || tb->t_label == -1){
+        printf("here: %c\n",ta->character);
+
+        // Create and link the nodes.
+        // Only create the Link node if a link
+        // intermediate node does not exist yet.
+        // This accounts for when there are multiple of the same
+        // leaf node.
+        if(ta->parent->t_label == 0){
+
+            Node *ta_label = build_basic_node_with_list();
+            (*tid)++;
+            ta_label ->t_label = *tid;
+            ta_label->parent = ta->parent;
+            ta_label->children[0] = ta;
+            (ta_label->num_child) ++;
+            (ta->parent)->children[i] = ta_label;
+            ta->parent = ta_label;
+
+        }
+        Node *tb_label = build_basic_node_with_list();
+        tb_label ->t_label = *tid;
+        tb_label->parent = tb->parent;
+        tb_label->children[0] = tb;
+        (tb_label->num_child) ++;
+        (tb->parent)->children[j] = tb_label;
+        tb->parent = tb_label;
+        return;
+    }
+
+    // if 2 non-terminals are given
+    // converge by changing the both t-label to
+    // min (ta->t_label, tb->t__label)
+    if(ta->t_label < tb->t_label){
+        tb->t_label = ta->t_label;
+    } else {
+        ta->t_label = tb->t_label;
+    }
+    return;
+}
+   \end{lstlisting}
+\caption{Merging same nodes}
+\label{fig:Merging Same nodes}
 \end{figure}
