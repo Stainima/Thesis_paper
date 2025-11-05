@@ -358,7 +358,7 @@ void merge_all_valid(Node *root){
             char *buffer_tb = calloc(1, sizeof(char));
             concatenate(root->children[j], &buffer_tb);
             if(strcmp(buffer_ta,buffer_tb) == 0){
-                merge_same_node(root->children[i], root->children[j], i, j);
+                merge_same_node(root->children[i], root->children[j], i, j, root);
                 free(buffer_ta);
                 free(buffer_tb);
                 continue;
@@ -375,7 +375,7 @@ void merge_all_valid(Node *root){
 
     \end{lstlisting}
 \caption{Merge All valid function code}
-\label{fig:MergeAllValid fnction code}
+\label{fig:MergeAllValid function code}
 \end{figure}
 
 
@@ -420,19 +420,24 @@ void merge_all_valid(Node *root){
         xleftmargin=1.5em,
         frame=none
     ]
-void merge_same_node(Node *ta, Node *tb, int i , int j){
+void merge_same_node(Node *ta, Node *tb, int i , int j, Node *root){
+
+    // Check the labels have already been merge
+    // cases where theere are 3 of the same kind
+    if((ta->t_label == tb->t_label) && (ta->t_label > 0)){
+        return;
+    }
 
     // if we are trying to merge 2 leaf nodes,
     // This is assuming pre-tokenisation.
     if(ta->t_label == -1 || tb->t_label == -1){
-        printf("here: %c\n",ta->character);
 
         // Create and link the nodes.
         // Only create the Link node if a link
         // intermediate node does not exist yet.
         // This accounts for when there are multiple of the same
         // leaf node.
-        if(ta->parent->t_label == 0){
+        if(root->children[i]->t_label == -1){
 
             Node *ta_label = build_basic_node_with_list();
             (*tid)++;
@@ -440,7 +445,7 @@ void merge_same_node(Node *ta, Node *tb, int i , int j){
             ta_label->parent = ta->parent;
             ta_label->children[0] = ta;
             (ta_label->num_child) ++;
-            (ta->parent)->children[i] = ta_label;
+            root->children[i] = ta_label;
             ta->parent = ta_label;
 
         }
@@ -449,7 +454,7 @@ void merge_same_node(Node *ta, Node *tb, int i , int j){
         tb_label->parent = tb->parent;
         tb_label->children[0] = tb;
         (tb_label->num_child) ++;
-        (tb->parent)->children[j] = tb_label;
+        root->children[j] = tb_label;
         tb->parent = tb_label;
         return;
     }
