@@ -226,6 +226,72 @@ When a punctuation mark or a node $c_i$ of a different class was encountered, an
 \vspace{\baselineskip}
 Essentially, this process ensures that intermediate non-terminal label nodes are only created for leaf nodes of the same class that form consecutive sequences of length two or greater. Refer to Appendix~\ref{fig:Pre_tokeniser} and Appendix~\ref{fig:pre_tokenise helper} for the implementation details.
 
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=10mm,
+    every node/.style={align=center}
+]
+
+% Left tree
+\node (lefttree) {
+\begin{tikzpicture}[
+    level distance=10mm,
+    sibling distance=4mm,
+    every node/.style={draw=none, inner sep=1pt, font=\small, anchor=base},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node {w}}
+    child {node {h}}
+    child {node {i}}
+    child {node {l}}
+    child {node {e}}
+    child {node {\textvisiblespace}}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {=}}
+    child {node {=}}
+    child {node {\textvisiblespace}}
+    child {node {n}};
+\end{tikzpicture}
+};
+
+
+% Right tree
+\node[right=of lefttree] (righttree) {
+\begin{tikzpicture}[
+    level distance=12mm,
+    sibling distance=3mm,
+    every node/.style={draw=none, inner sep=1pt, font=\small, anchor=base},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node[fill=orange] {$t_1$}
+        child {node {w}}
+        child {node {h}}
+        child {node {i}}
+        child {node {l}}
+        child {node {e}}
+    }
+    child {node {\textvisiblespace}}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {=}}
+    child {node {=}}
+    child {node {\textvisiblespace}}
+    child {node {n}};
+\end{tikzpicture}
+};
+\end{tikzpicture}
+
+\caption{Visualisation of adding a intermediate node, and tokenisation}
+\label{fig:addingInterVis}
+\end{figure}
+
+
+
 \subsection{MERGEALLVALID}
 
 Following the explanation provided in Section~III-A of the original paper \cite{kulkarniLearningHighlyRecursive2021}, the function MERGEALLVALID was implemented. After pre-tokenisation, another loop is executed that iterates through each parse tree $T_i$ and calls the MERGEALLVALID function on it.
@@ -266,10 +332,174 @@ Once all identical string-producing nodes had been processed, ARVADA iterated th
 After this, to process all not identical nodes, a different check is done to merge.If $t_a / c_a$ could replace $t_b / c_b$ in all parse trees and still produce valid concatenated strings—and vice versa ($t_b / c_b$ replacing $t_a / c_a$)—then the merge was executed. The procedure for performing this merge was described in the string replacement section of the original paper. The merging of two different node sequences was conducted in a similar manner to the merging of identical sequence nodes, as explained in the merging section.
 
 
-\subsection{Merging}
+In this re-implementation, because the \texttt{MERGEALLVALID} function first handles identical subtrees, two different merge functions were implemented: a general merge function (Appendix~\ref{fig:Gerenal merge function}) and a more specialised merge function used exclusively within \texttt{MERGEALLVALID} (Appendix~\ref{fig:Merging Same nodes}).
 
+\vspace{\baselineskip}
+The general merge function is used in \texttt{MERGEALLVALID} and can also be applied after the bubbling process in \texttt{CHECKBUBBLES}. This function takes two nodes as input, and if either of the given nodes is a terminal (leaf) node, it immediately introduces a non-terminal intermediate node—effectively adding an additional layer to the tree structure (similar to the operation performed during pre-tokenisation). This intermediate node is then used for re-labelling. Refer to Figure~\ref{fig:addingInterVis} for a visualisation of adding an intermediate node.
 
-\subsubsection{String replacement}
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    node distance=10mm,
+    every node/.style={align=center}
+]
+
+% Left tree
+\node (lefttree) {
+\begin{tikzpicture}[
+    level distance=12mm,
+    level 1/.style={sibling distance=5mm},
+    level 2/.style={sibling distance=2mm},
+    sibling distance=4mm,
+    every node/.style={draw=none, inner sep=1pt, font=\small, anchor=base},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node {$t_1$}
+        child {node {w}}
+        child {node {h}}
+        child {node {i}}
+        child {node {l}}
+        child {node {e}}
+    }
+    child {node {\textvisiblespace}}
+    child {node[fill=yellow] {$t_2$}
+        child {node {t}}
+        child {node {r}}
+        child {node {u}}
+        child {node {e}}
+    }
+    child {node {\textvisiblespace}}
+    child {node {\&}}
+    child {node {\&}}
+    child {node {\textvisiblespace}}
+    child {node[fill=yellow] {$t_3$}
+        child {node {f}}
+        child {node {a}}
+        child {node {l}}
+        child {node {s}}
+        child {node {e}}
+    };
+\end{tikzpicture}
+};
+
+% Right tree
+\node[right=of lefttree] (righttree) {
+\begin{tikzpicture}[
+    level distance=12mm,
+    level 1/.style={sibling distance=5mm},
+    level 2/.style={sibling distance=2mm},
+    sibling distance=3mm,
+    every node/.style={draw=none, inner sep=1pt, font=\small, anchor=base},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node {$t_1$}
+        child {node {w}}
+        child {node {h}}
+        child {node {i}}
+        child {node {l}}
+        child {node {e}}
+    }
+    child {node {\textvisiblespace}}
+    child {node[fill=orange] {$t_2$}
+        child {node {t}}
+        child {node {r}}
+        child {node {u}}
+        child {node {e}}
+    }
+    child {node {\textvisiblespace}}
+    child {node {\&}}
+    child {node {\&}}
+    child {node {\textvisiblespace}}
+    child {node[fill=orange] {$t_2$}
+        child {node {f}}
+        child {node {a}}
+        child {node {l}}
+        child {node {s}}
+        child {node {e}}
+    };
+\end{tikzpicture}
+};
+\end{tikzpicture}
+\caption{Visualisation of re-labelling}
+\label{fig:relabelingVis}
+\end{figure}
+
+\vspace{\baselineskip}
+The more specialised merge function, used only in \texttt{MERGEALLVALID}, was designed to handle cases where there are more than two identical leaf nodes directly linked to the root of a parse tree during the initial traversal. Consider the following example:
+
+\begin{center}
+\begin{tikzpicture}[
+    level distance=12mm,
+    level 1/.style={sibling distance=5mm},
+    level 2/.style={sibling distance=2mm},
+    sibling distance=3mm,
+    every node/.style={draw=none, inner sep=1pt, font=\small, anchor=base},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node[fill=yellow] {L}}
+    child {node {=}}
+    child {node[fill=yellow] {L}}
+    child {node {+}}
+    child {node {L}};
+\end{tikzpicture}
+
+$\big\downarrow$
+
+\begin{tikzpicture}[
+    level distance=12mm,
+    level 1/.style={sibling distance=5mm},
+    level 2/.style={sibling distance=2mm},
+    sibling distance=3mm,
+    every node/.style={draw=none, inner sep=1pt, font=\small, anchor=base},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node {$t_1$}
+        child {node[fill=yellow] {L}}
+    }
+    child {node {=}}
+    child {node {$t_1$}
+        child {node[fill=yellow] {L}}
+    }
+    child {node {+}}
+    child {node {L}};
+\end{tikzpicture}
+\end{center}
+
+The highlighted nodes represent the nodes under consideration in the loop. The first time two identical direct leaf nodes are found, the process is straightforward: both nodes are wrapped under newly created intermediate nodes with the same label, updating the tree structure accordingly. However, since the loop continues without restarting after the modification, a situation may arise as shown below:
+
+\begin{center}
+\begin{tikzpicture}[
+    level distance=12mm,
+    level 1/.style={sibling distance=5mm},
+    level 2/.style={sibling distance=2mm},
+    sibling distance=3mm,
+    every node/.style={draw=none, inner sep=1pt, font=\small, anchor=base},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node {$t_1$}
+        child {node[fill=yellow] {L}}
+    }
+    child {node {=}}
+    child {node {$t_1$}
+        child {node {L}}
+    }
+    child {node {+}}
+    child {node[fill=yellow] {L}};
+\end{tikzpicture}
+\end{center}
+
+Here, the two identical nodes remain leaf nodes, but only one of them is still directly connected to the root. Therefore, to merge these nodes correctly, only the one directly attached to the root requires an intermediate node. The specialised merge function handles this case by performing an additional check to determine whether the nodes are directly connected to the root before merging.
+
+\section{String replacement}
+
+For merging 2 different nodes,
+
+\section{Oracle and other testing}
 
 \subsection{Bubbling}
 
