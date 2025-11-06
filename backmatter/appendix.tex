@@ -560,3 +560,74 @@ void merge_same_node(Node *ta, Node *tb, int i , int j, Node *root){
 \label{fig:Gerenal merge function}
 \end{figure}
 
+
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        basicstyle= \tiny,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+    // Simple replace function that free later nodes, and replaces it with another node.
+// Given 1 nodes, and the index of the second node and root node
+void replace(Node *replacer, int j, Node *root){
+
+    free(root->children[j]);
+    root->children[j] = replacer;
+}
+
+// Froming a basic replacement check,
+// replace all instance of t_a with t_b in all trees
+// check if the all concatenate to a valid string (oracle)
+// do the vise-verse
+void basic_replacement_check(Node *ta, Node *tb, Nodes *all_trees, int *res){
+
+    // Concatenate to get the stringstring
+    char *buffer_ta = calloc(1, sizeof(char));
+    concatenate(ta, &buffer_ta);
+    char *buffer_tb = calloc(1, sizeof(char));
+    concatenate(tb,  &buffer_tb);
+
+    // loop through all trees.
+    for( int i = 0; i < all_trees->count; i++){
+
+        // duplicate tree
+        Node *dup_tree = duplicate_tree(all_trees->rootNodes[i]);
+
+        // loop through duplicate tree children node
+        for (int j = 0; j < dup_tree->num_child; j++){
+
+            // get current children nodes string.
+            char *buffer_tc = calloc(1, sizeof(char));
+            concatenate(dup_tree->children[j], &buffer_tc);
+
+            // if check to find correct replacement in the duplciate tree
+            if(strcmp(buffer_tb, buffer_tc) ==0){
+                replace(ta, j, dup_tree);
+            }
+            free(buffer_tc);
+        }
+
+        // Now all instances are replaces,
+        // send to duplicate to oracle to check and return
+        char *buffer_dup_tree= calloc(1, sizeof(char));
+        concatenate(dup_tree,  &buffer_dup_tree);
+        *res = parse_string(buffer_dup_tree);
+        if( *res == 0 ){
+            return;
+        }
+        free(buffer_dup_tree);
+    }
+
+    free(buffer_ta);
+    free(buffer_tb);
+}
+
+    \end{lstlisting}
+\caption{Basic replacement check}
+\label{fig:basic replacement}
+\end{figure}

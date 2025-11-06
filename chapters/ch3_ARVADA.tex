@@ -497,7 +497,10 @@ Here, the two identical nodes remain leaf nodes, but only one of them is still d
 
 \section{String replacement}
 
-For merging 2 different nodes,
+For merging 2 non-indentical nodes, to determine if they can or cannot be merged a replacement check is preformed. There are 2 types of replacement checks, a basic and a rigorous replacement check. The basic replacement check used in MERGEALLVALID, and the more rigorous replacement checks used to merge bubble in CHECKBUBBLE. Although, the bubbling has not been implemented, both replacement checks have been.
+
+\vspace{\baselineskip}
+ Given 2 nodes $t_a$ and $t_b$, basic replacement check, checks whether $t_a$ can replace all instance of $t_b$ in all the parse trees, and still produce candidate strings that are valid when concatenated and given to $\mathcal{O}$. This was achieved, looping through looking at one tree at a time, duplciating it, then spawing all $t_b$ with $t_a$. After the swap, concatenating the tree to get the candidate string. Feeding the string to $\mathcal{O}$. If the orcale return trues, meaning string was valid, then next tree is considered, else the merge is rejected straight away. Hence, for a merge to go through all candidate strings have to be valid. Appendix \ref{fig:basic replacement}.
 
 \section{Oracle and other testing}
 
