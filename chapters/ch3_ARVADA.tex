@@ -185,7 +185,7 @@ Since memory is being assigned dynamically, it also has to be freed dynamically.
 \label{fig:buildeachParseTree}
 \end{figure}
 
-\subsection{Pre-tokenisation}
+\section{Pre-tokenisation}
 
 
 \begin{figure}[H]
@@ -292,7 +292,7 @@ Essentially, this process ensures that intermediate non-terminal label nodes are
 
 
 
-\subsection{MERGEALLVALID}
+\section{MERGEALLVALID}
 
 Following the explanation provided in Section~III-A of the original paper \cite{kulkarniLearningHighlyRecursive2021}, the function MERGEALLVALID was implemented. After pre-tokenisation, another loop is executed that iterates through each parse tree $T_i$ and calls the MERGEALLVALID function on it.
 
@@ -329,9 +329,10 @@ If $t_a / c_a$ and $t_b / c_b$ produces identical concatenated strings, the func
 Once all identical string-producing nodes had been processed, ARVADA iterated through all the parse trees again, generating combinations of two child nodes once more—this time dealing with every $t_a / c_a$ and $t_b / c_b$ pair that produced different concatenated strings. Before merging these nodes, several checks were performed. The function first checkes for whitespace nodes, but this time to exclude nodes that produced identical strings. It also checked whether the nodes under consideration, $t_a$ and $t_b$, had already been merged. This was determined by verifying if $t_a$ and $t_b$ shared the same non-negative \texttt{t\_label}.
 
 \vspace{\baselineskip}
-After this, to process all not identical nodes, a different check is done to merge.If $t_a / c_a$ could replace $t_b / c_b$ in all parse trees and still produce valid concatenated strings—and vice versa ($t_b / c_b$ replacing $t_a / c_a$)—then the merge was executed. The procedure for performing this merge was described in the string replacement section of the original paper. The merging of two different node sequences was conducted in a similar manner to the merging of identical sequence nodes, as explained in the merging section.
+After this, to process all not identical nodes, a different check is done to merge. It loops through all the trees, dulicates the tree and hands it to another funciton, \texttt{string replacement}. \texttt{String replacement} checks if $t_a / c_a$ can replace $t_b / c_b$ in all parse trees and still produce valid concatenated strings—and vice versa ($t_b / c_b$ replacing $t_a / c_a$). If success full, then it is merge. In depth explanation provided in String replacement section of the paper. The merging of two different node sequences was conducted in a similar manner to the merging of identical sequence nodes, as explained in the merging section.
 
 
+\vspace{\baselineskip}
 In this re-implementation, because the \texttt{MERGEALLVALID} function first handles identical subtrees, two different merge functions were implemented: a general merge function (Appendix~\ref{fig:Gerenal merge function}) and a more specialised merge function used exclusively within \texttt{MERGEALLVALID} (Appendix~\ref{fig:Merging Same nodes}).
 
 \vspace{\baselineskip}
@@ -440,9 +441,13 @@ The more specialised merge function, used only in \texttt{MERGEALLVALID}, was de
 ]
 \node {$t_0$}
     child {node[fill=yellow] {L}}
+    child {node {\textvisiblespace}}
     child {node {=}}
+    child {node {\textvisiblespace}}
     child {node[fill=yellow] {L}}
+    child {node {\textvisiblespace}}
     child {node {+}}
+    child {node {\textvisiblespace}}
     child {node {L}};
 \end{tikzpicture}
 
@@ -460,11 +465,15 @@ $\big\downarrow$
     child {node {$t_1$}
         child {node[fill=yellow] {L}}
     }
+    child {node {\textvisiblespace}}
     child {node {=}}
+    child {node {\textvisiblespace}}
     child {node {$t_1$}
         child {node[fill=yellow] {L}}
     }
+    child {node {\textvisiblespace}}
     child {node {+}}
+    child {node {\textvisiblespace}}
     child {node {L}};
 \end{tikzpicture}
 \end{center}
@@ -484,11 +493,15 @@ The highlighted nodes represent the nodes under consideration in the loop. The f
     child {node {$t_1$}
         child {node[fill=yellow] {L}}
     }
+    child {node {\textvisiblespace}}
     child {node {=}}
+    child {node {\textvisiblespace}}
     child {node {$t_1$}
         child {node {L}}
     }
+    child {node {\textvisiblespace}}
     child {node {+}}
+    child {node {\textvisiblespace}}
     child {node[fill=yellow] {L}};
 \end{tikzpicture}
 \end{center}
@@ -497,12 +510,107 @@ Here, the two identical nodes remain leaf nodes, but only one of them is still d
 
 \section{String replacement}
 
-For merging 2 non-indentical nodes, to determine if they can or cannot be merged a replacement check is preformed. There are 2 types of replacement checks, a basic and a rigorous replacement check. The basic replacement check used in MERGEALLVALID, and the more rigorous replacement checks used to merge bubble in CHECKBUBBLE. Although, the bubbling has not been implemented, both replacement checks have been.
+From sections III-D of the original paper \cite{kulkarniLearningHighlyRecursive2021}, string replacement is the check done before before merging any 2 none identical nodes, appendix \ref{fig:Rigorous replacement}. String replacement, given 2 nodes $t_a / c_a$ (replacer) and $t_b / c_b$ (replacee) and a root tree $T_i$, gets all the permutation of the ways $t_a / c_a$ can replace $t_b / c_b$ in $T_i$. Then concatenates each permutation, which becomes a candidate string which is fed into the oracle to validate. For example take,
+
+\begin{center}
+\begin{tikzpicture}[
+    level distance=12mm,
+    level 1/.style={sibling distance=5mm},
+    level 2/.style={sibling distance=2mm},
+    sibling distance=3mm,
+    every node/.style={draw=none, inner sep=1pt, font=\small, anchor=base},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node {$t_1$}
+        child {node{i}}
+        child {node{f}}
+    }
+    child {node {\textvisiblespace}}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {$>$}}
+    child {node {\textvisiblespace}}
+    child {node {1}}
+    child {node {\textvisiblespace}}
+    child {node {\&}}
+    child {node {\&}}
+    child {node {\textvisiblespace}}
+    child {node {L}};
+    child {node {\textvisiblespace}}
+    child {node {$<$}};
+    child {node {\textvisiblespace}}
+    child {node {5}};
+\end{tikzpicture}
+\end{center}
+
+and let $t_a$ be $t_1$ and $t_b$ be L. From this the doing the permutation, the candidate string produced would be.
+
+\begin{gather*}
+\text{if } L > 1 \;\&\&\; L < 5 \\
+\text{if } \text{if} > 1 \;\&\&\; L < 5 \\
+\text{if } \text{if} > 1 \;\&\&\; \text{if} < 5 \\
+\text{if } L > 1 \;\&\&\; \text{if} < 5
+\end{gather*}
+
+From Section~III-D of the original paper~\cite{kulkarniLearningHighlyRecursive2021}, \textit{string replacement} is the verification step performed before merging any two non-identical nodes. Given two nodes, $t_a / c_a$ (the replacer) and $t_b / c_b$ (the replacee), and a root tree $T_i$, the string replacement process generates all permutations of the ways $t_a / c_a$ can replace $t_b / c_b$ within $T_i$. Each permutation is then concatenated to form a candidate string, which is subsequently passed to the oracle for validation.  
+
+For example, consider the following tree:
+
+\begin{center}
+\begin{tikzpicture}[
+    level distance=12mm,
+    level 1/.style={sibling distance=5mm},
+    level 2/.style={sibling distance=2mm},
+    sibling distance=3mm,
+    every node/.style={draw=none, inner sep=1pt, font=\small, anchor=base},
+    edge from parent/.style={draw}
+]
+\node {$t_0$}
+    child {node {$t_1$}
+        child {node{i}}
+        child {node{f}}
+    }
+    child {node {\textvisiblespace}}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {$>$}}
+    child {node {\textvisiblespace}}
+    child {node {1}}
+    child {node {\textvisiblespace}}
+    child {node {\&}}
+    child {node {\&}}
+    child {node {\textvisiblespace}}
+    child {node {L}}
+    child {node {\textvisiblespace}}
+    child {node {$<$}}
+    child {node {\textvisiblespace}}
+    child {node {5}};
+\end{tikzpicture}
+\end{center}
+
+Let $t_a$ represent $t_1$ and $t_b$ represent $L$.  
+After performing all permutations, the candidate strings generated would be:
+
+\begin{gather*}
+\text{if } L > 1 \;\&\&\; L < 5 \\
+\text{if } \text{if} > 1 \;\&\&\; L < 5 \\
+\text{if } \text{if} > 1 \;\&\&\; \text{if} < 5 \\
+\text{if } L > 1 \;\&\&\; \text{if} < 5
+\end{gather*}
+
+To achieve this, the string replacement process uses recursion. The function takes as input the replacer, the replacee, the position (an integer indicating the starting point of the loop in each recursive call), a duplicate of the parse tree, and a interger pointer (initially set to 1). The interger is what is checked, if the integer pointer remains 1 at all the way to the end, it means all candidate string were valid, and merge can happen, else a candidate has failed and no merge. It
 
 \vspace{\baselineskip}
-From section III-A of original paper.
- Given 2 nodes $t_a$ and $t_b$, basic replacement check, checks whether $t_a$ can replace all instance of $t_b$ in all the parse trees, and still produce candidate strings that are valid when concatenated and given to $\mathcal{O}$. In re-implementation this was achieved by looping through, looking at one tree at a time, duplciating it, then spawing all $t_b$ with $t_a$. After the swap, concatenating the tree to get the candidate string. Feeding the string to $\mathcal{O}$. If the orcale return trues, meaning string was valid, then next tree is considered, else the merge is rejected straight away. Hence, for a merge to go through all candidate strings have to be valid. Appendix \ref{fig:basic replacement}.
- 
+\vspace{\baselineskip}
+Since this is a recursive function, its first check determines whether the integer pointer still holds the value 1 (the base condition). If, at any point, this value becomes 0, it indicates that a candidate string has failed, and no further checks are required; the function exits immediately. If the value remains 1, the function then checks whether the replacee is a leaf node, setting a corresponding terminal flag if true. It then initiates a for-loop starting at position~0, iterating through each child node.
+
+\vspace{\baselineskip}
+If the terminal flag is set, the function checks whether the replacee’s character matches the current child’s character. If it matches, the function proceeds; otherwise, it continues to the next iteration of the loop. If the replacee is a non-terminal node, the function instead compares the current child’s \texttt{t\_label} value, proceeding only if it matches the replacee’s \texttt{t\_label}. The replacee is then temporarily replaced by the replacer, and the function recursively calls itself using the same replacer and replacee, but starting at the index of the current iteration.
+After the recursive call, the function concatenates the root and passes it to the oracle, which evaluates the candidate string and updates the integer pointer accordingly (the oracle implementation is explained in the next section). Once the recursion returns, the replacee is restored to its original state, and another recursive call is made using the same replacer, replacee, and current index. This ensures that all possible permutations are considered.
+
+\vspace{\baselineskip}
+This section is inherently abstract and best understood in conjunction with the source code provided in Appendix~\ref{fig:Rigorous replacement}.
 
 
 \section{Oracle and other testing}
@@ -510,5 +618,3 @@ From section III-A of original paper.
 \subsection{Bubbling}
 
 This section of ARVADA has not been implemented yet. Hence, further future work is required to complete the re-implementation.
-
-
