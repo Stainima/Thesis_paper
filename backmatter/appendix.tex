@@ -331,47 +331,80 @@ void pre_tokenise(Node* root){
         xleftmargin=1.5em,
         frame=none
     ]
-void merge_all_valid(Node *root){
+    void merge_all_valid(Node *root, Nodes *all_trees){
 
-    // Go through the list 1 once
-    for( int i = 0; i < root->num_child; i++){
-
-        // Skip White spaces
-        if(root->children[i]->character == ' '){
-            continue;
-        }
-
-        // Go through the list number 2 for perms
-        for ( int j = i + 1; j < root->num_child; j++){
+        // Go through the list 1 once
+        for( int i = 0; i < root->num_child; i++){
 
             // Skip White spaces
-            if(root->children[j]->character == ' '){
+            if(root->children[i]->character == ' '){
                 continue;
             }
 
-            Node *tmp = root->children[i];
+            // Go through the list number 2 for perms
+            for ( int j = i + 1; j < root->num_child; j++){
 
-            // if both t_a and t_b, concatneate to the same string
-            // Merge (change labels ) if they are non-terminals or non-white space.
-            char *buffer_ta = calloc(1, sizeof(char));
-            concatenate(root->children[i], &buffer_ta);
-            char *buffer_tb = calloc(1, sizeof(char));
-            concatenate(root->children[j], &buffer_tb);
-            if(strcmp(buffer_ta,buffer_tb) == 0){
-                merge_same_node(root->children[i], root->children[j], i, j, root);
+                // Skip White spaces
+                if(root->children[j]->character == ' '){
+                    continue;
+                }
+
+                // concatenate ta and tb to get strings
+                char *buffer_ta = calloc(1, sizeof(char));
+                concatenate(root->children[i], &buffer_ta);
+                char *buffer_tb = calloc(1, sizeof(char));
+                concatenate(root->children[j], &buffer_tb);
+
+                // if both t_a and t_b concatneate to the same string
+                // Merge (change labels ) if they are non-terminals or non-white space.
+                if(strcmp(buffer_ta,buffer_tb) == 0){
+                    merge_same_node(root->children[i], root->children[j], i, j, root);
+                    //printf("Comp: %s, %d\n", buffer_ta, root->children[i]->t_label);
+                    free(buffer_ta);
+                    free(buffer_tb);
+                    continue;
+                }
+
                 free(buffer_ta);
                 free(buffer_tb);
+
+
+            }
+
+        }
+
+        for( int i = 0; i < root->num_child; i++){
+
+            // Skip White spaces
+            if(root->children[i]->character == ' '){
                 continue;
             }
 
-            free(buffer_ta);
-            free(buffer_tb);
-            //merge(tmp, dup_root->children[j], dup_root);
-        }
+            // Go through the list number 2 for perms
+            for ( int j = i + 1; j < root->num_child; j++){
+
+                // Skip White spaces
+                if(root->children[j]->character == ' '){
+                    continue;
+                }
+
+                // t_a and t_b concatenate to different strings.
+                // Now perform a more extensive checl
+                int *res = calloc(1, sizeof(int));
+                *res = 1;
+                basic_replacement_check(root->children[i], root->children[j], all_trees, res);
+                basic_replacement_check(root->children[j], root->children[i], all_trees, res);
+                printf("Here: %d.\n", *res);
+
+                free(res);
+
+
+            }
 
         }
-    
+
     }
+        }
 
     \end{lstlisting}
 \caption{Merge All valid function code}
@@ -473,3 +506,57 @@ void merge_same_node(Node *ta, Node *tb, int i , int j, Node *root){
 \caption{Merging same nodes}
 \label{fig:Merging Same nodes}
 \end{figure}
+
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        basicstyle= \tiny,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+    void merge(Node *node_1, Node *node_2, Node *root, int i, int j){
+
+
+    // Add an intermediate label node
+    // if either of the nodes are leaf nodes.
+    if(node_1->t_label == -1){
+        Node *inter_node= build_basic_node_with_list();
+        (*tid)++;
+        inter_node->t_label = *tid;
+        inter_node->parent = node_1->parent;
+        inter_node->children[0] = node_1;
+        (inter_node->num_child) ++;
+        root->children[i] = inter_node;
+        node_1->parent = inter_node;
+        node_1 = node_1->parent;
+    }
+
+    if(node_2->t_label == - 1){
+        Node *inter_node= build_basic_node_with_list();
+        (*tid)++;
+        inter_node->t_label = *tid;
+        inter_node->parent = node_2->parent;
+        inter_node->children[0] = node_2;
+        (inter_node->num_child) ++;
+        root->children[j] = inter_node;
+        node_2->parent = inter_node;
+        node_2 = node_2->parent;
+    }
+
+    // If already intermediate nodes, switch labels.
+    if(node_1->t_label < node_2->t_label){
+        node_2->t_label = node_1->t_label;
+    } else{
+        node_1->t_label = node_2->t_label;
+    }
+}
+
+    \end{lstlisting}
+\caption{String concatenate function}
+\label{fig:Stirng Concatenate}
+\end{figure}
+

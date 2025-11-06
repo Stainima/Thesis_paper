@@ -1,6 +1,6 @@
 \chapter{GENERAL BACKGROUND \& REVIEW OF LITERATURE}
 
-\subsection{What are Grammars?}
+\section{What are Grammars?}
 
 Grammars in computer science can be defined as a set of rules by which valid sentences in a language are constructed \cite{jiangFormalGrammarsLanguages}, serving as a blueprint for the language. Beginning with a start symbol, which is a single non-terminal, production rules are applied sequentially, adding symbols from the alphabet according to the grammar’s production rules, to derive a string that is valid in the language \cite{GrammarTheoryComputation2025}.
 
@@ -19,7 +19,7 @@ Here, the production rules $P$ define all symbol substitutions that can be perfo
 \vspace{\baselineskip}
 These sets of rules are used by parsers to parse a string of tokens and analyse its syntax against this set of rules(Grammars)\cite{mulikComparisonParsingTechniques,hendriksConsiderItParsed}.
 
-\subsection{What are Context-Free Grammars?}
+\section{What are Context-Free Grammars?}
 
 Depending on the set of production rules, each grammar can be classified according to the \emph{Chomsky hierarchy} \cite{chomskyTHREEMODELSTIE1956}.
 
@@ -31,7 +31,7 @@ Depending on the set of production rules, each grammar can be classified accordi
 
 The hierarchy outlines four distinct types of grammars, ranging from \textbf{Type-3} (the most restrictive) to \textbf{Type-0} (the most general and unstructured). \textbf{Type-2} grammars in this hierarchy are known as \emph{context-free grammars}.
 
-\subsubsection{Type-3}
+\subsection{Type-3}
 Type-3 grammars, known as regular grammars, are used to generate regular languages. A grammar is classified as a regular grammar if its production rules follow from $X \rightarrow a | X \rightarrow aY$. The left-hand side must consist of a single $T$ and the right-hand side must consist of a single $T$ or a single $T$ and a single $N$.
 
 Regular grammar can take 2 forms, right linear and left linear.
@@ -55,7 +55,7 @@ Doing so may generate languages that are not regular.
 Additionally, production of $\varepsilon$ is allowed only if the corresponding nonterminal 
 does not appear on the right-hand side of any production rule \cite{hendriksConsiderItParsed,shiIntelligenceScience2021}
 
-\subsubsection{Type-2}
+\subsection{Type-2}
 
 Type-2 grammars, commonly known as context-free grammars (CFGs), have production rules of the form:
 \[
@@ -76,7 +76,7 @@ until eventually \( A \Rightarrow \varepsilon \).
 
 This property is particularly useful because it allows the grammar to enforce well-formed parentheses expressions and other recursive structures purely through production rules. As a result, context-free grammars are of great importance in the design and specification of programming languages\cite{hendriksConsiderItParsed,shiIntelligenceScience2021}.
 
-\subsubsection{Type-1}
+\subsection{Type-1}
 
 Type-1 grammars, also known as context-sensitive grammars, have production rules of the form:
 \[
@@ -92,7 +92,7 @@ An example derivation using a context-sensitive production is:
 A \Rightarrow aA\beta \Rightarrow aaA\beta\beta \Rightarrow \cdots
 \]
 
-\subsubsection{Type-0}
+\subsection{Type-0}
 
 Type-0 grammars, also known as unrestricted grammars, sit at the top of Chomsky's hierarchy. Their production has a complete lack of restrictions and takes the general form:
 \[
@@ -102,23 +102,23 @@ where \( \alpha, \beta \in (N \cup T)^+ \), meaning they are strings consisting 
 
 Type-0 grammars are the most expressive class in the Chomsky hierarchy and can generate all recursively enumerable languages.
 
-\subsection{What is ARVADA?}
+\section{What is ARVADA?}
 
-\subsubsection{Introduction}
+\subsection{Introduction}
 
 ARVADA is an algorithm published in \enquote{Learning Highly Recursive Input Grammars} \cite{kulkarniLearningHighlyRecursive2021} at the University of California, Berkeley in 2021. It is designed to learn context-free grammars from a set of positive examples and a Boolean-valued oracle $\mathcal{O}$. Starting from initially flat parse trees, ARVADA repeatedly applies two specialised operations, \textbf{bubbling} and \textbf{merging}, to incrementally add structure to these trees. From this structured representation, it extracts the smallest possible set of context-free grammar rules that accommodate all the given examples. The algorithm aims to generalise the language as much as possible without overgeneralising beyond what is accepted by $\mathcal{O}$.
 
 \vspace{\baselineskip}
 Like GLADE \cite{bastaniSynthesizingProgramInput}, ARVADA operates under the assumption of a black-box oracle $\mathcal{O}$. This means that ARVADA has no access to or knowledge of the internal workings of the oracle and can only observe the Boolean values returned by $\mathcal{O}$.
 
-\subsubsection{GLADE}
+\subsection{GLADE}
 GLADE is an algorithm proposed by Bastani et al., published in Synthesising Input Grammars at PLDI 2017 \cite{bastaniSynthesizingProgramInput}. Like ARVADA, GLADE uses a set of valid inputs and black-box access to the program, with the aim of automatically approximating the context-free input grammar of the given program.
 
 \vspace{\baselineskip}
 
 Because GLADE shares a similar experimental setting as ARVADA and is a predecessor, GLADE was used as a benchmark for ARVADA during its evaluation. It was shown that GLADE, on average, had a faster runtime compared to ARVADA. However, in terms of generalisation, following the original grammar of the oracle more closely, ARVADA outperformed GLADE across the 11 benchmarks, achieving a higher F1 score on 9 of the 11 benchmarks.
 
-\subsubsection{Explanation}
+\subsection{Explanation}
 
 ARVADA takes as input the oracle $\mathcal{O}$ and a set of positive, valid oracle inputs $S$. For each string $s \in S$, querying $\mathcal{O}(s)$ returns \verb|True|. The algorithm begins by constructing a flat parse tree for each string in $S$. Each tree has a single root node $t_0$ whose children correspond to the individual characters of the input string $s$.
 
@@ -131,7 +131,7 @@ ARVADA then decides whether to accept or reject each bubble by checking whether 
 \vspace{\baselineskip}
 The addition of new non-terminal nodes expands the language defined by the learned grammar, since any string derivable from the same label can now be substituted interchangeably. This relabeling of the bubbled subtree and the replaced node is called a \textbf{merge}, as it merges the labels of two previously distinct nodes in the tree. If a bubble is not accepted, it is discarded, and none of the trees are affected or structurally modified.
 
-\subsubsection{Walkthrough}
+\subsection{Walkthrough}
 
 This walkthrough will follow very closely to the examples provided in the original paper \cite{kulkarniLearningHighlyRecursive2021}, and use a concrete example to provide an in-depth understanding of ARVADA.
 
@@ -1006,14 +1006,14 @@ $\big\downarrow$
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Why replicate ARVADA?}
+\section{Why replicate ARVADA?}
 The replication study of GLADE \cite{bastaniSynthesizingProgramInput} conducted by researchers at CISPA \cite{bendrissouSynthesizingInputGrammars2022} in 2022 reported results that were inconsistent with those presented in the original paper \cite{bastaniSynthesizingProgramInput}. Since ARVADA is closely related to GLADE, sharing a similar purpose and experimental setting, there is reason to suspect that ARVADA may also yield inconsistent results upon reimplementation.
 
 \vspace{\baselineskip}
 
 Another motivation for replication arises from the incomplete nature of the ARVADA study and its evaluation. Although the paper presents a reasonable amount of testing and statistical data, compares the algorithm with GLADE, and provides a detailed explanation of ARVADA, it does not offer formal guarantees. It remains unclear whether ARVADA is applicable in all scenarios or what subset of scenarios it can reliably handle. Furthermore, when comparing ARVADA with GLADE, the possibility exists that the grammars used for testing were selected based on performance considerations. In later research, it has been stated that ARVADA only has high F1 scores when input strings are relatively small, and can vary widely on each run \cite{arefinFastDeterministicBlackbox2024}, raising suspicions that the study may have been selective.
 
-\subsection{Why C?}
+\section{Why C?}
 
 In the original study \cite{kulkarniLearningHighlyRecursive2021}, the ARVADA algorithm was implemented in Python. When compared to GLADE \cite{bastaniSynthesizingProgramInput}, which was implemented in Java, ARVADA exhibited a slower average runtime across all benchmarks. In the study, this was attributed to the natural runtime disadvantage of Python compared to Java, which is valid; however, the possibility that ARVADA itself might be inherently slow was not acknowledged.
 
@@ -1025,14 +1025,14 @@ In a comparative study, A Pragmatic Comparison of Four Different Programming Lan
 
 Therefore, to investigate and potentially address runtime bottlenecks, C was selected as the implementation language for this replication study. The added complexity inherent to programming in C, relative to Python, was also acknowledged.
 
-\subsection{Why is learning input grammar important?}
+\section{Why is learning input grammar important?}
 Grammar inference is important for many software engineering tasks, as knowledge about a program's grammar helps with code comprehension, reverse engineering, detecting and refactoring code smells, transforming source code for optimisation or bug fixing, and generating test inputs \ cite {arefinFastDeterministicBlackbox2024}. However, due to the increasing restrictions in many software systems—caused by global privacy and security regulations—we often lack access to the source code needed to learn their grammar.  Even with open-source programs and code, many only have closed-source parsers, making white-box or grey-box instrumentation difficult \cite{arefinFastDeterministicBlackbox2024,liIncrementalContextfreeGrammar2024}.
 
 \vspace{\baselineskip}
 This limitation highlights the importance of learning input grammars, which are formal grammars defining valid program inputs, and approaches that treat a program as a black box and recursively apply input grammars to infer or reverse-engineer the underlying grammar of the program.
 
 
-\subsection{Related Work}
+\section{Related Work}
 
 \subsection{TREEVADA}
 
@@ -1237,7 +1237,7 @@ To allow a broader range of rules compared to the ones induced solely from the p
 Finally, NATGI performs lexical expansion. Since the leaf nodes are limited by the token in the input string, NATGI takes these leaf nodes and tries to expand the lexicon accepted. For example, if leaf token is a single character, NATGI attempts to see if multiple characters are accepted.
 
 
-\subsection{Problem Statement}
+\section{Problem Statement}
 
 Due to the unknowns and gaps in the original paper \cite{kulkarniLearningHighlyRecursive2021}—including the lack of guarantees regarding the kinds of grammars ARVADA can handle and the complexity of the grammars it can learn—along with the suspicion that the original study may have been selective in nature, this thesis aims to achieve the following:
 

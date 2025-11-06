@@ -2,7 +2,7 @@
 
 This section of the thesis aims to provide a clear explanation of how the re-implementation was conducted in C. Providing all the steps taken in this attempt, with as much technical detail as possible and referencing appropriate sections of the original paper and code.
 
-\subsection{Data structures, and Initial Parse Trees}
+\section{Data structures, and Initial Parse Trees}
 \subsubsection{Data Structures}
 During this process of re-implementation, 2 structures were initialised. Structures are a way to group several related variables into one place in C \cite{w3schoolStructuresStructs2025}. One structure to represent a node in the parse trees, and another structure to hold and reference each parse tree.
 \begin{figure}[H]
@@ -91,7 +91,7 @@ Figure \ref{fig:Data_Structures2} shows the structure $Node$, used for each indi
 
 An global varible, \texttt{tid} was use to keep track of node non-terminal node labelling. It is incremented each time a new non-terminal is created and a tid is assigned. The \texttt{tid} is stored in \texttt{t\_label} of the node. Noting it is not used to assign \text{t\_label} of root nodes, as all root nodes have label 0. 
 
-\subsubsection{Building Initial parse trees}
+\section{Building Initial parse trees}
 This part of the thesis is derived from section III-A of the original paper \cite{kulkarniLearningHighlyRecursive2021}. Using the 2 structures described, next, the initial parse trees were built. First, we build the $Nodes$ structure, which houses all the parse tree pointers. 
 This is done by using C's built-in dynamic memory function $malloc$, where $capacity$ was set randomly to 4, $count$ to 0, as it does not house any parse tree pointers yet, and list $rootNodes$ was given enough memory to house 4 $Node$ pointers, where 4 is the current $capacity$. 
 
@@ -116,15 +116,15 @@ This is done by using C's built-in dynamic memory function $malloc$, where $capa
 \label{fig:rootNodes}
 \end{figure}
 
-Next, the file containing all the valid example strings is read as standard. Refer to figure \ref{fig:buildeachParseTree}, then from the top of the file, each valid string is read and each naive flat parse tree is built one by one. After each tree is built, the pointer to the tree's root if given and housed in \texttt{root\_trees} from figure \ref{fig:rootNodes}. 
+Next, the file containing all the valid example strings is read as standard. Refer to figure \ref{fig:buildeachParseTree}, then from the top of the file, each valid string is read and each naive flat parse tree is built one by one. This is done by, looping through all the valid string and building a root node $t_0$. Then for each strings, looping through each character, builing a node to house this character. The doing appropriate assignings to make this character node a child of the root node. After each tree is built, the pointer to the tree's root if given and housed in \texttt{root\_trees} from figure \ref{fig:rootNodes}. 
 
 
-\subsubsection{Memory management}
+\subsection{Memory management}
 
 As the number of valid example strings and the length of each example string are not pre-determined, the number of \texttt{Nodes} (each parse tree), and the number of leaf nodes each non-terminal root node is going to is also non-determined. This means memory has to be allocated dynamically. To do this, two functions are used: one function to check and increase memory allocated to \texttt{root\_nodes} in \texttt{Nodes}, and another to check and increase memory allocated to \texttt{children} in \texttt{Node}. Both these functions check the \texttt{capacity} of their respective structures, and if \texttt{count} for \texttt{Nodes} and \texttt{num\_child} for \texttt{Node} equals \texttt{capacity}, they increase the memory allocated to their respective lists by 1.5 times the \texttt{capacity}, updating other variables appropriately. Function code in the appendix \ref{fig:capacityChangeCode}
 
 \vspace{\baselineskip}
-Since memory is being assigned dynamically, it also has to be freed dynamically. To help with this, a help function is used. This helper function is given a node that does a depth-first search, and frees nodes as it searches, working its way bottom up. This is used to free memory as needed throughout, and all memory at the end. Refer to appendix \ref{fig:freeNodes}
+Since memory is being assigned dynamically, it also has to be freed dynamically. To help with this, a function is used. This helper function is given a node that does a depth-first search (DFS), and frees nodes as it searches, working its way bottom up. This is used to free memory as needed throughout, and all memory at the end. Refer to appendix \ref{fig:freeNodes}
 
 
 \begin{figure}[H]
@@ -251,18 +251,23 @@ Following the explanation provided in Section~III-A of the original paper \cite{
 \label{fig:pre-tokenise in main loop}
 \end{figure}
 
-Referencing Appendix \ref{fig:MergeAllValid function code}, once the function is given a parse tree $T_i$ with root $t_0$, it iterates through all its children, which are either leaf nodes ($c_i$) or non-terminal label nodes ($t_i$). For each child node $c_i/t_i$, the function then loops from the current node $c_{i+1}/t_{i + 1}$ to the final node $c_n/t_n$, effectively generating all combinations of two child nodes ($t_a$/$c_a$ and $t_b$/$c_b$).
+Referencing Appendix~\ref{fig:MergeAllValid function code}, once the function was given a parse tree $T_i$ with root $t_0$, it iterates through all its children, which are either leaf nodes ($c_i$) or non-terminal label nodes ($t_i$). For each child node $c_i / t_i$, the function then loops from the current node $c_{i+1} / t_{i+1}$ to the final node $c_n / t_n$, effectively generating all combinations of two child nodes ($t_a / c_a$ and $t_b / c_b$). This looping process is executed twice.
 
 \vspace{\baselineskip}
-While ignoring whitespace nodes as potential $t_a$/$c_a$ or $t_b$/$c_b$, the function first checks whether a pair of nodes $t_a$/$c_a$ and $t_b$/$c_b$ produce the same string when concatenated. String concatenation is performed by executing a depth-first search (DFS) traversal to the leaf nodes, retrieving each character, and storing it in a buffer (see Appendix \ref{fig:Stirng Concatenate}).
+While ignoring whitespace nodes as potential $t_a / c_a$ or $t_b / c_b$, the first time looping, it checks for pair of nodes $t_a / c_a$ and $t_b / c_b$ that produce the same string when concatenated. String concatenation, given a node, is a done by doing a depth-first search (DFS) traversal to the leaf nodes, retrieving each character, and storing it in a buffer (see Appendix~\ref{fig:Stirng Concatenate}).
 
 \vspace{\baselineskip}
-If $t_a / c_a$ and $t_b / c_b$ produce identical concatenated strings, the function merges both pairs ($t_a / c_a$ and $t_b / c_b$). This merging process is carried out through another function (Appendix~\ref{fig:Merging Same nodes}), which creates two new intermediate nodes with identical labels (same \texttt{t\_label}) if the two child nodes being compared are leaf nodes ($c_a$ and $c_b$). Otherwise, if the two nodes are non-terminals ($t_a$ and $t_b$), the function simply updates their \texttt{t\_label} values accordingly. Changing the \texttt{t\_label} of the larger non-terminal to the smaller 1.
+If $t_a / c_a$ and $t_b / c_b$ produces identical concatenated strings, the function merged both pairs ($t_a / c_a$ and $t_b / c_b$). This merging process is carried out through another function (Appendix~\ref{fig:Merging Same nodes}), which creates two new intermediate nodes with identical labels (same \texttt{t\_label}) if the two child nodes being compared are leaf nodes ($c_a$ and $c_b$). Otherwise, if the two nodes were non-terminals ($t_a$ and $t_b$), the function simply updated their \texttt{t\_label} values accordingly, assigning the smaller label value to the larger non-terminal.
 
 \vspace{\baselineskip}
-Now, for every $t_a / c_a$ and $t_b / c_b$ that produces different concatenated strings, a more tedious check and merge process is performed.
+Once all identical string-producing nodes had been processed, ARVADA iterated through all the parse trees again, generating combinations of two child nodes once more—this time dealing with every $t_a / c_a$ and $t_b / c_b$ pair that produced different concatenated strings. Before merging these nodes, several checks were performed. The function first checkes for whitespace nodes, but this time to exclude nodes that produced identical strings. It also checked whether the nodes under consideration, $t_a$ and $t_b$, had already been merged. This was determined by verifying if $t_a$ and $t_b$ shared the same non-negative \texttt{t\_label}.
+
+\vspace{\baselineskip}
+After this, to process all not identical nodes, a different check is done to merge.If $t_a / c_a$ could replace $t_b / c_b$ in all parse trees and still produce valid concatenated strings—and vice versa ($t_b / c_b$ replacing $t_a / c_a$)—then the merge was executed. The procedure for performing this merge was described in the string replacement section of the original paper. The merging of two different node sequences was conducted in a similar manner to the merging of identical sequence nodes, as explained in the merging section.
+
 
 \subsection{Merging}
+
 
 \subsubsection{String replacement}
 
