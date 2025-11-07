@@ -654,3 +654,54 @@ void rigorous_replacement_check(Node *replacer, Node *replacee, Node *dup_tree, 
 \caption{Rigorous replacement check}
 \label{fig:Rigorous replacement}
 \end{figure}
+
+
+
+\begin{figure}[H]
+    \begin{lstlisting}[
+        language=C,
+        numbers=left,
+        basicstyle= \tiny,
+        stepnumber=1,
+        numbersep=5pt,
+        xleftmargin=1.5em,
+        frame=none
+    ]
+    int parse_string(const char *input) {
+    if (input == NULL) {
+        return 0;
+    }
+
+    pid_t pid = fork();
+    if (pid < 0) {
+        perror("fork");
+        return 0;
+    } else if (pid == 0) {
+        // Child: run ./parser with input as argument
+        execlp("./parser", "parser", input, (char *)NULL);
+        //perror("execlp");
+        exit(127);  // exec failed
+    } else {
+        // Parent: wait for child
+        int status;
+        if (waitpid(pid, &status, 0) < 0) {
+            perror("waitpid");
+            return 0;
+        }
+        if (WIFEXITED(status)) {
+            int exitcode = WEXITSTATUS(status);
+            if (exitcode == 0) {
+                return 1;   // parse success
+            } else {
+                return 0;   // parse failed (10 or other error)
+            }
+        } else {
+            return 0; // abnormal termination
+        }
+    }
+}
+
+    \end{lstlisting}
+\caption{Orcale Wrapper}
+\label{fig:OracleWrapper}
+\end{figure}

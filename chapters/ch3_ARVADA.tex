@@ -612,8 +612,13 @@ After the recursive call, the function concatenates the root and passes it to th
 \vspace{\baselineskip}
 This section is inherently abstract and best understood in conjunction with the source code provided in Appendix~\ref{fig:Rigorous replacement}.
 
-
 \section{Oracle and other testing}
+
+For $\mathcal{O}$, which was used during string replacement, an ANTLR4-based parser was employed. It was built by following \enquote{Generating a parser in C++ with ANTLR4} by Rahul Gopinath~\cite{gopinathGeneratingParserANTLR42018}. To invoke the parser from C, a wrapper function was implemented (see Appendix~\ref{fig:OracleWrapper}). 
+
+\vspace{\baselineskip}
+Given a string, the wrapper uses \texttt{fork()} to create a child process, which is a copy of itself (parent process). In the child process, the ANTLR4 parser is executed with the given string as input. Meanwhile, the parent process (the wrapper) waits for the child process to finish. Once the parser has finished, the parent inspects the child’s return value. If parsing was successful, the wrapper returns \texttt{1}, otherwise it returns \texttt{0}.
+
 
 \subsection{Bubbling}
 
