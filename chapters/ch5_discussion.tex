@@ -1,18 +1,37 @@
 \chapter{DISCUSSION \& REFLECTION}
 
-A re-implementation in 
+\section{Complexity with Replication}
 
+Replication studies in the fields of computer science and software engineering are uncommon and not yet a standard practice. It can be argued that conducting replication research often requires more effort than developing an alternative approach from scratch \cite{bendrissouSynthesizingInputGrammars2022,carverReplicationsSoftwareEngineering2014}. This is particularly true in cases such as this, where replication is based solely on the research paper and involves the use of entirely different tools.
 
-\section{Complexity with replication}
-
-
-\section{Complexity ARVADA \& C}
+\vspace{\baselineskip}
+This additional workload arising from the time, energy, and effort required to independently understand the research well enough to attempt a re-implementation from its description alone. Moreover, there is a also aspect of quality assurance—ensuring that what is being implemented truly reflects what is described in the original paper \cite{bendrissouSynthesizingInputGrammars2022}.
 
 \section{Insights}
 
+Through the process of re-implementation, several key insights were gained, including the complexity of ARVADA itself, the challenges of implementing ARVADA in C, and the difficulty of fully comprehending certain areas of the original research paper.
 
-\section{Limitation \& future work}
+\subsection{Complexity of ARVADA and Implementation in C}
 
+ARVADA is inherently a complex algorithm. It is memory-intensive, performs a high degree of memory manipulation, and utilises sophisticated data structures such as graphs and trees. These factors create significant overhead during implementation. 
 
-// Limitation with this re-implementation
-MergeALLVALID only prefrom merging in each parse tree and not across trees.
+\vspace{\baselineskip}
+In contrast to the original implementation, which was written in Python, re-implementing ARVADA in C further amplifies these challenges. C is a lower-level programming language, where dynamic memory must be manually allocated and managed, and where built-in support for complex data structures is limited. Managing trees, manipulating memory, and handling pointers all require substantial effort. Although these challenges were anticipated, it is important to emphasise the extent of additional overhead and how it slowed down progress and development.
+
+\subsection{Evaluation of the Research Paper}
+
+Since this replication study relied solely on the explanations provided in the research paper, it is important to reflect on the clarity and reproducibility of those explanations. Specifically, whether the descriptions were sufficiently detailed to enable accurate re-implementation.
+
+\vspace{\baselineskip}
+During this study, it was found that the original research provides a very detailed and comprehensible explanation of the later stages of the algorithm, particularly the concepts of \textit{merging} and \textit{bubbling}. However, it lacks clarity and sufficient explanation in the earlier stages. 
+
+\vspace{\baselineskip}
+Pre-tokenisation is one of the early and crucial steps in the algorithm. Despite its significance, the research paper discusses pre-tokenisation only briefly near the end and provides no examples of the algorithm running with tokenised input. All diagrams presented are non-tokenised, which undermines the perceived importance of this step and introduces ambiguity during re-implementation. Consequently, subsequent steps such as \texttt{MergeALLVALID} became confusing and time-consuming to understand and implement.
+
+\section{Limitations, Improvements, and Future Work}
+
+The most prominent limitation of this study stems from it being conducted as a clean-room replication, without access to the original implementation. This raises the possibility that certain aspects of the research or algorithm may have been misunderstood, and that the resulting implementation may not fully align with the original intent.
+
+\vspace{\baselineskip}
+Furthermore, as only a partial implementation of the algorithm was completed, there remains significant opportunity for further development and refinement. This work providing a strating point. Future work could review and refinement of the partial implementation and focus on movingf forward from there, and improving the documentation and clarity of the replication process to support reproducibility in future studies.
+

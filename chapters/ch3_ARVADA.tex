@@ -508,6 +508,7 @@ The highlighted nodes represent the nodes under consideration in the loop. The f
 
 Here, the two identical nodes remain leaf nodes, but only one of them is still directly connected to the root. Therefore, to merge these nodes correctly, only the one directly attached to the root requires an intermediate node. The specialised merge function handles this case by performing an additional check to determine whether the nodes are directly connected to the root before merging.
 
+
 \section{String replacement}
 
 From sections III-D of the original paper \cite{kulkarniLearningHighlyRecursive2021}, string replacement is the check done before before merging any 2 none identical nodes, appendix \ref{fig:Rigorous replacement}. String replacement, given 2 nodes $t_a / c_a$ (replacer) and $t_b / c_b$ (replacee) and a root tree $T_i$, gets all the permutation of the ways $t_a / c_a$ can replace $t_b / c_b$ in $T_i$. Then concatenates each permutation, which becomes a candidate string which is fed into the oracle to validate. For example take,
